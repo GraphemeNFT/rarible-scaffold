@@ -29,4 +29,19 @@ contract YourCollectible is ERC721 {
 
       return id;
   }
+
+   mapping(uint256 => uint256[]) private _children;
+
+   function assignChildren(uint256 tokenId, uint256[] memory childIds) public {
+      require(_isApprovedOrOwner(_msgSender(), tokenId), "ERC721: caller is not owner nor approved");
+      // need a check if the children exist or not
+      _children[tokenId] = childIds;
+   }
+
+   function getChildren(uint256 tokenId) 
+   public view
+    returns (uint256[] memory) {
+       require(_exists(tokenId), "ERC721: Nonexistent token");
+      return _children[tokenId];
+   }
 }
