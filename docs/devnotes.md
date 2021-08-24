@@ -27,4 +27,9 @@ https://ropsten.rarible.com/token/0x66f806bf40bfa98f2dac85a85d437895043f2be5:1?t
 
 ## Questions
 
-updating contract changes its address each time?
+- updating contract changes its address each time?
+
+- have to update ABI when modifying contract?
+- IPFS address needed to mint?
+- how to get IPFS hash?
+
