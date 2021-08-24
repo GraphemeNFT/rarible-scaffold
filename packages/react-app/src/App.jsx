@@ -27,6 +27,7 @@ import {
 } from "./components";
 import { DAI_ABI, DAI_ADDRESS, INFURA_ID, NETWORK, NETWORKS } from "./constants";
 import { Transactor } from "./helpers";
+import { newGrid, makeRng, renderLetter } from "./helpers/grapheme";
 import {
   useBalance,
   useContractLoader,
@@ -393,6 +394,12 @@ function App(props) {
   const [transferToAddresses, setTransferToAddresses] = useState({});
   const [approveAddresses, setApproveAddresses] = useState({});
 
+  const makeLetter = (entropy) => {
+    let grid = newGrid();
+    renderLetter(grid, makeRng([4, 4, 1, 4, 1, 7, 0, 4, 0, 3, 2]));
+    return grid;//.map(row => row.join('') ).join('<br />');
+  };
+  const letterStyle = {fontFamily: 'monospace', fontWeight: 'bold', fontSize: '16px', lineHeight: '16px', letterSpacing: '-2px', marginBottom: 0};
   return (
     <div className="App">
       {/* ✏️ Edit the header and change the title to your project name */}
@@ -519,6 +526,10 @@ function App(props) {
                           <img src={item.image} style={{ maxWidth: 150 }} />
                         </div>
                         <div>{item.description}</div>
+
+                        <div>
+                          { makeLetter([]).map(row => (<pre style={letterStyle}>{row.join('')}</pre>)) }
+                        </div>
                       </Card>
 
                       <div>
