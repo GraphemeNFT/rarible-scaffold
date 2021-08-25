@@ -85,6 +85,10 @@ contract YourCollectible is ERC721 {
         return _items[tokenId].identifier;
     }
 
+    function getDNA(uint256 tokenId) public view returns (uint256) {
+        return _items[tokenId].identifier;
+    }
+
     function rollToMint(address to) public payable {
         // should mint 'n' tokens.
         // should some funds go to DAO/Owner as creation fee??

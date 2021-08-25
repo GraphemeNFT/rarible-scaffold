@@ -11,8 +11,9 @@ const main = async () => {
 
 
   const yourCollectible = await deploy("YourCollectible") // <-- add in constructor args like line 19 vvvv
-  console.log('deployed', yourCollectible)
-  console.log('address', yourCollectible.address)
+  // console.log('deployed', yourCollectible)
+  console.log('functions', yourCollectible.functions)
+  console.log('\ndeployed to address', yourCollectible.address, '\n')
 
   // const NFTHolder = await deploy("NFTHolder") // <-- add in constructor args like line 19 vvvv
 

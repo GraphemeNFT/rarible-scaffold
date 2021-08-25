@@ -16,14 +16,14 @@ yarn deploy
 then get contract address eg:
 0xfBeab5c1de66515877A51e6aAB22f8F33861e65F
 
+server side minting will pick up the Contract address from [./artifacts/YourCollectible.address](../packages/hardhat/artifacts/YourCollectible.address)
 
-- fund local deployer account
-via metamask on localhost?
+but this is different from the *deployed* contract address?
 
-
-## update contract address
+## update client side contract address
 
 - ERC721 YourCollectible contract address for react client
+
 [edit](../packages/react-app/src/contracts/YourCollectible.address.js)
 
 
@@ -38,6 +38,11 @@ generate IPFS hash eg Qmc9hvaC9EUK7efbCfJc2QESB9NxW84jbPiTvz1p6Lh91d
 need to add this to a script as it cannot access metamask
 [here](../packages/hardhat/scripts/AppConfig.js)
 
+## server side minting
+
+- fund local deployer account
+
+via metamask on localhost?
 
 
 ## later for OpenSea

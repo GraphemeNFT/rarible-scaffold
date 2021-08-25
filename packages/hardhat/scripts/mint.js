@@ -15,16 +15,19 @@ const { createDeflate } = require("zlib");
 const main = async () => {
 
   const toAddress = AppConfig.toAddress;
-
   const createdAt = new Date();
+  const randomInt = Math.floor(Math.random() * 1000000);
 
-  console.log("\n\n 🎫 Minting to " + toAddress + "...\n");
+  console.log("\n\n 🎫 Minting to " + toAddress + "  \n");
+
+  // const contractAddress = fs.readFileSync("./artifacts/YourCollectible.address").toString()
+  const contractAddress = "0x0DCd1Bf9A1b36cE34237eEaFef220932846BCD82"
 
   const yourCollectible = await ethers.getContractAt(
     'YourCollectible',
-    fs.readFileSync("./artifacts/YourCollectible.address").toString()
+    contractAddress
   )
-  console.log('yourCollectible', yourCollectible)
+  console.log('yourCollectible.address', chalk.greenBright(yourCollectible.address))
 
   const buffalo = {
     "description": "Bison 3.0",
@@ -47,13 +50,18 @@ const main = async () => {
       {
         "trait_type": "Stamina",
         "value": 42
+      },
+      {
+        "trait_type": "randomInt",
+        "value": randomInt
       }
     ]
   }
+
   console.log("Uploading item")
   const ipfsHash = await ipfs.add(JSON.stringify(buffalo))
   console.log('Minting item with IPFS hash', ipfsHash)
-  console.log(`Minting toAddress ${toAddress}`)
+  console.log(`Minting toAddress`, chalk.greenBright(toAddress))
 
   // await yourCollectible.mintItem(toAddress, uploaded.path, { gasLimit: 400000 })
   // await yourCollectible.rollToMint(toAddress)
@@ -61,7 +69,6 @@ const main = async () => {
   const result = await yourCollectible.mintItem(toAddress, ipfsHash.path);
   console.log('mintResult', result)
   await sleep(delayMS)
-
 
   /*
   console.log("Minting zebra...")
