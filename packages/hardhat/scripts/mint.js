@@ -20,14 +20,15 @@ const main = async () => {
 
   console.log("\n\n 🎫 Minting to " + toAddress + "  \n");
 
-  // const contractAddress = fs.readFileSync("./artifacts/YourCollectible.address").toString()
-  const contractAddress = "0x0DCd1Bf9A1b36cE34237eEaFef220932846BCD82"
+  const contractAddress = fs.readFileSync("./artifacts/YourCollectible.address").toString()
+  // const contractAddress = "0x0DCd1Bf9A1b36cE34237eEaFef220932846BCD82"
 
   const yourCollectible = await ethers.getContractAt(
     'YourCollectible',
     contractAddress
   )
-  console.log('yourCollectible.address', chalk.greenBright(yourCollectible.address))
+  console.log('contractAddress', chalk.greenBright(contractAddress))
+  console.log('contract', yourCollectible)
 
   const buffalo = {
     "description": "Bison 3.0",
