@@ -1,19 +1,26 @@
 ## DevNotes
 
+start 3 shells:
+```
+yarn chain # start local chain
+yarn start # start local dev server for front-end
+```
+
+## update contract
+
 [edit contract SOL](../packages/hardhat/contracts/YourCollectible.sol)
 
-`yarn deploy`
-get contract address eg:
+```
+yarn deploy
+```
+then get contract address eg:
 0xfBeab5c1de66515877A51e6aAB22f8F33861e65F
 
-## contract address
+## update contract address
 
-- contract address for react client
+- ERC721 YourCollectible contract address for react client
 [edit](../packages/react-app/src/contracts/YourCollectible.address.js)
 
-
-- user wallet to mint to for client
-[here](../packages/react-app/src/contracts/YourContract.address.js)
 
 ## client wallet address
 
@@ -47,3 +54,8 @@ https://ropsten.rarible.com/token/0x66f806bf40bfa98f2dac85a85d437895043f2be5:1?t
 - moved config to scripts/AppConfig.js
 
 
+
+## other contracts
+
+- YourContract contract for react front-end (not used?)
+[here](../packages/react-app/src/contracts/YourContract.address.js)
