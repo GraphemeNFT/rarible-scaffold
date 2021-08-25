@@ -35,7 +35,7 @@ contract YourCollectible is ERC721 {
     // function rollToMint(address to) public payable {
 
     function mintItem(address to, string memory tokenURI)
-        private
+        public
         returns (uint256)
     {
         _tokenIds.increment();
