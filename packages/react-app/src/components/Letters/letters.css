@@ -1,0 +1,23 @@
+.letter-holder {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.letter-item {
+    border: 5px solid white;
+    background-color: black;
+
+    padding: 10px;
+    min-width: 30vw;
+    min-height: 30vh;
+    color: white;
+    cursor: pointer;
+}
+
+.letter-item:hover {
+    border: 5px solid #ccc;
+    background-color: #111;
+
+}
+

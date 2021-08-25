@@ -1,13 +1,15 @@
 import React from "react";
 import { Button, Input, Tooltip } from "antd";
-import {AddressInput} from './'
+import { AddressInput } from ".";
 
-export default function Mint(props) {
+export default function Mint (props) {
   const [mintTo, setMintTo] = React.useState();
   const [ipfsHash, setIpfsHash] = React.useState();
   const [sending, setSending] = React.useState();
-  console.log({writeContracts: props.writeContracts})
-  const writeContracts = props.writeContracts
+
+  console.log({ writeContracts: props.writeContracts });
+  const writeContracts = props.writeContracts;
+
   return (
     <div>
       <AddressInput
@@ -34,7 +36,7 @@ export default function Mint(props) {
         onClick={async () => {
           setSending(true);
           console.log("sending");
-          await writeContracts.YourCollectible.mintItem(mintTo, ipfsHash)
+          await writeContracts.YourCollectible.mintItem(mintTo, ipfsHash);
           setSending(false);
         }}
       >

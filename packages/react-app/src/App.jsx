@@ -10,6 +10,8 @@ import ReactJson from "react-json-view";
 import { BrowserRouter, Link, Route, Switch } from "react-router-dom";
 import Web3Modal from "web3modal";
 import "./App.css";
+
+// main components
 import {
   Account,
   Address,
@@ -25,6 +27,9 @@ import {
   LazyMint,
   RaribleItemIndexer,
 } from "./components";
+
+import Letters from "./components/Letters/Letters";
+
 import { DAI_ABI, DAI_ADDRESS, INFURA_ID, NETWORK, NETWORKS } from "./constants";
 import { Transactor } from "./helpers";
 import {
@@ -147,7 +152,7 @@ const logoutOfWeb3Modal = async () => {
   }, 1);
 };
 
-function App(props) {
+function App (props) {
   const mainnetProvider = scaffoldEthProvider && scaffoldEthProvider._network ? scaffoldEthProvider : mainnetInfura;
 
   const [injectedProvider, setInjectedProvider] = useState();
@@ -400,6 +405,17 @@ function App(props) {
       {networkDisplay}
       <BrowserRouter>
         <Menu style={{ textAlign: "center" }} selectedKeys={[route]} mode="horizontal">
+          <Menu.Item key="/letters">
+            <Link
+              onClick={() => {
+                setRoute("/letters");
+              }}
+              to="/letters"
+            >
+              Letters
+            </Link>
+          </Menu.Item>
+
           <Menu.Item key="/">
             <Link
               onClick={() => {
@@ -493,6 +509,10 @@ function App(props) {
         </Menu>
 
         <Switch>
+          <Route path="/letters">
+            <Letters dataSource={yourCollectibles} />
+          </Route>
+
           <Route exact path="/">
             {/*
                 🎛 this scaffolding is full of commonly used components
@@ -570,7 +590,7 @@ function App(props) {
                           accountAddress={address}
                           ERC721Address={writeContracts.YourCollectible.address}
                           tokenId={id}
-                        ></Sell>
+                        />
                       </div>
                     </List.Item>
                   );
@@ -578,41 +598,35 @@ function App(props) {
               />
             </div>
           </Route>
+
           <Route path="/mint">
             <div style={{ paddingTop: 32, width: 740, margin: "auto" }}>
-                        <Mint
-                      ensProvider={mainnetProvider}
-                          provider={userProvider}
-                          writeContracts={writeContracts}
-                        ></Mint>
+              <Mint ensProvider={mainnetProvider} provider={userProvider} writeContracts={writeContracts} />
             </div>
-
           </Route>
           <Route path="/lazyMint">
             <div style={{ paddingTop: 32, width: 740, margin: "auto" }}>
-                        <LazyMint
-                          ensProvider={mainnetProvider}
-                          provider={userProvider}
-                          // contractAddress={writeContracts.ERC721Rarible.address}
-                          // contractAddress={writeContracts.YourCollectible.address}
-                          writeContracts={writeContracts}
-                          accountAddress={address}
-                        ></LazyMint>
+              <LazyMint
+                ensProvider={mainnetProvider}
+                provider={userProvider}
+                // contractAddress={writeContracts.ERC721Rarible.address}
+                // contractAddress={writeContracts.YourCollectible.address}
+                writeContracts={writeContracts}
+                accountAddress={address}
+              />
             </div>
-
           </Route>
 
           <Route path="/raribleItemIndexer">
             <div style={{ paddingTop: 32, width: 740, margin: "auto" }}>
-                        <RaribleItemIndexer
-                          ensProvider={mainnetProvider}
-                          tx={tx}
-                          provider={userProvider}
-                          writeContracts={writeContracts}
-                          accountAddress={address}
-                        ></RaribleItemIndexer>
+              <RaribleItemIndexer
+                ensProvider={mainnetProvider}
+                tx={tx}
+                provider={userProvider}
+                writeContracts={writeContracts}
+                accountAddress={address}
+              />
             </div>
-
           </Route>
 
           <Route path="/rarible">
@@ -641,13 +655,13 @@ function App(props) {
               type="primary"
               onClick={async () => {
                 setDownloading(true);
-                let sellOrderResult
+                let sellOrderResult;
                 if (tokenId) {
-                const getSellOrdersByItemUrl = `https://api-dev.rarible.com/protocol/v0.1/ethereum/order/orders/sell/byItem?contract=${collectionContract}&tokenId=${tokenId}&sort=LAST_UPDATE`;
-                sellOrderResult = await fetch(getSellOrdersByItemUrl);
+                  const getSellOrdersByItemUrl = `https://api-dev.rarible.com/protocol/v0.1/ethereum/order/orders/sell/byItem?contract=${collectionContract}&tokenId=${tokenId}&sort=LAST_UPDATE`;
+                  sellOrderResult = await fetch(getSellOrdersByItemUrl);
                 } else {
-                const getSellOrderByCollectionUrl = `https://api-dev.rarible.com/protocol/v0.1/ethereum/order/orders/sell/byCollection?collection=${collectionContract}&sort=LAST_UPDATE`;
-                sellOrderResult = await fetch(getSellOrderByCollectionUrl);
+                  const getSellOrderByCollectionUrl = `https://api-dev.rarible.com/protocol/v0.1/ethereum/order/orders/sell/byCollection?collection=${collectionContract}&sort=LAST_UPDATE`;
+                  sellOrderResult = await fetch(getSellOrderByCollectionUrl);
                 }
                 const resultJson = await sellOrderResult.json();
                 if (resultJson && resultJson.orders) {
@@ -691,18 +705,23 @@ function App(props) {
                       </Card>
 
                       <Button
-                        onClick={async () =>{
-                          const preparedTransaction = await prepareMatchingOrder(item, address)
-                          console.log({preparedTransaction})
-                          const value = preparedTransaction.asset.value
-                          const valueBN = BigNumber.from(value)
-                          const safeValue = valueBN.add(100)
-                          console.log({safeValue})
-                          const signer = userProvider.getSigner()
-                          tx(signer.sendTransaction({to: preparedTransaction.transaction.to, from: address, data: preparedTransaction.transaction.data, value: safeValue}))
-
-                        }
-                        }
+                        onClick={async () => {
+                          const preparedTransaction = await prepareMatchingOrder(item, address);
+                          console.log({ preparedTransaction });
+                          const value = preparedTransaction.asset.value;
+                          const valueBN = BigNumber.from(value);
+                          const safeValue = valueBN.add(100);
+                          console.log({ safeValue });
+                          const signer = userProvider.getSigner();
+                          tx(
+                            signer.sendTransaction({
+                              to: preparedTransaction.transaction.to,
+                              from: address,
+                              data: preparedTransaction.transaction.data,
+                              value: safeValue,
+                            }),
+                          );
+                        }}
                       >
                         Fill order
                       </Button>
