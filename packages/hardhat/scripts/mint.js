@@ -45,25 +45,18 @@ const main = async () => {
   }
   console.log("Uploading buffalo...")
   const uploaded = await ipfs.add(JSON.stringify(buffalo))
-
   console.log("Minting buffalo with IPFS hash (" + uploaded.path + ")")
-
 
   // await yourCollectible.mintItem(toAddress, uploaded.path, { gasLimit: 400000 })
   await yourCollectible.rollToMint(toAddress, { gasLimit: 400000 })
-
 
   await sleep(delayMS)
 
 
   /*
-
-
   console.log("Minting zebra...")
   await yourCollectible.mintItem("0xD75b0609ed51307E13bae0F9394b5f63A7f8b6A1","zebra.jpg")
-
   */
-
 
   //const secondContract = await deploy("SecondContract")
 
