@@ -32,16 +32,16 @@ contract YourCollectible is ERC721 {
         _setBaseURI("https://ipfs.io/ipfs/");
     }
 
-    // function rollToMint(address to) public payable {
-
     function mintItem(address to, string memory tokenURI)
         private
         returns (uint256)
     {
         _tokenIds.increment();
+
         uint256 id = _tokenIds.current();
         _mint(to, id);
         _setTokenURI(id, tokenURI);
+
         return id;
     }
 
@@ -50,6 +50,7 @@ contract YourCollectible is ERC721 {
         returns (uint256)
     {
         _tokenIds.increment();
+
         uint256 id = _tokenIds.current();
         _mint(to, id);
         _items[id] = ItemDetail({isPrimitive: true, identifier: identifier});
@@ -76,11 +77,7 @@ contract YourCollectible is ERC721 {
     }
     */
 
-    function getCharacterIdentifier(uint256 tokenId)
-        public
-        view
-        returns (uint256)
-    {
+    function getCharacterIdentifier(uint256 tokenId) public view returns (uint256) {
         return _items[tokenId].identifier;
     }
 
@@ -90,7 +87,7 @@ contract YourCollectible is ERC721 {
         uint256 i = 0;
         uint256 prc = getRandomness();
         for (i = 0; i <= 5; i++) {
-            uint256 random = uint256(keccak256(abi.encodePacked(prc, i)));
+             uint256 random = uint256(keccak256(abi.encodePacked(prc, i)));
             // uint256 random = uint256(prc);
             mintCharacterToken(to, random);
         }
@@ -98,15 +95,6 @@ contract YourCollectible is ERC721 {
 
     function getRandomness() private view returns (uint256) {
         // do this as a temp measure. Investigate VRF options
-        return
-            uint256(
-                keccak256(
-                    abi.encodePacked(
-                        block.timestamp,
-                        msg.sender,
-                        blockhash(block.number)
-                    )
-                )
-            );
+        return uint256(keccak256(abi.encodePacked(block.timestamp, msg.sender, blockhash(block.number))));
     }
 }
