@@ -47,7 +47,10 @@ const main = async () => {
   const uploaded = await ipfs.add(JSON.stringify(buffalo))
 
   console.log("Minting buffalo with IPFS hash (" + uploaded.path + ")")
-  await yourCollectible.mintItem(toAddress, uploaded.path, { gasLimit: 400000 })
+
+
+  // await yourCollectible.mintItem(toAddress, uploaded.path, { gasLimit: 400000 })
+  await yourCollectible.rollToMint(toAddress, { gasLimit: 400000 })
 
 
   await sleep(delayMS)
