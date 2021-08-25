@@ -43,7 +43,7 @@ const noContractDisplay = (
 
 const isQueryable = fn => (fn.stateMutability === "view" || fn.stateMutability === "pure") && fn.inputs.length === 0;
 
-export default function Contract({
+export default function Contract ({
   customContract,
   account,
   gasPrice,
@@ -69,13 +69,18 @@ export default function Contract({
     () =>
       contract
         ? Object.values(contract.interface.functions).filter(
-            fn => fn.type === "function" && !(show && show.indexOf(fn.name) < 0),
-          )
+          fn => fn.type === "function" && !(show && show.indexOf(fn.name) < 0),
+        )
         : [],
     [contract, show],
   );
 
   const [refreshRequired, triggerRefresh] = useState(false);
+
+  if (contract) {
+    console.log('contract fns', contract.interface.functions)
+  }
+
   const contractDisplay = displayedContractFunctions.map(fn => {
     if (isQueryable(fn)) {
       // If there are no inputs, just display return value

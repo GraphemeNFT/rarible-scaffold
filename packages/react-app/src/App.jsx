@@ -405,7 +405,7 @@ function App (props) {
     renderLetter(grid, makeRng([4, 4, 1, 4, 1, 7, 0, 4, 0, 3, 2]));
     return grid;//.map(row => row.join('') ).join('<br />');
   };
-  const letterStyle = {fontFamily: 'monospace', fontWeight: 'bold', fontSize: '16px', lineHeight: '16px', letterSpacing: '-2px', marginBottom: 0};
+  const letterStyle = { fontFamily: 'monospace', fontWeight: 'bold', fontSize: '16px', lineHeight: '16px', letterSpacing: '-2px', marginBottom: 0 };
 
   return (
     <div className="App">
@@ -529,7 +529,7 @@ function App (props) {
                 and give you a form to interact with it locally
             */}
 
-              <DrawWordTool />
+            <DrawWordTool />
             <div style={{ width: 640, margin: "auto", marginTop: 32, paddingBottom: 32 }}>
               <List
                 bordered
@@ -550,7 +550,7 @@ function App (props) {
                         </div>
                         <div>{item.description}</div>
                         <div>
-                          { makeLetter([]).map(row => (<pre style={letterStyle}>{row.join('')}</pre>)) }
+                          {makeLetter([]).map(row => (<pre style={letterStyle}>{row.join('')}</pre>))}
                         </div>
                       </Card>
 
@@ -845,6 +845,7 @@ function App (props) {
               address={address}
               blockExplorer={blockExplorer}
             />
+            {/*
             <Contract
               name="YourERC20"
               signer={userProvider.getSigner()}
@@ -859,6 +860,7 @@ function App (props) {
               address={address}
               blockExplorer={blockExplorer}
             />
+             */}
           </Route>
         </Switch>
       </BrowserRouter>

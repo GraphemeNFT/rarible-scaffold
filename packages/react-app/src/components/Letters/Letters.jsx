@@ -12,6 +12,7 @@ export default function Letters (props) {
 
     const inner = (letters) => {
         return letters.map(item => {
+            console.log('letter', Object.keys(item))
             const key = 'item-' + item.id.toNumber()
             return (
                 <span className='letter-item' key={key}>

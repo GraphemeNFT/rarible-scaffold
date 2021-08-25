@@ -18,7 +18,7 @@ then get contract address eg:
 
 server side minting will pick up the Contract address from [./artifacts/YourCollectible.address](../packages/hardhat/artifacts/YourCollectible.address)
 
-but this is different from the *deployed* contract address?
+but this is different from the *deployed* contract address
 
 ## update client side contract address
 
