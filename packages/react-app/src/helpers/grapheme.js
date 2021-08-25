@@ -3,7 +3,7 @@
 
 const rows = 40;
 const cols = 80;
-const bgCh = '.';
+const bgCh = ' ';
 const newRow = () => [...Array(cols)].map(und => bgCh);
 const newGrid = () => [...Array(rows)].map(_ => newRow());
 function rowIsEmpty(grid, row) {
@@ -29,9 +29,17 @@ function crop(grid) {
   while (rowIsEmpty(grid, 0)) {
     grid.shift();
   }
+  while (rowIsEmpty(grid, grid.length-1)) {
+    grid.pop();
+  }
   try {
     while (colIsEmpty(grid, 0)) {
       grid.forEach(row => row.shift());
+    }
+  } catch(e) {}
+  try {
+    while (colIsEmpty(grid, grid[0].length-1)) {
+      grid.forEach(row => row.pop());
     }
   } catch(e) {}
 }
@@ -161,5 +169,6 @@ function main() {
 export {
   newGrid,
   makeRng,
-  renderLetter
+  renderLetter,
+  crop
 }

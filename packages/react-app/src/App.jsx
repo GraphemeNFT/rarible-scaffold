@@ -26,6 +26,7 @@ import {
   Mint,
   LazyMint,
   RaribleItemIndexer,
+  DrawWordTool,
 } from "./components";
 
 import Letters from "./components/Letters/Letters";
@@ -528,6 +529,7 @@ function App (props) {
                 and give you a form to interact with it locally
             */}
 
+              <DrawWordTool />
             <div style={{ width: 640, margin: "auto", marginTop: 32, paddingBottom: 32 }}>
               <List
                 bordered
