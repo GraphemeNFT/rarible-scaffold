@@ -35,7 +35,7 @@ export default function Mint (props) {
         type="primary"
         onClick={async () => {
           setSending(true);
-          console.log("sending");
+          console.log("minting to mintTo", mintTo);
           await writeContracts.YourCollectible.mintItem(mintTo, ipfsHash);
           setSending(false);
         }}

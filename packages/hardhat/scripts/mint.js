@@ -10,10 +10,13 @@ const ipfs = ipfsAPI({ host: 'ipfs.infura.io', port: '5001', protocol: 'https' }
 const delayMS = 1000 //sometimes xDAI needs a 6000ms break lol 😅
 
 const AppConfig = require("./AppConfig.js");
+const { createDeflate } = require("zlib");
 
 const main = async () => {
 
   const toAddress = AppConfig.toAddress;
+
+  const createdAt = new Date();
 
   console.log("\n\n 🎫 Minting to " + toAddress + "...\n");
 
@@ -34,6 +37,10 @@ const main = async () => {
         "value": "green"
       },
       {
+        "trait_type": "createdAt",
+        "value": createdAt
+      },
+      {
         "trait_type": "Eyes",
         "value": "googly"
       },
@@ -43,13 +50,16 @@ const main = async () => {
       }
     ]
   }
-  console.log("Uploading buffalo...")
-  const uploaded = await ipfs.add(JSON.stringify(buffalo))
-  console.log("Minting buffalo with IPFS hash (" + uploaded.path + ")")
+  console.log("Uploading item")
+  const ipfsHash = await ipfs.add(JSON.stringify(buffalo))
+  console.log('Minting item with IPFS hash', ipfsHash)
+  console.log(`Minting toAddress ${toAddress}`)
 
   // await yourCollectible.mintItem(toAddress, uploaded.path, { gasLimit: 400000 })
-  await yourCollectible.rollToMint(toAddress, { gasLimit: 400000 })
+  // await yourCollectible.rollToMint(toAddress)
 
+  const result = await yourCollectible.mintItem(toAddress, ipfsHash.path);
+  console.log('mintResult', result)
   await sleep(delayMS)
 
 

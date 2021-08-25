@@ -8,7 +8,7 @@ import React from "react"; // useCallback, useEffect, useState
 import './letters.css'
 
 export default function Letters (props) {
-    console.log('letters.props', props)
+    console.log('letters.props', props.dataSource)
 
     const inner = (letters) => {
         return letters.map(item => {

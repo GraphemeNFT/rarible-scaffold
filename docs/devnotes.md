@@ -16,6 +16,11 @@ yarn deploy
 then get contract address eg:
 0xfBeab5c1de66515877A51e6aAB22f8F33861e65F
 
+
+- fund local deployer account
+via metamask on localhost?
+
+
 ## update contract address
 
 - ERC721 YourCollectible contract address for react client
@@ -24,10 +29,16 @@ then get contract address eg:
 
 ## client wallet address
 
+## client minting
+generate IPFS hash eg Qmc9hvaC9EUK7efbCfJc2QESB9NxW84jbPiTvz1p6Lh91d
+
+
 - wallet address to mint to with `yarn mint`
 
 need to add this to a script as it cannot access metamask
 [here](../packages/hardhat/scripts/AppConfig.js)
+
+
 
 ## later for OpenSea
 
@@ -59,3 +70,11 @@ https://ropsten.rarible.com/token/0x66f806bf40bfa98f2dac85a85d437895043f2be5:1?t
 
 - YourContract contract for react front-end (not used?)
 [here](../packages/react-app/src/contracts/YourContract.address.js)
+
+
+## Typical problems
+
+- nonce too high
+reset your wallet
+https://dev.to/nmassi/comment/1dafo
+

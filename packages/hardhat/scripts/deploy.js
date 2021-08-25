@@ -11,6 +11,9 @@ const main = async () => {
 
 
   const yourCollectible = await deploy("YourCollectible") // <-- add in constructor args like line 19 vvvv
+  console.log('deployed', yourCollectible)
+  console.log('address', yourCollectible.address)
+
   // const NFTHolder = await deploy("NFTHolder") // <-- add in constructor args like line 19 vvvv
 
   //const yourContract = await ethers.getContractAt('YourContract', "0xaAC799eC2d00C013f1F11c37E654e59B0429DF6A") //<-- if you want to instantiate a version of a contract at a specific address!
@@ -75,13 +78,13 @@ const deploy = async (contractName, _args = [], overrides = {}, libraries = {}) 
   console.log(` 🛰  Deploying: ${contractName}`);
 
   const contractArgs = _args || [];
-  const contractArtifacts = await ethers.getContractFactory(contractName,{libraries: libraries});
+  const contractArtifacts = await ethers.getContractFactory(contractName, { libraries: libraries });
   const deployed = await contractArtifacts.deploy(...contractArgs, overrides);
   const encoded = abiEncodeArgs(deployed, contractArgs);
   fs.writeFileSync(`artifacts/${contractName}.address`, deployed.address);
 
   let extraGasInfo = ""
-  if(deployed&&deployed.deployTransaction){
+  if (deployed && deployed.deployTransaction) {
     const gasUsed = deployed.deployTransaction.gasLimit.mul(deployed.deployTransaction.gasPrice)
     extraGasInfo = `${utils.formatEther(gasUsed)} ETH, tx hash ${deployed.deployTransaction.hash}`
   }
@@ -146,17 +149,17 @@ const readArgsFile = (contractName) => {
   return args;
 };
 
-function sleep(ms) {
+function sleep (ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
 // If you want to verify on https://tenderly.co/
-const tenderlyVerify = async ({contractName, contractAddress}) => {
+const tenderlyVerify = async ({ contractName, contractAddress }) => {
 
-  let tenderlyNetworks = ["kovan","goerli","mainnet","rinkeby","ropsten","matic","mumbai","xDai","POA"]
+  let tenderlyNetworks = ["kovan", "goerli", "mainnet", "rinkeby", "ropsten", "matic", "mumbai", "xDai", "POA"]
   let targetNetwork = process.env.HARDHAT_NETWORK || config.defaultNetwork
 
-  if(tenderlyNetworks.includes(targetNetwork)) {
+  if (tenderlyNetworks.includes(targetNetwork)) {
     console.log(chalk.blue(` 📁 Attempting tenderly verification of ${contractName} on ${targetNetwork}`))
 
     await tenderly.persistArtifacts({
@@ -165,14 +168,14 @@ const tenderlyVerify = async ({contractName, contractAddress}) => {
     });
 
     let verification = await tenderly.verify({
-        name: contractName,
-        address: contractAddress,
-        network: targetNetwork
-      })
+      name: contractName,
+      address: contractAddress,
+      network: targetNetwork
+    })
 
     return verification
   } else {
-      console.log(chalk.grey(` 🧐 Contract verification not supported on ${targetNetwork}`))
+    console.log(chalk.grey(` 🧐 Contract verification not supported on ${targetNetwork}`))
   }
 }
 
