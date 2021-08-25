@@ -86,6 +86,7 @@ contract YourCollectible is ERC721 {
     }
 
     function getDNA(uint256 tokenId) public view returns (uint256) {
+        // TODO: emit event
         return _items[tokenId].identifier;
     }
 

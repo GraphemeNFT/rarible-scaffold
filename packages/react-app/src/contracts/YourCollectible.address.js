@@ -3,7 +3,9 @@
 // module.exports = "0x8023167678DF04267b845DFD8c0Bfa00c6164C47";
 
 // yarn deploy => contract address
-module.exports = "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9"
+// module.exports = "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9"
+
+module.exports = "0x67d269191c92Caf3cD7723F116c85e6E9bf55933"
 
 // DC rarible
 // module.exports = "0xfBeab5c1de66515877A51e6aAB22f8F33861e65F";

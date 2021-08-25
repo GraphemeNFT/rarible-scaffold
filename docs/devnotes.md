@@ -15,6 +15,7 @@ yarn deploy
 ```
 then get contract address eg:
 0xfBeab5c1de66515877A51e6aAB22f8F33861e65F
+0xc5a5C42992dECbae36851359345FE25997F5C42d
 
 server side minting will pick up the Contract address from [./artifacts/YourCollectible.address](../packages/hardhat/artifacts/YourCollectible.address)
 
