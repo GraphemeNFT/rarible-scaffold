@@ -1,6 +1,6 @@
 
-import React, { useEffect, useState } from "react";
-import { Button, Input, Tooltip } from "antd";
+import React, { useState } from "react";
+import { Button, Input } from "antd";
 
 import { newGrid, makeRng, renderLetter, crop } from "../helpers/grapheme";
 
@@ -8,14 +8,13 @@ import { newGrid, makeRng, renderLetter, crop } from "../helpers/grapheme";
 function LetterControl(props) {
   return (
     <div>
-      <span>Control for tokenId:{props.tokenId} - DNA:{props.tokenDNA.toString()} - position:({props.row}, {props.col})</span>
-      {/*<Input
-        value={props.row}
-        onChange={e => {
-          props.setRow(parseInt(e.target.value));
+      <Button
+        onClick={e => {
+          props.delIdx(props.idx);
         }}
-      />
-      */}
+      >X (del)
+      </Button>
+      <span>Control for tokenId:{props.tokenId} - DNA:{props.tokenDNA} - position:({props.row}, {props.col})</span>
       <Button
         onClick={e => {
           props.setRow(props.row-1);
@@ -44,11 +43,12 @@ function LetterControl(props) {
   )
 }
 export default function DrawWordTool(props) {
-  const [rows, setRows] = useState([1, 4, 2]);
-  const [cols, setCols] = useState([10, 20, 80]);
+  const yourTokens = props.yourTokens ? props.yourTokens : [];
+  const [rows, setRows] = useState([]); //useState([1, 4, 2]);
+  const [cols, setCols] = useState([]); //useState([10, 20, 80]);
   const setColIdx = (idx, num) => { let cpy = [...cols]; cpy[idx] = num; setCols(cpy); };
   const setRowIdx = (idx, num) => { let cpy = [...rows]; cpy[idx] = num; setRows(cpy); };
-  const tokenIds = [0, 1, 2];
+  const [tokenIds, setTokenIds] = useState([]); //[0, 1, 2];
   const fakeDNAs = [
     [4,1,0,6,6,7,2,5], // n
     [7,2,0,6,2,7,0,4], // P
@@ -58,14 +58,29 @@ export default function DrawWordTool(props) {
     [7,2,0,1,7,1,2,1], // _X~
     [4,2,1,7,6,4,4,0], // 4
   ];
-  const tokenDNAs = fakeDNAs.slice(0, 3);
+  const [tokenDNAs, setTokenDNAs] = useState([]);
+  const add = (tokenId) => {
+    setRows([...rows].concat([1]));
+    setCols([...cols].concat([1]));
+    setTokenDNAs([...tokenDNAs].concat([fakeDNAs[tokenId].join(',')]));
+    setTokenIds([...tokenIds].concat([tokenId]));
+  };
+  const delIdx = (idx) => {
+    setRows(rows.filter((_, i) => i != idx));
+    setCols(cols.filter((_, i) => i != idx));
+    setTokenDNAs(tokenDNAs.filter((_, i) => i != idx));
+    setTokenIds(tokenIds.filter((_, i) => i != idx));
+  };
 
   return (
     <div>
+      <span>Add one of your Letters: </span>
+      {yourTokens ? yourTokens.map(item => (<Button key={'add-' + item.id.toString()} onClick={e => add(item.id.toNumber())} >Add #{item.id.toString()}</Button>)) : '...'}
       <DrawWord tokenIds={tokenIds} tokenDNAs={tokenDNAs} rows={rows} cols={cols} />
-      <LetterControl tokenId={tokenIds[0]} tokenDNA={fakeDNAs[0]} setRow={(num) => setRowIdx(0, num)} setCol={(num) => setColIdx(0, num)} row={rows[0]} col={cols[0]} />
-      <LetterControl tokenId={tokenIds[1]} tokenDNA={fakeDNAs[1]} setRow={(num) => setRowIdx(1, num)} setCol={(num) => setColIdx(1, num)} row={rows[1]} col={cols[1]} />
-      <LetterControl tokenId={tokenIds[2]} tokenDNA={fakeDNAs[2]} setRow={(num) => setRowIdx(2, num)} setCol={(num) => setColIdx(2, num)} row={rows[2]} col={cols[2]} />
+      { tokenIds.map((id, idx) => (<span key={'foo-'+idx}>{id}, {idx}</span>)) }
+      { tokenIds.map((id, idx) => (
+        <LetterControl key={'lc-' + idx} idx={idx} delIdx={delIdx} tokenId={tokenIds[idx]} tokenDNA={tokenDNAs[idx]} setRow={(num) => setRowIdx(idx, num)} setCol={(num) => setColIdx(idx, num)} row={rows[idx]} col={cols[idx]} />
+      )) }
       </div>
   );
 }
@@ -89,8 +104,11 @@ function writeLetterToGrid(grid, letterGrid, row, col) {
   }
 }
 function DrawWord({ tokenIds, tokenDNAs, rows, cols }) {
+  if (tokenIds.length == 0) {
+    return '...';
+  }
   // tokenIds - list of tokenId (uint256)
-  // tokenDNAs - list of arrays of numbers - subject to change to just a bitstring
+  // tokenDNAs - list of string of numbers - subject to change to just a bitstring
   // rows
   // cols
   const bgCh = ' ';
@@ -98,8 +116,9 @@ function DrawWord({ tokenIds, tokenDNAs, rows, cols }) {
   let grid = [...Array(80)].map(_ => newRow());
   let letterGrids = tokenDNAs.map((dna, idx) => {
     let letterGrid = newGrid();
-    renderLetter(letterGrid, makeRng(dna));
+    renderLetter(letterGrid, makeRng(dna.split(',').map(s => parseInt(s))));
     writeLetterToGrid(grid, letterGrid, rows[idx], cols[idx]);
+    grid[rows[idx]][cols[idx]] = idx;
     return letterGrid;
   });
   crop(grid);
@@ -107,7 +126,7 @@ function DrawWord({ tokenIds, tokenDNAs, rows, cols }) {
 
   return (
       <div>
-        { grid.map(row => (<pre style={letterStyle}>{row.join('')}</pre>)) }
+        { grid.map((row, idx) => (<pre key={'grow-' + idx} style={letterStyle}>{row.join('')}</pre>)) }
       </div>
   );
 }
