@@ -1,0 +1,24 @@
+diff --git a/package.json b/package.json
+index 290db8d..9266fa5 100644
+--- a/package.json
++++ b/package.json
+@@ -22,6 +22,7 @@
+     "start": "yarn workspace @scaffold-eth/react-app start",
+     "compile": "yarn workspace @scaffold-eth/hardhat compile",
+     "deploy": "yarn workspace @scaffold-eth/hardhat deploy",
++    "publish-contracts": "yarn workspace @scaffold-eth/hardhat publish-contracts",
+     "watch": "yarn workspace @scaffold-eth/hardhat watch",
+     "accounts": "yarn workspace @scaffold-eth/hardhat accounts",
+     "balance": "yarn workspace @scaffold-eth/hardhat balance",
+diff --git a/packages/hardhat/package.json b/packages/hardhat/package.json
+index aa93397..1623271 100644
+--- a/packages/hardhat/package.json
++++ b/packages/hardhat/package.json
+@@ -31,6 +31,7 @@
+     "test": "hardhat test --network hardhat",
+     "compile": "hardhat compile",
+     "deploy": "hardhat run scripts/deploy.js",
++    "publish-contracts": "hardhat run scripts/publish.js",
+     "watch": "node scripts/watch.js",
+     "accounts": "hardhat accounts",
+     "balance": "hardhat balance",

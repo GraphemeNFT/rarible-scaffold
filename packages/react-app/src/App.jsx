@@ -540,16 +540,16 @@ function App (props) {
                     <List.Item key={id + "_" + item.uri + "_" + item.owner}>
                       <Card
                         title={
-                          <div>
+                          <div key={'d1' + id}>
                             <span style={{ fontSize: 16, marginRight: 8 }}>#{id}</span> {item.name}
                           </div>
                         }
                       >
-                        <div>
+                        <div key={'d2' + id}>
                           <img src={item.image} style={{ maxWidth: 150 }} />
                         </div>
-                        <div>{item.description}</div>
-                        <div>
+                        <div key={'d3' + id}>{item.description}</div>
+                        <div key={'d4' + id}>
                           {makeLetter([]).map(row => (<pre style={letterStyle}>{row.join('')}</pre>))}
                         </div>
                       </Card>
