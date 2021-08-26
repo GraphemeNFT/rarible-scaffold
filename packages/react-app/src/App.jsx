@@ -400,12 +400,20 @@ function App (props) {
   const [transferToAddresses, setTransferToAddresses] = useState({});
   const [approveAddresses, setApproveAddresses] = useState({});
 
-  const makeLetter = (entropy) => {
+  const makeLetter = (dna) => {
     let grid = newGrid();
-    renderLetter(grid, makeRng([4, 4, 1, 4, 1, 7, 0, 4, 0, 3, 2]));
+    //renderLetter(grid, makeRng([4, 4, 1, 4, 1, 7, 0, 4, 0, 3, 2]));
+    renderLetter(grid, makeRng(dna));
     return grid;//.map(row => row.join('') ).join('<br />');
   };
-  const letterStyle = { fontFamily: 'monospace', fontWeight: 'bold', fontSize: '16px', lineHeight: '16px', letterSpacing: '-2px', marginBottom: 0 };
+  const letterStyle = { fontFamily: 'monospace', textAlign: 'left', fontWeight: 'bold', fontSize: '16px', lineHeight: '16px', letterSpacing: '-2px', marginBottom: 0 };
+  const fakeDNAs = [
+    [4,1,0,6,6,7,2,5], // n
+    [7,2,0,6,2,7,0,4], // P
+    [3,5,3,6,0,5,0,0], // B
+    [2,3,1,6,0,7,3,5], // ~A
+    [7,5,7,4,7,4,4,0], // _M
+  ];
 
   return (
     <div className="App">
@@ -550,7 +558,7 @@ function App (props) {
                         </div>
                         <div>{item.description}</div>
                         <div>
-                          {makeLetter([]).map(row => (<pre style={letterStyle}>{row.join('')}</pre>))}
+                          {makeLetter(fakeDNAs[id]).map(row => (<pre style={letterStyle}>{row.join('')}</pre>))}
                         </div>
                       </Card>
 
