@@ -7,7 +7,10 @@ const bgCh = ' ';
 const newRow = () => [...Array(cols)].map(und => bgCh);
 const newGrid = () => [...Array(rows)].map(_ => newRow());
 function rowIsEmpty(grid, row) {
-  return (grid[row].findIndex(ch => ch != bgCh) == -1);
+  if (grid[row]) {
+    return (grid[row].findIndex(ch => ch != bgCh) == -1);
+  }
+  return true;
 }
 function colIsEmpty(grid, col) {
   for (let i = 0; i < grid.length; i++) {
@@ -17,12 +20,21 @@ function colIsEmpty(grid, col) {
   }
   return (grid.map(row => row[col]).findIndex(ch => ch != bgCh) == -1);
 }
-function print(grid, usedRnds) {
-  //console.log('rnd (bits: ' + 3*usedRnds.length + '): ' + usedRnds.join(', '));
+function print(grid) {
   for (let row = 0; row < grid.length; row++) {
-    if (!rowIsEmpty(grid, row)) {
-      console.log(grid[row].join(''));
+    //if (!rowIsEmpty(grid, row)) {
+    try {
+      if ((grid[row])) {
+        console.log(grid[row].join(''));
+      } else {
+        console.log('');
+      }
+    } catch(e) {
+      console.log(`row: ${row}, grid.length: ${grid.length}`);
+      console.log(grid);
+      console.log(e);
     }
+    //}
   }
 }
 function crop(grid) {
@@ -63,17 +75,14 @@ function strepeat(str, count) {
   return retval;
 }
 
-// let usedRnds = [];
 function _rnd() {
   // simulates 3 bits of entropy, an octal
-  let rv = Math.floor(Math.random()*8);
-  // usedRnds.push(rv);
-  return rv;
+  return Math.floor(Math.random()*8);
 }
 
-// returns a function that will return randomness on each call
+// returns a function that will return randomness on each call. recycle for limitless fun.
 function makeRng(entropy) {
-  return () => entropy.shift();
+  return () => { const x = entropy.shift(); entropy.push(x); return x; }
 }
 
 function renderLetter(grid, rng) {
@@ -81,35 +90,54 @@ function renderLetter(grid, rng) {
   let y = Math.floor(0.75 * rows);
   const startStroke = rng() % 4; // max 3
   const maxStrokes = startStroke + 2 + rng() % 6; // min 2
-  const _write = (s) => write(grid, x, y, s);
+  const nextNum = rng();
+  const skipStroke = nextNum > startStroke ? (nextNum < maxStrokes ? nextNum : nextNum-3) : nextNum % startStroke
+  const _write = (s) => i == skipStroke ? false : write(grid, x, y, s);
 
-  let width = 3; // XXX
+  let i;
   // % 4 == 0 -> up, == 1 -> left,  down, right
-  for (let i = startStroke; i < maxStrokes; i++) {
+  for (i = startStroke; i < maxStrokes; i++) {
     let len = 8 + rng(); // lens.shift();
+    let lenCopy = len;
     let girth;
     switch (i % 4) {
       case 0:
         girth = 2 + rng();
-        _write('\\' + strepeat('_', girth) + '\\/');
-        y--;
-        _write('/' + strepeat('_', girth) + '/ /');
-        while (len--) {
+        if (rng() % 3 == 0) { // diag
+          _write('\\' + strepeat('_', girth) + '\\/');
+          x--; y--;
+          _write('\\' + strepeat(' ', girth) + '\\  /');
+          while (len--) {
+            x--; y--;
+            _write('\\' + strepeat(' ', girth) + '\\   \\');
+          }
+          y--;
+          _write('/' + strepeat('_', girth) + '/  \\');
           x++; y--;
-          _write('/' + strepeat(' ', girth) + '/ /');
+          _write('/' + strepeat(' ', girth) + '/\\');
+          x++; y--;
+          _write(strepeat('_', girth+1));
+        } else {
+          _write('\\' + strepeat('_', girth) + '\\/');
+          y--;
+          _write('/' + strepeat('_', girth) + '/ /');
+          while (len--) {
+            x++; y--;
+            _write('/' + strepeat(' ', girth) + '/ /');
+          }
+          x++; y--;
+          _write('/' + strepeat(' ', girth) + '/\\');
+          x++; y--;
+          _write(strepeat('_', girth));
+          y += 1; x += 2; // recenter
         }
-        x++; y--;
-        _write('/' + strepeat(' ', girth) + '/\\');
-        x++; y--;
-        _write(strepeat('_', girth));
-        y += 1; x += 2; // recenter
         break;
       case 1:
         girth = 2; // hard-coded
         len *= 2;
         x -= len - 1;
         y--;
-        _write(strepeat('_', len));
+        _write(strepeat('_', len+1));
         x--; y++;
         _write('/' + strepeat(' ', len) + '/\\');
         while (girth--) {
@@ -123,19 +151,40 @@ function renderLetter(grid, rng) {
         break;
       case 2:
         girth = 2 + rng();
-        x += 2; y -= 4;
-        _write(strepeat('_', girth));
-        x--; y++;
-        _write('/' + strepeat(' ', girth) + '/\\');
-        while (len--) {
+        if (rng() % 3 == 0) { // diag
+          _write(strepeat('_', girth));
           x--; y++;
-          _write('/' + strepeat(' ', girth) + '/ /');
+          _write('/' + strepeat(' ', girth) + '/\\');
+          x--; y++;
+          _write('/' + strepeat('_', girth) + '/  \\');
+          while (len--) {
+            x++; y++;
+            _write('\\' + strepeat(' ', girth) + '\\   \\');
+          }
+          x++; y++;
+          _write('\\' + strepeat(' ', girth) + '\\  /');
+          x++; y++;
+          _write('\\' + strepeat('_', girth) + '\\/');
+        } else {
+          x += 2; y -= 4;
+          _write(strepeat('_', girth));
+          x--; y++;
+          _write('/' + strepeat(' ', girth) + '/\\');
+          while (len--) {
+            x--; y++;
+            _write('/' + strepeat(' ', girth) + '/ /');
+          }
+          x--; y++;
+          _write('/' + strepeat('_', girth) + '/ /');
+          y++;
+          _write('\\' + strepeat('_', girth) + '\\/');
+          if (true || rng() % 2 == 0) {
+            y -= Math.floor(lenCopy / 2);
+            x += Math.floor(lenCopy /2);
+          } else {
+            y -= 1; x -= 2; // recenter
+          }
         }
-        x--; y++;
-        _write('/' + strepeat('_', girth) + '/ /');
-        y++;
-        _write('\\' + strepeat('_', girth) + '\\/');
-        y -= 1; x -= 2; // recenter
         break;
       case 3:
         len *= 2;
@@ -159,14 +208,18 @@ function renderLetter(grid, rng) {
 
 function main() {
   let grid = newGrid();
-  let rng = makeRng([4, 4, 1, 4, 1, 7, 0, 4, 0, 3, 2]);
+  let numbers = [...Array(8)].map(_ => _rnd());
+  console.log(numbers.join(','));
+  //let rng = makeRng([4, 4, 1, 4, 1, 7, 0, 4, 0, 3, 2]);
+  let rng = makeRng(numbers);
   renderLetter(grid, rng);
   print(grid);
 }
-//main();
+if (require.main === module) {
+  main();
+}
 
-
-export {
+module.exports = {
   newGrid,
   makeRng,
   renderLetter,
