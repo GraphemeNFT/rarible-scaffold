@@ -66,8 +66,31 @@ describe("Grapheme Tests", function () {
                 }
             });
 
+            it("Should emit relevant events", async function () {
+                await expect(graphemeInstance.rollToMint(addr2.address))
+                    .to.emit(graphemeInstance, 'Transfer')
+                    .withArgs(function () {}, addr2.address, 7)
+                    .withArgs(function () {}, addr2.address, 8)
+                    .withArgs(function () {}, addr2.address, 9)
+                    .withArgs(function () {}, addr2.address, 10)
+                    .withArgs(function () {}, addr2.address, 11)
+                    .withArgs(function () {}, addr2.address, 12)
+                    .to.emit(graphemeInstance, 'Roll')
+                    .withArgs(addr2.address, function () {});
+            });
 
         });
 
     });
+
+
+    describe("Claiming", function () {
+        it("Token owner should able to claim a minted token", async function () {
+            expect(await graphemeInstance.isClaimed(1)).to.be.false;
+            await graphemeInstance.connect(addr1).claimToken(1, 'testUri1');
+            expect(await graphemeInstance.isClaimed(1)).to.be.true;
+            expect(await graphemeInstance.tokenURI(1)).to.contain('testUri1');
+        });
+    });
+    
 });
