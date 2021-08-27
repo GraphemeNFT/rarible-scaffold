@@ -7,3 +7,6 @@ fund-deployer:
 
 balance-deployer:
 	yarn run balance ${deployer}
+
+publish:
+	yarn publish-contracts

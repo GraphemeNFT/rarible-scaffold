@@ -77,9 +77,10 @@ export default function Contract ({
 
   const [refreshRequired, triggerRefresh] = useState(false);
 
-  if (contract) {
-    console.log('contract fns', contract.interface.functions)
-  }
+  // introspect the contract
+  // if (contract) {
+  //   console.log('contract fns', contract.interface.functions)
+  // }
 
   const contractDisplay = displayedContractFunctions.map(fn => {
     if (isQueryable(fn)) {
