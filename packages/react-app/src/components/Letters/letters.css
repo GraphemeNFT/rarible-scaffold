@@ -9,15 +9,18 @@
     background-color: black;
 
     padding: 10px;
-    min-width: 30vw;
+    max-width: 30vw;
     min-height: 30vh;
     color: white;
     cursor: pointer;
+    text-align: left;
 }
 
 .letter-item:hover {
     border: 5px solid #ccc;
     background-color: #111;
-
 }
 
+.break-word {
+      word-wrap: break-word;
+}
