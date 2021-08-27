@@ -558,7 +558,7 @@ function App (props) {
                 and give you a form to interact with it locally
             */}
 
-            <DrawWordTool yourTokens={yourCollectibles} />
+            <DrawWordTool yourTokens={yourCollectibles} ipfs={ipfs} />
             <div style={{ width: 640, margin: "auto", marginTop: 32, paddingBottom: 32 }}>
               <List
                 bordered
