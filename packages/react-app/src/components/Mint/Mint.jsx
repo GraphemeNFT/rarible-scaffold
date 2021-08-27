@@ -26,28 +26,6 @@ export default function Mint (props) {
             setMintTo(newValue);
           }}
         />
-        <Input
-          value={ipfsHash}
-          placeholder="IPFS Hash"
-          onChange={e => {
-            setIpfsHash(e.target.value);
-          }}
-        />
-        <Button
-          style={{ margin: 8 }}
-          loading={sending}
-          size="large"
-          shape="round"
-          type="primary"
-          onClick={async () => {
-            setSending(true);
-            console.log("minting to mintTo", mintTo);
-            await writeContracts.YourCollectible.mintItem(mintTo, ipfsHash);
-            setSending(false);
-          }}
-        >
-          Mint
-        </Button>
 
         <Button
           style={{ margin: 8 }}
@@ -64,6 +42,49 @@ export default function Mint (props) {
         >
           rollToMint
         </Button>
+
+        <Button
+          style={{ margin: 8 }}
+          loading={sending}
+          size="large"
+          shape="round"
+          type="primary"
+          onClick={async () => {
+            setSending(true);
+            const id = await writeContracts.YourCollectible.mintLetter(mintTo);
+            console.log("mintLetter to:", mintTo, ' id =>', id);
+            setSending(false);
+          }}
+        >
+          mintLetter
+        </Button>
+
+        <hr />
+
+        <Input
+          value={ipfsHash}
+          placeholder="IPFS Hash"
+          onChange={e => {
+            setIpfsHash(e.target.value);
+          }}
+        />
+
+        <Button
+          style={{ margin: 8 }}
+          loading={sending}
+          size="large"
+          shape="round"
+          type="primary"
+          onClick={async () => {
+            setSending(true);
+            console.log("minting to mintTo", mintTo);
+            await writeContracts.YourCollectible.mintItem(mintTo, ipfsHash);
+            setSending(false);
+          }}
+        >
+          Mint with IPFS Hash
+        </Button>
+
       </Card>
 
       <Card>

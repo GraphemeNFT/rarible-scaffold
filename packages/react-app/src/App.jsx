@@ -230,26 +230,32 @@ function App (props) {
       const collectibleUpdate = [];
       for (let tokenIndex = 0; tokenIndex < balance; tokenIndex++) {
         try {
-          console.log("GEtting token index", tokenIndex);
+          console.log("Getting token index", tokenIndex);
           const tokenId = await readContracts.YourCollectible.tokenOfOwnerByIndex(address, tokenIndex);
-          console.log("tokenId", tokenId);
+          console.log("tokenId:", tokenId);
           const tokenURI = await readContracts.YourCollectible.tokenURI(tokenId);
-          console.log("tokenURI", tokenURI);
+          console.log("tokenURI:", tokenURI);
 
           const ipfsHash = tokenURI.replace("https://ipfs.io/ipfs/", "");
           console.log("ipfsHash", ipfsHash);
 
-          const jsonManifestBuffer = await getFromIPFS(ipfsHash);
-
           try {
-            const jsonManifest = JSON.parse(jsonManifestBuffer.toString());
-            console.log("jsonManifest", jsonManifest);
+            let jsonManifest = {}
+            if (!tokenURI) {
+              const jsonManifestBuffer = await getFromIPFS(ipfsHash);
+              jsonManifest = JSON.parse(jsonManifestBuffer.toString());
+              console.log("jsonManifest", jsonManifest);
+            } else {
+              console.log("No tokenURI for tokenId", tokenId);
+            }
             collectibleUpdate.push({ id: tokenId, uri: tokenURI, owner: address, ...jsonManifest });
           } catch (e) {
-            console.log(e);
+            console.log('parseManifest error', e);
+          } finally {
+            console.log('handled update')
           }
         } catch (e) {
-          console.log(e);
+          console.log('updateCollectibles error', e);
         }
       }
       setYourCollectibles(collectibleUpdate);

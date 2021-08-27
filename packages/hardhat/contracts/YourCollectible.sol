@@ -34,16 +34,26 @@ contract YourCollectible is ERC721 {
         _setBaseURI("https://ipfs.io/ipfs/");
     }
 
-    // function rollToMint(address to) public payable {
-
+    // mint with IPFS hash
     function mintItem(address to, string memory tokenURI)
         public
         returns (uint256)
     {
-        _tokenIds.increment();
-        uint256 id = _tokenIds.current();
-        _mint(to, id);
+        uint256 prc = getRandomness();
+        uint256 i = 0;
+        uint256 random = uint256(keccak256(abi.encodePacked(prc, i)));
+        uint256 id = mintCharacterToken(to, random);
         _setTokenURI(id, tokenURI);
+        return id;
+    }
+
+    // mint a single letter
+    function mintLetter(address to) public returns (uint256) {
+        uint256 prc = getRandomness();
+        uint256 i = 0;
+        uint256 random = uint256(keccak256(abi.encodePacked(prc, i)));
+        uint256 id = mintCharacterToken(to, random);
+        console.log("mintLetter. id:", id);
         return id;
     }
 
