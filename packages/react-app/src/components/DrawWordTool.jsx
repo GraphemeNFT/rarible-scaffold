@@ -25,9 +25,10 @@ const STARTING_JSON = {
     },
   ],
 };
-function makeMetadata(name, tokenIds, rows, cols) {
+function makeMetadata(imageCid, name, tokenIds, rows, cols) {
   let metadata = Object.assign({}, STARTING_JSON);
   metadata.name = name;
+  metadata.image = imageCid;
   metadata.attributes = [];
   for (let i = 0; i < tokenIds.length; i++) {
     metadata.attributes.push({ trait_type: "tokenId_" + i, value: tokenIds[i] });
@@ -125,7 +126,26 @@ export default function DrawWordTool(props) {
   const wrapStyle = { padding: 10, border: '5px solid gold', minHeight: 100 };
 
   const castWord = async () => {
-    const ipfsResult = await metadataToIpfs(makeMetadata(wordName, tokenIds, rows, cols), props.ipfs);
+    let canvas = document.getElementById('drawword-canvas');
+    let ctx = canvas.getContext('2d');
+    const canBlob = await new Promise((resolve, reject) => {
+      canvas.toBlob((blob) => resolve(blob));
+    });
+    let ipfsCanvasResult;
+    try {
+      ipfsCanvasResult = await props.ipfs.add(canBlob);
+    } catch(e) {
+      console.log('ipfs.add of blob failed: ', e);
+      return;
+    }
+    console.log('canBlob ipfs cid: ', ipfsCanvasResult);
+    let ipfsResult;
+    try {
+      ipfsResult = await metadataToIpfs(makeMetadata('ipfs://' + ipfsCanvasResult.path, wordName, tokenIds, rows, cols), props.ipfs);
+    } catch(e) {
+      console.log('ipfs.add of metadata.json failed: ', e);
+      return;
+    }
     console.log('castWord ipfsResult: ', ipfsResult);
     // TODO take cid and pass to contract to mint Word
     // await writeContracts.YourCollectible.castWord(mintTo, ipfsHash, );
@@ -206,7 +226,7 @@ function DrawWord({ tokenIds, tokenDNAs, rows, cols }) {
     let canvas = document.getElementById('drawword-canvas');
     console.log(canvas);
     if (canvas) {
-      let ctx = canvas.getContext('2d');
+      let ctx = canvas.getContext('2d' /* weird alias effect: , { alpha: false } */);
       ctx.font = '14px/14px P0T-NOoDLE';
       ctx.clearRect(0, 0, canvasWidth, canvasHeight);
       //ctx.strokeText('Hello world', 50, 100);
