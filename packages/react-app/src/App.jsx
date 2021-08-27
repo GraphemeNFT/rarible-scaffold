@@ -644,7 +644,9 @@ function App (props) {
                             accountAddress={address}
                             // ERC721Address={writeContracts.YourCollectible.address}
                             writeContracts={writeContracts}
+                            ipfs={ipfs}
                             tokenId={id}
+                            tokenDNA={'TODO'}
                             onClaimed={() => { setFakeClaimed(fakeClaimed.concat([id])); console.log('YOU CLAIMED token ', id); }}
                           />
                         )}
