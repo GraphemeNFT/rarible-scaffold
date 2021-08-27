@@ -6,7 +6,7 @@ import { getSelectedOperationName } from "graphiql";
 
 export default function Mint (props) {
   const [mintTo, setMintTo] = React.useState();
-  const [ipfsHash, setIpfsHash] = React.useState();
+  const [ipfsHash, setIpfsHash] = React.useState('Qmc9hvaC9EUK7efbCfJc2QESB9NxW84jbPiTvz1p6Lh91d');
   const [tokenId, setTokenId] = React.useState(1);
   const [itemDna, setItemDna] = React.useState('-');
   const [sending, setSending] = React.useState();

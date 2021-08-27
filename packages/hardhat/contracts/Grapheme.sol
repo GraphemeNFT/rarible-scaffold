@@ -18,7 +18,9 @@ contract Grapheme is ERC721, Ownable {
     event Roll(address indexed owner, uint256[] tokens);
 
     mapping(uint256 => ItemDetail) private _items;
-    mapping(uint256 => ItemPosition[]) private _itemPositions;
+    mapping(uint256 => uint256[]) private _wordTokenIds;
+    mapping(uint256 => uint256[]) private _wordRows;
+    mapping(uint256 => uint256[]) private _wordColumns;
 
     uint256 _claimFee = 0;
     uint256 _mintFee = 0;
@@ -95,10 +97,12 @@ contract Grapheme is ERC721, Ownable {
 
     function setMintFee(uint256 mintFee) public onlyOwner returns (bool) {
         _mintFee = mintFee;
+        return true;
     }
 
     function setClaimFee(uint256 claimFee) public onlyOwner returns (bool) {
         _claimFee = claimFee;
+        return true;
     }
 
     function transferFundsToOwner(address dao, uint256 amount)
@@ -109,7 +113,6 @@ contract Grapheme is ERC721, Ownable {
     {
         //  require(address(this).balance >= amount, "Address: insufficient balance");
         // _owner.transfer(amount);
-
         // To do
     }
 
@@ -162,5 +165,48 @@ contract Grapheme is ERC721, Ownable {
 
         _items[tokenId].isClaimed = true;
         _setTokenURI(tokenId, tokenURI);
+    }
+
+    function mintWord(
+        address to,
+        string memory tokenURI,
+        uint256[] memory tokenIds,
+        uint256[] memory rows,
+        uint256[] memory cols
+    ) public returns (uint256) {
+        uint256 tokenId = mintItem(to, tokenURI);
+        
+        _wordTokenIds[tokenId] = tokenIds;
+        _wordRows[tokenId] = rows;
+        _wordColumns[tokenId] = cols;
+
+        return tokenId;
+    }
+
+    function saveWord(
+        uint256 tokenId,
+        string memory tokenURI,
+        uint256[] memory tokenIds,
+        uint256[] memory rows,
+        uint256[] memory cols
+    ) public {
+        require(
+            _isApprovedOrOwner(_msgSender(), tokenId),
+            "Grapheme: claimToken caller is not owner nor approved"
+        );
+        
+        _setTokenURI(tokenId, tokenURI);
+        _wordTokenIds[tokenId] = tokenIds;
+        _wordRows[tokenId] = rows;
+        _wordColumns[tokenId] = cols;
+    }
+
+    function GetWord(uint256 tokenId) public view returns (uint256[] memory tokenIds, uint256[] memory rows, uint256[] memory cols) {
+        // require(
+        //     _wordTokenIds[tokenId] != bytes4(0x0),
+        //     "No words set"
+        // );
+        return (_wordTokenIds[tokenId],  _wordRows[tokenId], _wordColumns[tokenId]);
+
     }
 }
