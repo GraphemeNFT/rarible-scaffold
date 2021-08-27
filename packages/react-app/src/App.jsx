@@ -23,7 +23,7 @@ import {
   Ramp,
   ThemeSwitch,
   Sell,
-  Mint,
+  // Mint,
   Claim,
   RollMint,
   LazyMint,
@@ -32,6 +32,8 @@ import {
 } from "./components";
 
 import Letters from "./components/Letters/Letters";
+import ClientConfig from "./helpers/ClientConfig";
+import Mint from './components/Mint/Mint'
 
 import { DAI_ABI, DAI_ADDRESS, INFURA_ID, NETWORK, NETWORKS } from "./constants";
 import { Transactor } from "./helpers";
@@ -74,10 +76,12 @@ const ipfs = ipfsAPI({ host: "ipfs.infura.io", port: "5001", protocol: "https" }
 */
 
 /// 📡 What chain are your contracts deployed to?
-const targetNetwork = NETWORKS.localhost; // <------- select your target frontend network (localhost, rinkeby, xdai, mainnet)
+//  select your target frontend network (localhost, rinkeby, xdai, mainnet)
+const targetNetwork = NETWORKS.localhost;
 
 // 😬 Sorry for all the console logging
-const DEBUG = true;
+const DEBUG = (ClientConfig.debugLevel > 2) ? true : false;
+
 
 // EXAMPLE STARTING JSON:
 const STARTING_JSON = {
@@ -226,26 +230,32 @@ function App (props) {
       const collectibleUpdate = [];
       for (let tokenIndex = 0; tokenIndex < balance; tokenIndex++) {
         try {
-          console.log("GEtting token index", tokenIndex);
+          console.log("Getting token index", tokenIndex);
           const tokenId = await readContracts.YourCollectible.tokenOfOwnerByIndex(address, tokenIndex);
-          console.log("tokenId", tokenId);
+          console.log("tokenId:", tokenId);
           const tokenURI = await readContracts.YourCollectible.tokenURI(tokenId);
-          console.log("tokenURI", tokenURI);
+          console.log("tokenURI:", tokenURI);
 
           const ipfsHash = tokenURI.replace("https://ipfs.io/ipfs/", "");
           console.log("ipfsHash", ipfsHash);
 
-          const jsonManifestBuffer = await getFromIPFS(ipfsHash);
-
           try {
-            const jsonManifest = JSON.parse(jsonManifestBuffer.toString());
-            console.log("jsonManifest", jsonManifest);
+            let jsonManifest = {}
+            if (!tokenURI) {
+              const jsonManifestBuffer = await getFromIPFS(ipfsHash);
+              jsonManifest = JSON.parse(jsonManifestBuffer.toString());
+              console.log("jsonManifest", jsonManifest);
+            } else {
+              console.log("No tokenURI for tokenId", tokenId);
+            }
             collectibleUpdate.push({ id: tokenId, uri: tokenURI, owner: address, ...jsonManifest });
           } catch (e) {
-            console.log(e);
+            console.log('parseManifest error', e);
+          } finally {
+            console.log('handled update')
           }
         } catch (e) {
-          console.log(e);
+          console.log('updateCollectibles error', e);
         }
       }
       setYourCollectibles(collectibleUpdate);
@@ -273,7 +283,7 @@ function App (props) {
       writeContracts // &&
       // mainnetDAIContract
     ) {
-      console.log("_____________________________________ 🏗 scaffold-eth _____________________________________");
+      console.groupCollapsed("____ 🏗 scaffold-eth ____________");
       console.log("🌎 mainnetProvider", mainnetProvider);
       console.log("🏠 localChainId", localChainId);
       console.log("👩‍💼 selected address:", address);
@@ -283,6 +293,7 @@ function App (props) {
       console.log("📝 readContracts", readContracts);
       // console.log("🌍 DAI contract on mainnet:", mainnetDAIContract);
       console.log("🔐 writeContracts", writeContracts);
+      console.groupEnd();
     }
   }, [
     mainnetProvider,
@@ -633,17 +644,17 @@ function App (props) {
                           ERC721Address={writeContracts.YourCollectible.address}
                           tokenId={id}
                         />
-                        { fakeClaimed.indexOf(id) != -1 ? 'Claimed Already!' : (
-                        <Claim
-                          provider={userProvider}
-                          accountAddress={address}
-                          // ERC721Address={writeContracts.YourCollectible.address}
-                          writeContracts={writeContracts}
-                          ipfs={ipfs}
-                          tokenId={id}
-                          tokenDNA={'TODO'}
-                          onClaimed={() => { setFakeClaimed(fakeClaimed.concat([id])); console.log('YOU CLAIMED token ', id); }}
-                        />
+                        {fakeClaimed.indexOf(id) != -1 ? 'Claimed Already!' : (
+                          <Claim
+                            provider={userProvider}
+                            accountAddress={address}
+                            // ERC721Address={writeContracts.YourCollectible.address}
+                            writeContracts={writeContracts}
+                            ipfs={ipfs}
+                            tokenId={id}
+                            tokenDNA={'TODO'}
+                            onClaimed={() => { setFakeClaimed(fakeClaimed.concat([id])); console.log('YOU CLAIMED token ', id); }}
+                          />
                         )}
                       </div>
                     </List.Item>

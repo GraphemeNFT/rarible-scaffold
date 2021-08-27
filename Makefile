@@ -15,4 +15,5 @@ update:
 	yarn compile
 	yarn deploy
 	yarn publish-contracts
-	@echo "copy contract address to ./packages/react-app/src/contracts/YourCollectible.address.js"
+	# publish seems to copy contract meta data into client app
+	@echo "copied contract address to ./packages/react-app/src/contracts/YourCollectible.address.js"

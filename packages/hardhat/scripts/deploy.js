@@ -10,12 +10,15 @@ const main = async () => {
   console.log("\n\n 📡 Deploying...\n");
 
 
-  const yourCollectible = await deploy("YourCollectible") // <-- add in constructor args like line 19 vvvv
+  // TODO add in constructor args like below
+  const yourCollectible = await deploy("YourCollectible")
+  const grapheme = await deploy("Grapheme")
   // console.log('deployed', yourCollectible)
-  console.log('functions', yourCollectible.functions)
-  console.log('\ndeployed to address', yourCollectible.address, '\n')
+  // console.log('functions', yourCollectible.functions)
+  console.log('\ndeployed YourCollectible to address', yourCollectible.address, '\n')
 
-  // const NFTHolder = await deploy("NFTHolder") // <-- add in constructor args like line 19 vvvv
+  // <-- add in constructor args like line 19 vvvv
+  // const NFTHolder = await deploy("NFTHolder")
 
   //const yourContract = await ethers.getContractAt('YourContract', "0xaAC799eC2d00C013f1F11c37E654e59B0429DF6A") //<-- if you want to instantiate a version of a contract at a specific address!
   //const secondContract = await deploy("SecondContract")

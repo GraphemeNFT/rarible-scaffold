@@ -1,4 +1,4 @@
-const AppConfig = {
+const ClientConfig = {
 
     debugLevel: 1,
 
@@ -12,4 +12,4 @@ const AppConfig = {
 }
 
 
-module.exports = AppConfig;
+module.exports = ClientConfig;
