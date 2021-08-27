@@ -23,7 +23,6 @@ import {
   Ramp,
   ThemeSwitch,
   Sell,
-  Mint,
   RollMint,
   LazyMint,
   RaribleItemIndexer,
@@ -31,6 +30,8 @@ import {
 } from "./components";
 
 import Letters from "./components/Letters/Letters";
+import ClientConfig from "./helpers/ClientConfig";
+import Mint from './components/Mint/Mint'
 
 import { DAI_ABI, DAI_ADDRESS, INFURA_ID, NETWORK, NETWORKS } from "./constants";
 import { Transactor } from "./helpers";
@@ -73,10 +74,12 @@ const ipfs = ipfsAPI({ host: "ipfs.infura.io", port: "5001", protocol: "https" }
 */
 
 /// 📡 What chain are your contracts deployed to?
-const targetNetwork = NETWORKS.localhost; // <------- select your target frontend network (localhost, rinkeby, xdai, mainnet)
+//  select your target frontend network (localhost, rinkeby, xdai, mainnet)
+const targetNetwork = NETWORKS.localhost;
 
 // 😬 Sorry for all the console logging
-const DEBUG = true;
+const DEBUG = (ClientConfig.debugLevel > 2) ? true : false;
+
 
 // EXAMPLE STARTING JSON:
 const STARTING_JSON = {
@@ -272,7 +275,7 @@ function App (props) {
       writeContracts // &&
       // mainnetDAIContract
     ) {
-      console.log("_____________________________________ 🏗 scaffold-eth _____________________________________");
+      console.groupCollapsed("____ 🏗 scaffold-eth ____________");
       console.log("🌎 mainnetProvider", mainnetProvider);
       console.log("🏠 localChainId", localChainId);
       console.log("👩‍💼 selected address:", address);
@@ -282,6 +285,7 @@ function App (props) {
       console.log("📝 readContracts", readContracts);
       // console.log("🌍 DAI contract on mainnet:", mainnetDAIContract);
       console.log("🔐 writeContracts", writeContracts);
+      console.groupEnd();
     }
   }, [
     mainnetProvider,
