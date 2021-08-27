@@ -117,7 +117,7 @@ export default function Contract ({
       <Card
         title={
           <div>
-            {name}
+            name: {name}
             <div style={{ float: "right" }}>
               <Account
                 address={address}

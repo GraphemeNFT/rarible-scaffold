@@ -473,7 +473,7 @@ function App (props) {
               }}
               to="/raribleItemIndexer"
             >
-              Rarible Item Indexer
+              Item Indexer
             </Link>
           </Menu.Item>
           <Menu.Item key="/rarible">
@@ -483,7 +483,7 @@ function App (props) {
               }}
               to="/rarible"
             >
-              Rarible Order Indexer
+              Order Indexer
             </Link>
           </Menu.Item>
           <Menu.Item key="/transfers">
@@ -506,6 +506,18 @@ function App (props) {
               IPFS Upload
             </Link>
           </Menu.Item>
+
+          <Menu.Item key="/contract">
+            <Link
+              onClick={() => {
+                setRoute("/contract");
+              }}
+              to="/contract"
+            >
+              YC Contract
+            </Link>
+          </Menu.Item>
+
           <Menu.Item key="/ipfsdown">
             <Link
               onClick={() => {
@@ -516,6 +528,8 @@ function App (props) {
               IPFS Download
             </Link>
           </Menu.Item>
+
+
           <Menu.Item key="/debugcontracts">
             <Link
               onClick={() => {
@@ -526,6 +540,7 @@ function App (props) {
               Debug Contracts
             </Link>
           </Menu.Item>
+
         </Menu>
 
         <Switch>
@@ -849,6 +864,19 @@ function App (props) {
 
             <pre style={{ padding: 16, width: 500, margin: "auto", paddingBottom: 150 }}>{ipfsContent}</pre>
           </Route>
+
+          <Route path="/contract">
+
+            <Contract
+              name="YourCollectible"
+              signer={userProvider.getSigner()}
+              provider={localProvider}
+              address={address}
+              blockExplorer={blockExplorer}
+            />
+
+          </Route>
+
           <Route path="/debugcontracts">
             <Contract
               name="YourCollectible"
