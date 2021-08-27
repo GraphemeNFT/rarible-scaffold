@@ -5,24 +5,18 @@ import React from "react"; // useCallback, useEffect, useState
 //     // Menu, Row
 // } from "antd";
 
+import OneLetter from './OneLetter'
+
 import './letters.css'
 
 export default function Letters (props) {
-    console.log('letters.props', props.dataSource)
+    // console.log('letters.props', props.dataSource)
 
     const inner = (letters) => {
         return letters.map(item => {
-            console.log('letter', Object.keys(item))
-            const key = 'item-' + item.id.toNumber()
+            const ukey = 'item-' + item.id.toNumber()
             return (
-                <span className='letter-item' key={key}>
-                    <div>
-                        {key}
-                    </div>
-                    <div>
-                        {item.name}
-                    </div>
-                </span>
+                <OneLetter readContracts={props.readContracts} key={ukey} item={item} />
             )
         })
     }
