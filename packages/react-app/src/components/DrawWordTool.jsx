@@ -194,20 +194,31 @@ function DrawWord({ tokenIds, tokenDNAs, rows, cols }) {
   // rows
   // cols
   const bgCh = ' ';
+  const canvasWidth = 1000;
+  const canvasHeight = 500;
   const newRow = () => [...Array(250)].map(und => bgCh);
   let grid = [...Array(80)].map(_ => newRow());
-  let letterGrids = tokenDNAs.map((dna, idx) => {
+  tokenDNAs.forEach((dna, idx) => {
     let letterGrid = newGrid();
     renderLetter(letterGrid, makeRng(dna.split(',').map(s => parseInt(s))));
     writeLetterToGrid(grid, letterGrid, rows[idx], cols[idx]);
-    // grid[rows[idx]][cols[idx]] = idx; // debug
-    return letterGrid;
+
+    let canvas = document.getElementById('drawword-canvas');
+    console.log(canvas);
+    if (canvas) {
+      let ctx = canvas.getContext('2d');
+      ctx.font = '14px/14px P0T-NOoDLE';
+      ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+      //ctx.strokeText('Hello world', 50, 100);
+      grid.forEach((row, idx) => ctx.strokeText(row.join(''), 0, idx * 14));
+    }
   });
   crop(grid);
 
   return (
       <div>
         { grid.map((row, idx) => (<pre key={'grow-' + idx} className='pre-amiga'>{row.join('')}</pre>)) }
+        <canvas id='drawword-canvas' width={canvasWidth} height={canvasHeight} ></canvas>
       </div>
   );
 }
