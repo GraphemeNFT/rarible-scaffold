@@ -410,13 +410,13 @@ function App (props) {
   };
   const letterStyle = { fontFamily: 'monospace', textAlign: 'left', fontWeight: 'bold', fontSize: '16px', lineHeight: '16px', letterSpacing: '-2px', marginBottom: 0 };
   const fakeDNAs = [
-    [4,1,0,6,6,7,2,5], // n
-    [7,2,0,6,2,7,0,4], // P
-    [3,5,3,6,0,5,0,0], // B
-    [2,3,1,6,0,7,3,5], // ~A
-    [7,5,7,4,7,4,4,0], // _M
-    [7,2,0,1,7,1,2,1], // _X~
-    [4,2,1,7,6,4,4,0], // 4
+    [4, 1, 0, 6, 6, 7, 2, 5], // n
+    [7, 2, 0, 6, 2, 7, 0, 4], // P
+    [3, 5, 3, 6, 0, 5, 0, 0], // B
+    [2, 3, 1, 6, 0, 7, 3, 5], // ~A
+    [7, 5, 7, 4, 7, 4, 4, 0], // _M
+    [7, 2, 0, 1, 7, 1, 2, 1], // _X~
+    [4, 2, 1, 7, 6, 4, 4, 0], // 4
   ];
 
   const [fakeClaimed, setFakeClaimed] = useState([]);
@@ -476,7 +476,7 @@ function App (props) {
               }}
               to="/raribleItemIndexer"
             >
-              Rarible Item Indexer
+              Item Indexer
             </Link>
           </Menu.Item>
           <Menu.Item key="/rarible">
@@ -486,7 +486,7 @@ function App (props) {
               }}
               to="/rarible"
             >
-              Rarible Order Indexer
+              Order Indexer
             </Link>
           </Menu.Item>
           <Menu.Item key="/transfers">
@@ -509,6 +509,18 @@ function App (props) {
               IPFS Upload
             </Link>
           </Menu.Item>
+
+          <Menu.Item key="/contract">
+            <Link
+              onClick={() => {
+                setRoute("/contract");
+              }}
+              to="/contract"
+            >
+              YC Contract
+            </Link>
+          </Menu.Item>
+
           <Menu.Item key="/ipfsdown">
             <Link
               onClick={() => {
@@ -519,6 +531,8 @@ function App (props) {
               IPFS Download
             </Link>
           </Menu.Item>
+
+
           <Menu.Item key="/debugcontracts">
             <Link
               onClick={() => {
@@ -529,6 +543,7 @@ function App (props) {
               Debug Contracts
             </Link>
           </Menu.Item>
+
         </Menu>
 
         <Switch>
@@ -862,6 +877,19 @@ function App (props) {
 
             <pre style={{ padding: 16, width: 500, margin: "auto", paddingBottom: 150 }}>{ipfsContent}</pre>
           </Route>
+
+          <Route path="/contract">
+
+            <Contract
+              name="YourCollectible"
+              signer={userProvider.getSigner()}
+              provider={localProvider}
+              address={address}
+              blockExplorer={blockExplorer}
+            />
+
+          </Route>
+
           <Route path="/debugcontracts">
             <Contract
               name="YourCollectible"

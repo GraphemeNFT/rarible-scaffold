@@ -42,6 +42,23 @@ export default function Mint (props) {
       >
         Mint
       </Button>
+
+      <Button
+        style={{ margin: 8 }}
+        loading={sending}
+        size="large"
+        shape="round"
+        type="primary"
+        onClick={async () => {
+          setSending(true);
+          console.log("rollToMint to:", mintTo);
+          await writeContracts.YourCollectible.rollToMint(mintTo);
+          setSending(false);
+        }}
+      >
+        rollToMint
+      </Button>
+
     </div>
   );
 }
