@@ -10,3 +10,9 @@ balance-deployer:
 
 publish:
 	yarn publish-contracts
+
+update:
+	yarn compile
+	yarn deploy
+	yarn publish-contracts
+	@echo "copy contract address to ./packages/react-app/src/contracts/YourCollectible.address.js"

@@ -88,7 +88,10 @@ contract YourCollectible is ERC721 {
 
     function getDNA(uint256 tokenId) public view returns (uint256) {
         // TODO: emit event
-        return _items[tokenId].identifier;
+        console.log(msg.sender, "\ncalling getDNA for token", tokenId);
+        uint256 dna = _items[tokenId].identifier;
+        console.log("identifier is:", dna);
+        return dna;
     }
 
     function rollToMint(address to) public payable {
