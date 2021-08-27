@@ -159,10 +159,10 @@ export default function DrawWordTool(props) {
 
       <span>Add one of your Letters: </span>
       {yourTokens ? yourTokens.map(item => (<Button key={'add-' + item.id.toString()} onClick={e => add(item.id.toNumber())} >Add #{item.id.toString()}</Button>)) : '...'}
-      <DrawWord tokenIds={tokenIds} tokenDNAs={tokenDNAs} rows={rows} cols={cols} />
       { tokenIds.map((id, idx) => (
         <LetterControl key={'lc-' + idx} idx={idx} delIdx={delIdx} tokenId={tokenIds[idx]} tokenDNA={tokenDNAs[idx]} setRow={(num) => setRowIdx(idx, num)} setCol={(num) => setColIdx(idx, num)} row={rows[idx]} col={cols[idx]} />
       )) }
+      <DrawWord tokenIds={tokenIds} tokenDNAs={tokenDNAs} rows={rows} cols={cols} />
       </div>
   );
 }
