@@ -24,6 +24,7 @@ import {
   ThemeSwitch,
   Sell,
   Mint,
+  Claim,
   RollMint,
   LazyMint,
   RaribleItemIndexer,
@@ -418,6 +419,8 @@ function App (props) {
     [4,2,1,7,6,4,4,0], // 4
   ];
 
+  const [fakeClaimed, setFakeClaimed] = useState([]);
+
   return (
     <div className="App">
       {/* ✏️ Edit the header and change the title to your project name */}
@@ -615,6 +618,16 @@ function App (props) {
                           ERC721Address={writeContracts.YourCollectible.address}
                           tokenId={id}
                         />
+                        { fakeClaimed.indexOf(id) != -1 ? 'Claimed Already!' : (
+                        <Claim
+                          provider={userProvider}
+                          accountAddress={address}
+                          // ERC721Address={writeContracts.YourCollectible.address}
+                          writeContracts={writeContracts}
+                          tokenId={id}
+                          onClaimed={() => { setFakeClaimed(fakeClaimed.concat([id])); console.log('YOU CLAIMED token ', id); }}
+                        />
+                        )}
                       </div>
                     </List.Item>
                   );
