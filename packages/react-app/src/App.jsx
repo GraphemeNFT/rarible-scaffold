@@ -24,6 +24,7 @@ import {
   ThemeSwitch,
   Sell,
   Mint,
+  RollMint,
   LazyMint,
   RaribleItemIndexer,
   DrawWordTool,
@@ -624,6 +625,7 @@ function App (props) {
 
           <Route path="/mint">
             <div style={{ paddingTop: 32, width: 740, margin: "auto" }}>
+              <RollMint ensProvider={mainnetProvider} provider={userProvider} writeContracts={writeContracts} />
               <Mint ensProvider={mainnetProvider} provider={userProvider} writeContracts={writeContracts} />
             </div>
           </Route>
