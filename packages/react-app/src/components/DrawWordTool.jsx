@@ -1,7 +1,7 @@
 
 import React, { useState } from "react";
 import { Button, Input } from "antd";
-
+import "../App.css";
 import { newGrid, makeRng, renderLetter, crop } from "../helpers/grapheme";
 
 // EXAMPLE STARTING JSON:
@@ -204,11 +204,10 @@ function DrawWord({ tokenIds, tokenDNAs, rows, cols }) {
     return letterGrid;
   });
   crop(grid);
-  const letterStyle = {fontFamily: 'monospace', fontWeight: 'bold', fontSize: '16px', lineHeight: '16px', letterSpacing: '-2px', marginBottom: 0};
 
   return (
       <div>
-        { grid.map((row, idx) => (<pre key={'grow-' + idx} style={letterStyle}>{row.join('')}</pre>)) }
+        { grid.map((row, idx) => (<pre key={'grow-' + idx} className='pre-amiga'>{row.join('')}</pre>)) }
       </div>
   );
 }

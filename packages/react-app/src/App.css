@@ -7,3 +7,16 @@
   font-family: 'Courier New', Courier, monospace;
   font-size: 14px;
 }
+
+@font-face {
+  font-family: "P0T-NOoDLE";
+  src: url("/P0T-NOoDLE_v1.0.ttf") format("truetype");
+}
+
+.pre-amiga, pre {
+  font-family: "P0T-NOoDLE";
+  margin: 0;
+  padding: 0;
+  font-size: 14px;
+  line-height: 14px;
+}
