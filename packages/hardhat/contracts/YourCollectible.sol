@@ -8,7 +8,7 @@ pragma solidity >=0.6.0 <0.9.0;
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
-import "@nomiclabs/buidler/console.sol";
+//import "@nomiclabs/buidler/console.sol";
 
 // GET LISTED ON OPENSEA: https://testnets.opensea.io/get-listed/step-two
 
@@ -53,7 +53,6 @@ contract YourCollectible is ERC721 {
         uint256 i = 0;
         uint256 random = uint256(keccak256(abi.encodePacked(prc, i)));
         uint256 id = mintCharacterToken(to, random);
-        console.log("mintLetter. id:", id);
         return id;
     }
 
@@ -98,9 +97,7 @@ contract YourCollectible is ERC721 {
 
     function getDNA(uint256 tokenId) public view returns (uint256) {
         // TODO: emit event
-        console.log(msg.sender, "\ncalling getDNA for token", tokenId);
         uint256 dna = _items[tokenId].identifier;
-        console.log("identifier is:", dna);
         return dna;
     }
 
@@ -131,6 +128,5 @@ contract YourCollectible is ERC721 {
     }
 
     fallback() external payable {
-        console.log(msg.sender, "just deposited", msg.value);
     }
 }
