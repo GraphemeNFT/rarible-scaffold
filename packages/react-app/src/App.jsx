@@ -470,6 +470,7 @@ function App (props) {
               Mint
             </Link>
           </Menu.Item>
+
           <Menu.Item key="/lazyMint">
             <Link
               onClick={() => {
@@ -480,6 +481,7 @@ function App (props) {
               Lazy Mint
             </Link>
           </Menu.Item>
+
           <Menu.Item key="/raribleItemIndexer">
             <Link
               onClick={() => {
@@ -490,6 +492,7 @@ function App (props) {
               Item Indexer
             </Link>
           </Menu.Item>
+
           <Menu.Item key="/rarible">
             <Link
               onClick={() => {
@@ -500,6 +503,7 @@ function App (props) {
               Order Indexer
             </Link>
           </Menu.Item>
+
           <Menu.Item key="/transfers">
             <Link
               onClick={() => {
@@ -510,6 +514,7 @@ function App (props) {
               Transfers
             </Link>
           </Menu.Item>
+
           <Menu.Item key="/ipfsup">
             <Link
               onClick={() => {
@@ -543,7 +548,6 @@ function App (props) {
             </Link>
           </Menu.Item>
 
-
           <Menu.Item key="/debugcontracts">
             <Link
               onClick={() => {
@@ -558,9 +562,6 @@ function App (props) {
         </Menu>
 
         <Switch>
-          <Route path="/letters">
-            <Letters dataSource={yourCollectibles} />
-          </Route>
 
           <Route exact path="/">
             {/*
@@ -892,7 +893,6 @@ function App (props) {
           </Route>
 
           <Route path="/contract">
-
             <Contract
               name="YourCollectible"
               signer={userProvider.getSigner()}
@@ -900,7 +900,15 @@ function App (props) {
               address={address}
               blockExplorer={blockExplorer}
             />
+          </Route>
 
+          <Route path="/letters">
+            <Letters dataSource={yourCollectibles}
+              ensProvider={mainnetProvider}
+              provider={userProvider}
+              writeContracts={writeContracts}
+              readContracts={readContracts}
+            />
           </Route>
 
           <Route path="/debugcontracts">
