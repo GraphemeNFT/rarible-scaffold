@@ -62,15 +62,7 @@ export default function OneLetter (props) {
         renderLetter(grid, makeRng(dna));
         return grid;//.map(row => row.join('') ).join('<br />');
     };
-    const letterStyle = {
-        fontFamily: 'monospace',
-        textAlign: 'left',
-        fontWeight: 'bold',
-        fontSize: '12px',
-        lineHeight: '12px',
-        letterSpacing: '-2px',
-        marginBottom: 0
-    };
+
 
     const { item } = props
     const tokenId = item.id.toNumber()
@@ -89,7 +81,7 @@ export default function OneLetter (props) {
                     // console.log('info', infoRes)
                     const hex = dnaObj.toHexString()
                     setHex(hex)
-                    const firstHex = hex.slice(0, 8)
+                    const firstHex = hex.slice(0, 12)
                     const num = parseInt(firstHex, 16)
                     const digits = num.toString().split('')
                     const dna = digits.map(digit => parseInt(digit))
@@ -103,8 +95,17 @@ export default function OneLetter (props) {
         }
     }, [tokenId])
 
+    const letterStyle = {
+        fontFamily: 'monospace',
+        textAlign: 'left',
+        fontWeight: 'bold',
+        fontSize: '12px',
+        lineHeight: '12px',
+        letterSpacing: '-2px',
+        marginBottom: 0
+    };
     const letterClass = claimed ? 'letter-item claimed' : 'letter-item'
-    // const key = 'item-' + item.id.toNumber()
+
     return (
         <span className={letterClass} key={props.ukey}>
             <div className='letter-inner'>
@@ -115,6 +116,12 @@ export default function OneLetter (props) {
                     claimed: {claimed ? 'true' : 'false'} <br />
                     name: {info.name} <br />
                 </div>
+
+                {/* <div>
+                    {makeLetter(itemDna).map(row => {
+                        return (<pre className='grapheme'>{row.join('')}</pre>)
+                    })}
+                </div> */}
 
                 {makeLetter(itemDna).map(row => (<pre style={letterStyle}>{row.join('')}</pre>))}
 

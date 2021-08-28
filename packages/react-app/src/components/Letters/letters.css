@@ -35,3 +35,15 @@
 .break-word {
       word-wrap: break-word;
 }
+
+.grapheme {
+    color: #44FF88;
+    font-family: monospace;
+    text-align: left;
+    font-weight: bold;
+    font-size: 12px;
+    line-height: 10px;
+    letter-spacing: -2px;
+    margin-bottom: 0;
+}
+
