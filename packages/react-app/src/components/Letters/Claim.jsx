@@ -1,13 +1,13 @@
 import React from "react";
 import { Button, Input, Tooltip } from "antd";
-import { AddressInput } from ".";
+import { AddressInput } from "..";
 
 // EXAMPLE STARTING JSON:
 const STARTING_JSON = {
   description: "A Grapheme NFT Letter",
   external_url: "https://austingriffith.com/portfolio/paintings/", // <-- this can link to a page for the specific file too
   image: "https://austingriffith.com/images/paintings/buffalo.jpg",
-  name: "Buffalo",
+  name: "Letter",
   attributes: [
     {
       trait_type: "DNA",
@@ -20,26 +20,34 @@ const STARTING_JSON = {
 export default function Claim (props) {
   const [name, setName] = React.useState();
   const [sending, setSending] = React.useState();
+  const tokenId = props.tokenId;
 
-  console.log({ writeContracts: props.writeContracts });
   const writeContracts = props.writeContracts;
 
-  const fakePause = async () => await new Promise(resolve => setTimeout(resolve, 2000));
+  // const fakePause = async () => await new Promise(resolve => setTimeout(resolve, 2000));
+
   const claimTokenId = async () => {
     // IPFS
     let metadata = STARTING_JSON;
     metadata.description = 'A Grapheme NFT Letter';
     metadata.name = name;
-    metadata.attributes[0].value = props.tokenDNA; // Not canonical! Trust the blockchain.
-    const result = await props.ipfs.add(JSON.stringify(metadata));
+    // TODO - normalize names eg tokenHex ?
+    metadata.attributes[0].value = props.tokenDNA;
+    const ipfsHash = await props.ipfs.add(JSON.stringify(metadata));
+    console.log('upload', metadata, 'ipfsHash:', ipfsHash);
 
-    console.log('save this .path as tokenURI in claim: ', result);
+    // console.log('save this .path as tokenURI in claim: ', ipfsHash);
     // await fakePause();
-    // await writeContracts.YourCollectible.mintItem(mintTo, ipfsHash);
-    console.log('fake claim of ', props.tokenId);
-    props.onClaimed(); // XXX gives React warning about mem leak
+    const claimed = await writeContracts.YourCollectible.claimToken(tokenId, ipfsHash.path);
+
+    console.log('claimed', props.tokenId, claimed);
+    onClaimed({ tokenId });
   };
 
+  const onClaimed = async (opts) => {
+    console.log('onClaimed', opts)
+    // const uri = await writeContracts.YourCollectible.getTokenURI(opts.tokenId);
+  }
 
   return (
     <div>

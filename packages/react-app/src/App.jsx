@@ -24,7 +24,7 @@ import {
   ThemeSwitch,
   Sell,
   // Mint,
-  Claim,
+
   RollMint,
   LazyMint,
   RaribleItemIndexer,
@@ -34,10 +34,11 @@ import {
 import Letters from "./components/Letters/Letters";
 import ClientConfig from "./helpers/ClientConfig";
 import Mint from './components/Mint/Mint'
+import Claim from './components/Letters/Claim'
 
 import { DAI_ABI, DAI_ADDRESS, INFURA_ID, NETWORK, NETWORKS } from "./constants";
 import { Transactor } from "./helpers";
-import { newGrid, makeRng, renderLetter } from "./helpers/grapheme";
+import { newGrid, makeRng, renderLetter } from "./components/Letters/grapheme";
 import {
   useBalance,
   useContractLoader,
@@ -229,6 +230,7 @@ function App (props) {
     const updateYourCollectibles = async () => {
       const collectibleUpdate = [];
       for (let tokenIndex = 0; tokenIndex < balance; tokenIndex++) {
+        console.group('updateYourCollectibles: ', tokenIndex)
         try {
           console.log("Getting token index", tokenIndex);
           const tokenId = await readContracts.YourCollectible.tokenOfOwnerByIndex(address, tokenIndex);
@@ -236,6 +238,8 @@ function App (props) {
           const tokenURI = await readContracts.YourCollectible.tokenURI(tokenId);
           console.log("tokenURI:", tokenURI);
 
+
+          // update hash?
           const ipfsHash = tokenURI.replace("https://ipfs.io/ipfs/", "");
           console.log("ipfsHash", ipfsHash);
 
@@ -257,6 +261,7 @@ function App (props) {
         } catch (e) {
           console.log('updateCollectibles error', e);
         }
+        console.groupEnd()
       }
       setYourCollectibles(collectibleUpdate);
     };
@@ -522,7 +527,18 @@ function App (props) {
               }}
               to="/ipfsup"
             >
-              IPFS Upload
+              IPFS up
+            </Link>
+          </Menu.Item>
+
+          <Menu.Item key="/ipfsdown">
+            <Link
+              onClick={() => {
+                setRoute("/ipfsdown");
+              }}
+              to="/ipfsdown"
+            >
+              IPFS down
             </Link>
           </Menu.Item>
 
@@ -534,17 +550,6 @@ function App (props) {
               to="/contract"
             >
               YC Contract
-            </Link>
-          </Menu.Item>
-
-          <Menu.Item key="/ipfsdown">
-            <Link
-              onClick={() => {
-                setRoute("/ipfsdown");
-              }}
-              to="/ipfsdown"
-            >
-              IPFS Download
             </Link>
           </Menu.Item>
 
@@ -667,7 +672,7 @@ function App (props) {
 
           <Route path="/mint">
             <div style={{ paddingTop: 32, width: 740, margin: "auto" }}>
-              <RollMint ensProvider={mainnetProvider} provider={userProvider} writeContracts={writeContracts} />
+              {/* <RollMint ensProvider={mainnetProvider} provider={userProvider} writeContracts={writeContracts} /> */}
               <Mint ensProvider={mainnetProvider} provider={userProvider} writeContracts={writeContracts} />
             </div>
           </Route>

@@ -43,7 +43,7 @@ export default function Mint (props) {
           rollToMint
         </Button>
 
-        <Button
+        {/* <Button
           style={{ margin: 8 }}
           loading={sending}
           size="large"
@@ -57,7 +57,7 @@ export default function Mint (props) {
           }}
         >
           mintLetter
-        </Button>
+        </Button> */}
 
         <hr />
 
@@ -105,13 +105,13 @@ export default function Mint (props) {
           type="primary"
           onClick={async () => {
             setSending(true);
-            const dna = await writeContracts.YourCollectible.getDNA(tokenId);
-            console.log("getDNA:", tokenId, '=>', dna);
+            const dna = await writeContracts.YourCollectible.getDna(tokenId);
+            console.log("getDna:", tokenId, '=>', dna);
             setItemDna(dna);
             setSending(false);
           }}
         >
-          getDNA
+          getDna
         </Button>
         <div className='debug-field'>
           <pre>

@@ -1,6 +1,5 @@
-pragma solidity >=0.6.0 <0.9.0;
-// pragma solidity 0.7.5;
-// pragma solidity ^0.8.0;
+pragma solidity 0.7.5;
+
 // pragma abicoder v2;
 //SPDX-License-Identifier: MIT
 
@@ -8,20 +7,28 @@ pragma solidity >=0.6.0 <0.9.0;
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
-//import "@nomiclabs/buidler/console.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
 
 // GET LISTED ON OPENSEA: https://testnets.opensea.io/get-listed/step-two
 
-contract YourCollectible is ERC721 {
+contract YourCollectible is ERC721, Ownable {
     using Counters for Counters.Counter;
     Counters.Counter private _tokenIds;
 
+    event Roll(address indexed owner, uint256[] tokens);
+
     mapping(uint256 => ItemDetail) private _items;
-    mapping(uint256 => ItemPosition[]) private _itemPositions;
+    mapping(uint256 => uint256[]) private _wordTokenIds;
+    mapping(uint256 => uint256[]) private _wordRows;
+    mapping(uint256 => uint256[]) private _wordColumns;
+
+    uint256 _claimFee = 0;
+    uint256 _mintFee = 0;
 
     struct ItemDetail {
         bool isPrimitive;
-        uint256 identifier;
+        uint256 dna;
+        bool isClaimed;
     }
 
     struct ItemPosition {
@@ -30,40 +37,33 @@ contract YourCollectible is ERC721 {
         uint256 column;
     }
 
-    constructor() public ERC721("YourCollectible", "YCB") {
+    constructor() public ERC721("Grapheme", "PHEME") {
         _setBaseURI("https://ipfs.io/ipfs/");
     }
 
-    // mint with IPFS hash
     function mintItem(address to, string memory tokenURI)
         public
         returns (uint256)
     {
-        uint256 prc = getRandomness();
-        uint256 i = 0;
-        uint256 random = uint256(keccak256(abi.encodePacked(prc, i)));
-        uint256 id = mintCharacterToken(to, random);
-        _setTokenURI(id, tokenURI);
-        return id;
-    }
-
-    // mint a single letter
-    function mintLetter(address to) public returns (uint256) {
-        uint256 prc = getRandomness();
-        uint256 i = 0;
-        uint256 random = uint256(keccak256(abi.encodePacked(prc, i)));
-        uint256 id = mintCharacterToken(to, random);
-        return id;
-    }
-
-    function mintCharacterToken(address to, uint256 identifier)
-        private
-        returns (uint256)
-    {
         _tokenIds.increment();
+
         uint256 id = _tokenIds.current();
         _mint(to, id);
-        _items[id] = ItemDetail({isPrimitive: true, identifier: identifier});
+        _setTokenURI(id, tokenURI);
+
+        return id;
+    }
+
+    function reserveToken(address to, uint256 dna) private returns (uint256) {
+        _tokenIds.increment();
+
+        uint256 id = _tokenIds.current();
+        _mint(to, id);
+        _items[id] = ItemDetail({
+            isPrimitive: true,
+            dna: dna,
+            isClaimed: false
+        });
         return id;
     }
 
@@ -87,18 +87,38 @@ contract YourCollectible is ERC721 {
     }
     */
 
-    function getCharacterIdentifier(uint256 tokenId)
-        public
-        view
-        returns (uint256)
-    {
-        return _items[tokenId].identifier;
+    function getDna(uint256 tokenId) public view returns (uint256) {
+        return _items[tokenId].dna;
     }
 
-    function getDNA(uint256 tokenId) public view returns (uint256) {
-        // TODO: emit event
-        uint256 dna = _items[tokenId].identifier;
-        return dna;
+    function getInfo(uint256 tokenId) public view returns (uint256, bool) {
+        return (_items[tokenId].dna, _items[tokenId].isClaimed);
+        // _getTokenURI(tokenId)
+    }
+
+    function isClaimed(uint256 tokenId) public view returns (bool) {
+        return _items[tokenId].isClaimed;
+    }
+
+    function setMintFee(uint256 mintFee) public onlyOwner returns (bool) {
+        _mintFee = mintFee;
+        return true;
+    }
+
+    function setClaimFee(uint256 claimFee) public onlyOwner returns (bool) {
+        _claimFee = claimFee;
+        return true;
+    }
+
+    function transferFundsToOwner(address dao, uint256 amount)
+        public
+        payable
+        onlyOwner
+        returns (bool)
+    {
+        //  require(address(this).balance >= amount, "Address: insufficient balance");
+        // _owner.transfer(amount);
+        // To do
     }
 
     function rollToMint(address to) public payable {
@@ -106,11 +126,12 @@ contract YourCollectible is ERC721 {
         // should some funds go to DAO/Owner as creation fee??
         uint256 i = 0;
         uint256 prc = getRandomness();
+        uint256[] memory tokensGenerated = new uint256[](6);
         for (i = 0; i <= 5; i++) {
             uint256 random = uint256(keccak256(abi.encodePacked(prc, i)));
-            // uint256 random = uint256(prc);
-            mintCharacterToken(to, random);
+            tokensGenerated[i] = reserveToken(to, random);
         }
+        emit Roll(to, tokensGenerated);
     }
 
     function getRandomness() private view returns (uint256) {
@@ -121,12 +142,87 @@ contract YourCollectible is ERC721 {
                     abi.encodePacked(
                         block.timestamp,
                         msg.sender,
-                        blockhash(block.number)
+                        blockhash(block.number - 1)
                     )
                 )
             );
     }
 
-    fallback() external payable {
+    function claimToken(uint256 tokenId, string memory tokenURI)
+        public
+        payable
+    {
+        require(
+            _isApprovedOrOwner(_msgSender(), tokenId),
+            "Grapheme: claimToken caller is not owner nor approved"
+        );
+        require(
+            _items[tokenId].isClaimed == false,
+            "Grapheme: Token is already claimed"
+        );
+        require(
+            _items[tokenId].isPrimitive == true,
+            "Grapheme: This type of token cannot be claimed"
+        );
+
+        // Claim fee
+        require(msg.value >= _claimFee, "Claim fee is low");
+
+        _items[tokenId].isClaimed = true;
+        _setTokenURI(tokenId, tokenURI);
+    }
+
+    function mintWord(
+        address to,
+        string memory tokenURI,
+        uint256[] memory tokenIds,
+        uint256[] memory rows,
+        uint256[] memory cols
+    ) public returns (uint256) {
+        uint256 tokenId = mintItem(to, tokenURI);
+
+        _wordTokenIds[tokenId] = tokenIds;
+        _wordRows[tokenId] = rows;
+        _wordColumns[tokenId] = cols;
+
+        return tokenId;
+    }
+
+    function saveWord(
+        uint256 tokenId,
+        string memory tokenURI,
+        uint256[] memory tokenIds,
+        uint256[] memory rows,
+        uint256[] memory cols
+    ) public {
+        require(
+            _isApprovedOrOwner(_msgSender(), tokenId),
+            "Grapheme: claimToken caller is not owner nor approved"
+        );
+
+        _setTokenURI(tokenId, tokenURI);
+        _wordTokenIds[tokenId] = tokenIds;
+        _wordRows[tokenId] = rows;
+        _wordColumns[tokenId] = cols;
+    }
+
+    function GetWord(uint256 tokenId)
+        public
+        view
+        returns (
+            uint256[] memory tokenIds,
+            uint256[] memory rows,
+            uint256[] memory cols
+        )
+    {
+        // require(
+        //     _wordTokenIds[tokenId] != bytes4(0x0),
+        //     "No words set"
+        // );
+        return (
+            _wordTokenIds[tokenId],
+            _wordRows[tokenId],
+            _wordColumns[tokenId]
+        );
     }
 }

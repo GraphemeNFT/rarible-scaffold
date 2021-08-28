@@ -6,21 +6,23 @@ const cols = 80;
 const bgCh = ' ';
 const newRow = () => [...Array(cols)].map(und => bgCh);
 const newGrid = () => [...Array(rows)].map(_ => newRow());
-function rowIsEmpty(grid, row) {
+function rowIsEmpty (grid, row) {
   if (grid[row]) {
     return (grid[row].findIndex(ch => ch != bgCh) == -1);
   }
   return true;
 }
-function colIsEmpty(grid, col) {
+
+function colIsEmpty (grid, col) {
   for (let i = 0; i < grid.length; i++) {
     if (grid[i].length < col) {
-      throw('Exceed');
+      throw ('Exceed');
     }
   }
   return (grid.map(row => row[col]).findIndex(ch => ch != bgCh) == -1);
 }
-function print(grid) {
+
+function print (grid) {
   for (let row = 0; row < grid.length; row++) {
     //if (!rowIsEmpty(grid, row)) {
     try {
@@ -29,7 +31,7 @@ function print(grid) {
       } else {
         console.log('');
       }
-    } catch(e) {
+    } catch (e) {
       console.log(`row: ${row}, grid.length: ${grid.length}`);
       console.log(grid);
       console.log(e);
@@ -37,25 +39,27 @@ function print(grid) {
     //}
   }
 }
-function crop(grid) {
+
+function crop (grid) {
   while (rowIsEmpty(grid, 0)) {
     grid.shift();
   }
-  while (rowIsEmpty(grid, grid.length-1)) {
+  while (rowIsEmpty(grid, grid.length - 1)) {
     grid.pop();
   }
   try {
     while (colIsEmpty(grid, 0)) {
       grid.forEach(row => row.shift());
     }
-  } catch(e) {}
+  } catch (e) { }
   try {
-    while (colIsEmpty(grid, grid[0].length-1)) {
+    while (colIsEmpty(grid, grid[0].length - 1)) {
       grid.forEach(row => row.pop());
     }
-  } catch(e) {}
+  } catch (e) { }
 }
-function write(grid, x, y, str) {
+
+function write (grid, x, y, str) {
   if (!grid[y]) { // assumes incrementing rows but not skipping
     grid[y] = newRow();
   }
@@ -67,7 +71,8 @@ function write(grid, x, y, str) {
     grid[y][x + i] = str[i];
   }
 }
-function strepeat(str, count) {
+
+function strepeat (str, count) {
   let retval = '';
   while (count--) {
     retval += str;
@@ -75,23 +80,29 @@ function strepeat(str, count) {
   return retval;
 }
 
-function _rnd() {
+function _rnd () {
   // simulates 3 bits of entropy, an octal
-  return Math.floor(Math.random()*8);
+  return Math.floor(Math.random() * 8);
 }
 
 // returns a function that will return randomness on each call. recycle for limitless fun.
-function makeRng(entropy) {
+function makeRng (entropy) {
+  if (!entropy || !entropy.shift) {
+    // FIXME - why getting this?
+    // just a temp hac to prevent crash
+    console.warn('makeRng but no entropy', entropy);
+    entropy = [4, 4, 1, 4, 1, 7, 0, 4, 0, 3, 2]
+  }
   return () => { const x = entropy.shift(); entropy.push(x); return x; }
 }
 
-function renderLetter(grid, rng) {
+function renderLetter (grid, rng) {
   let x = Math.floor(0.75 * cols);
   let y = Math.floor(0.75 * rows);
   const startStroke = rng() % 4; // max 3
   const maxStrokes = startStroke + 2 + rng() % 6; // min 2
   const nextNum = rng();
-  const skipStroke = nextNum > startStroke ? (nextNum < maxStrokes ? nextNum : nextNum-3) : nextNum % startStroke
+  const skipStroke = nextNum > startStroke ? (nextNum < maxStrokes ? nextNum : nextNum - 3) : nextNum % startStroke
   const _write = (s) => i == skipStroke ? false : write(grid, x, y, s);
 
   let i;
@@ -116,7 +127,7 @@ function renderLetter(grid, rng) {
           x++; y--;
           _write('/' + strepeat(' ', girth) + '/\\');
           x++; y--;
-          _write(strepeat('_', girth+1));
+          _write(strepeat('_', girth + 1));
         } else {
           _write('\\' + strepeat('_', girth) + '\\/');
           y--;
@@ -137,7 +148,7 @@ function renderLetter(grid, rng) {
         len *= 2;
         x -= len - 1;
         y--;
-        _write(strepeat('_', len+1));
+        _write(strepeat('_', len + 1));
         x--; y++;
         _write('/' + strepeat(' ', len) + '/\\');
         while (girth--) {
@@ -180,9 +191,8 @@ function renderLetter(grid, rng) {
           _write('\\' + strepeat('_', girth) + '\\/');
           if (true || rng() % 2 == 0) {
             y -= Math.floor(lenCopy / 2);
-            x += Math.floor(lenCopy /2);
+            x += Math.floor(lenCopy / 2);
           } else {
-            y -= 1; x -= 2; // recenter
           }
         }
         break;
@@ -206,11 +216,11 @@ function renderLetter(grid, rng) {
   crop(grid);
 }
 
-function main() {
+function main () {
   let grid = newGrid();
   let numbers = [...Array(8)].map(_ => _rnd());
-  console.log(numbers.join(','));
-  //let rng = makeRng([4, 4, 1, 4, 1, 7, 0, 4, 0, 3, 2]);
+  // console.log(numbers.join(','));
+  // let rng = makeRng([4, 4, 1, 4, 1, 7, 0, 4, 0, 3, 2]);
   let rng = makeRng(numbers);
   renderLetter(grid, rng);
   print(grid);
