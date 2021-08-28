@@ -43,46 +43,64 @@ export default function OneLetter (props) {
     const [hex, setHex] = useState('0x')
     // const [bigInt, setBigInt] = useState('10101')
     const [claimed, setClaimed] = useState(false)
+    const [tokenURI, setTokenURI] = useState('')
     const [injectedProvider, setInjectedProvider] = useState();
     const userProvider = useUserProvider(injectedProvider, localProvider);
+    const [info, setInfo] = useState({})
+    const graphemeContract = props.readContracts.YourCollectible
 
-    const [fakeClaimed, setFakeClaimed] = useState([]);
+    // const [fakeClaimed, setFakeClaimed] = useState([]);
 
     const address = useUserAddress(userProvider);
     const writeContracts = useContractLoader(userProvider);
 
 
     const { item } = props
-    const itemId = item.id.toNumber()
+    const tokenId = item.id.toNumber()
 
     useEffect(() => {
-        if (itemId) {
-            props.readContracts.YourCollectible.getDNA(itemId)
-                .then((dnaObj) => {
-                    setHex(dnaObj.toHexString())
-                })
-            props.readContracts.YourCollectible.isClaimed(itemId)
-                .then((isClaimed) => {
-                    setClaimed(isClaimed)
-                    console.log('item', item, isClaimed)
-                })
-        }
-    }, [itemId])
+        if (tokenId) {
+            graphemeContract.tokenURI(tokenId).then(uri => {
+                console.log('uri', uri)
+                setTokenURI(uri)
+            })
 
-    const onClaimed = (opts) => {
-        console.log('onClaimed', opts)
-    }
+            graphemeContract.getInfo(tokenId)
+                .then((infoRes) => {
+                    // returns an array of dna, isClaimed
+                    const [dnaObj, isClaimed] = infoRes
+                    // console.log('info', infoRes)
+                    const dna = dnaObj.toHexString()
+                    setHex(dna)
+                    setClaimed(isClaimed)
+                    console.log({ isClaimed, dna })
+                })
+            // props.readContracts.YourCollectible.getDna(itemId)
+            //     .then((dnaObj) => {
+            //         setHex(dnaObj.toHexString())
+            //     })
+            // props.readContracts.YourCollectible.isClaimed(itemId)
+            //     .then((isClaimed) => {
+            //         setClaimed(isClaimed)
+            //         if (isClaimed) {
+            //             console.log('claimed item:', item, isClaimed)
+            //             console.log('item.keys', Object.keys(item))
+            //         }
+            //     })
+        }
+    }, [tokenId])
 
     const letterClass = claimed ? 'letter-item claimed' : 'letter-item'
     // const key = 'item-' + item.id.toNumber()
     return (
         <span className={letterClass} key={props.ukey}>
             <div>
-                itemId: {itemId}
+                tokenId: {tokenId}
             </div>
             <div className='break-word'>
                 <div>
-                    hex: {hex}
+                    hex: {hex} <br />
+                    tokenURI: {tokenURI}
                 </div>
                 <div>
                     claimed: {claimed ? 'true' : 'false'}
@@ -93,16 +111,19 @@ export default function OneLetter (props) {
 
                 <div>
                     {claimed ?
-                        '_name_' :
+                        <div>
+                            _name_: {info.name} <br />
+
+                        </div>
+                        :
                         <Claim
                             provider={userProvider}
                             accountAddress={address}
                             // ERC721Address={writeContracts.YourCollectible.address}
                             writeContracts={writeContracts}
                             ipfs={ipfs}
-                            tokenId={itemId}
+                            tokenId={tokenId}
                             tokenDNA={hex}
-                            onClaimed={onClaimed}
                         />
                     }
                 </div>

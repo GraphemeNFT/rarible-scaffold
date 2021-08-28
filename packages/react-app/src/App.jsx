@@ -230,6 +230,7 @@ function App (props) {
     const updateYourCollectibles = async () => {
       const collectibleUpdate = [];
       for (let tokenIndex = 0; tokenIndex < balance; tokenIndex++) {
+        console.group('updateYourCollectibles: ', tokenIndex)
         try {
           console.log("Getting token index", tokenIndex);
           const tokenId = await readContracts.YourCollectible.tokenOfOwnerByIndex(address, tokenIndex);
@@ -237,6 +238,8 @@ function App (props) {
           const tokenURI = await readContracts.YourCollectible.tokenURI(tokenId);
           console.log("tokenURI:", tokenURI);
 
+
+          // update hash?
           const ipfsHash = tokenURI.replace("https://ipfs.io/ipfs/", "");
           console.log("ipfsHash", ipfsHash);
 
@@ -258,6 +261,7 @@ function App (props) {
         } catch (e) {
           console.log('updateCollectibles error', e);
         }
+        console.groupEnd()
       }
       setYourCollectibles(collectibleUpdate);
     };
