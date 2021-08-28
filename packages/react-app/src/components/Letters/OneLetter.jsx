@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react"; // useCallback, useEffect, u
 
 import { useUserAddress } from "eth-hooks";
 import { DAI_ABI, DAI_ADDRESS, INFURA_ID, NETWORK, NETWORKS } from "../../constants";
+import { newGrid, makeRng, renderLetter } from "./grapheme";
 
 
 // import {
@@ -41,6 +42,7 @@ export default function OneLetter (props) {
     // console.log('oneLetter.props', props.item)
     // const [dna, setDna] = useState({ hex: '0x', num: 0 })
     const [hex, setHex] = useState('0x')
+    const [itemDna, setItemDna] = useState([7, 2, 0, 6, 2, 7, 0, 4]) // P
     // const [bigInt, setBigInt] = useState('10101')
     const [claimed, setClaimed] = useState(false)
     const [tokenURI, setTokenURI] = useState('')
@@ -54,6 +56,21 @@ export default function OneLetter (props) {
     const address = useUserAddress(userProvider);
     const writeContracts = useContractLoader(userProvider);
 
+    const makeLetter = (dna) => {
+        let grid = newGrid();
+        //renderLetter(grid, makeRng([4, 4, 1, 4, 1, 7, 0, 4, 0, 3, 2]));
+        renderLetter(grid, makeRng(dna));
+        return grid;//.map(row => row.join('') ).join('<br />');
+    };
+    const letterStyle = {
+        fontFamily: 'monospace',
+        textAlign: 'left',
+        fontWeight: 'bold',
+        fontSize: '12px',
+        lineHeight: '12px',
+        letterSpacing: '-2px',
+        marginBottom: 0
+    };
 
     const { item } = props
     const tokenId = item.id.toNumber()
@@ -70,23 +87,19 @@ export default function OneLetter (props) {
                     // returns an array of dna, isClaimed
                     const [dnaObj, isClaimed] = infoRes
                     // console.log('info', infoRes)
-                    const dna = dnaObj.toHexString()
-                    setHex(dna)
+                    const hex = dnaObj.toHexString()
+                    setHex(hex)
+                    const firstHex = hex.slice(0, 8)
+                    const num = parseInt(firstHex, 16)
+                    const digits = num.toString().split('')
+                    const dna = digits.map(digit => parseInt(digit))
+
+                    // const num = dnaObj.toNumber() / 1e12
+                    setItemDna(dna) // last 6 digits e12-e18
                     setClaimed(isClaimed)
-                    console.log({ isClaimed, dna })
+                    console.log({ isClaimed, hex, num, dna })
                 })
-            // props.readContracts.YourCollectible.getDna(itemId)
-            //     .then((dnaObj) => {
-            //         setHex(dnaObj.toHexString())
-            //     })
-            // props.readContracts.YourCollectible.isClaimed(itemId)
-            //     .then((isClaimed) => {
-            //         setClaimed(isClaimed)
-            //         if (isClaimed) {
-            //             console.log('claimed item:', item, isClaimed)
-            //             console.log('item.keys', Object.keys(item))
-            //         }
-            //     })
+
         }
     }, [tokenId])
 
@@ -94,39 +107,28 @@ export default function OneLetter (props) {
     // const key = 'item-' + item.id.toNumber()
     return (
         <span className={letterClass} key={props.ukey}>
-            <div>
-                tokenId: {tokenId}
-            </div>
-            <div className='break-word'>
-                <div>
+            <div className='letter-inner'>
+                <div className='break-word'>
+                    [{tokenId}]
                     hex: {hex} <br />
-                    tokenURI: {tokenURI}
-                </div>
-                <div>
-                    claimed: {claimed ? 'true' : 'false'}
-                </div>
-                <div>
-                    {/* name: {props.item.dataProvider.name} */}
+                    tokenURI: {tokenURI} <br />
+                    claimed: {claimed ? 'true' : 'false'} <br />
+                    name: {info.name} <br />
                 </div>
 
-                <div>
-                    {claimed ?
-                        <div>
-                            _name_: {info.name} <br />
+                {makeLetter(itemDna).map(row => (<pre style={letterStyle}>{row.join('')}</pre>))}
 
-                        </div>
-                        :
-                        <Claim
-                            provider={userProvider}
-                            accountAddress={address}
-                            // ERC721Address={writeContracts.YourCollectible.address}
-                            writeContracts={writeContracts}
-                            ipfs={ipfs}
-                            tokenId={tokenId}
-                            tokenDNA={hex}
-                        />
-                    }
-                </div>
+                {!claimed &&
+                    <Claim
+                        provider={userProvider}
+                        accountAddress={address}
+                        // ERC721Address={writeContracts.YourCollectible.address}
+                        writeContracts={writeContracts}
+                        ipfs={ipfs}
+                        tokenId={tokenId}
+                        tokenDNA={hex}
+                    />
+                }
             </div>
         </span>
     )

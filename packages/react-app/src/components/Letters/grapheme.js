@@ -12,6 +12,7 @@ function rowIsEmpty (grid, row) {
   }
   return true;
 }
+
 function colIsEmpty (grid, col) {
   for (let i = 0; i < grid.length; i++) {
     if (grid[i].length < col) {
@@ -20,6 +21,7 @@ function colIsEmpty (grid, col) {
   }
   return (grid.map(row => row[col]).findIndex(ch => ch != bgCh) == -1);
 }
+
 function print (grid) {
   for (let row = 0; row < grid.length; row++) {
     //if (!rowIsEmpty(grid, row)) {
@@ -37,6 +39,7 @@ function print (grid) {
     //}
   }
 }
+
 function crop (grid) {
   while (rowIsEmpty(grid, 0)) {
     grid.shift();
@@ -55,6 +58,7 @@ function crop (grid) {
     }
   } catch (e) { }
 }
+
 function write (grid, x, y, str) {
   if (!grid[y]) { // assumes incrementing rows but not skipping
     grid[y] = newRow();
@@ -67,6 +71,7 @@ function write (grid, x, y, str) {
     grid[y][x + i] = str[i];
   }
 }
+
 function strepeat (str, count) {
   let retval = '';
   while (count--) {
@@ -82,7 +87,7 @@ function _rnd () {
 
 // returns a function that will return randomness on each call. recycle for limitless fun.
 function makeRng (entropy) {
-  if (!entropy) {
+  if (!entropy || !entropy.shift) {
     // FIXME - why getting this?
     // just a temp hac to prevent crash
     console.warn('makeRng but no entropy', entropy);

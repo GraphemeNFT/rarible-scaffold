@@ -1,1 +1,1 @@
-module.exports = ["Grapheme","YourCollectible","YourContract"];
+module.exports = ["YourCollectible"];

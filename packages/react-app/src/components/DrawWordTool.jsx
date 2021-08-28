@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import { Button, Input } from "antd";
 import "../App.css";
-import { newGrid, makeRng, renderLetter, crop } from "../helpers/grapheme";
+import { newGrid, makeRng, renderLetter, crop } from "./Letters/grapheme";
 
 // EXAMPLE STARTING JSON:
 const STARTING_JSON = {
@@ -25,7 +25,7 @@ const STARTING_JSON = {
     },
   ],
 };
-function makeMetadata(imageCid, name, tokenIds, rows, cols) {
+function makeMetadata (imageCid, name, tokenIds, rows, cols) {
   let metadata = Object.assign({}, STARTING_JSON);
   metadata.name = name;
   metadata.image = imageCid;
@@ -37,12 +37,12 @@ function makeMetadata(imageCid, name, tokenIds, rows, cols) {
   }
   return metadata;
 }
-async function metadataToIpfs(metadata, ipfs) {
+async function metadataToIpfs (metadata, ipfs) {
   const result = await ipfs.add(JSON.stringify(metadata));
   return result;
 }
 
-function LetterControl(props) {
+function LetterControl (props) {
   return (
     <div>
       <Button
@@ -54,44 +54,44 @@ function LetterControl(props) {
       <span>Control for tokenId:{props.tokenId} - DNA:{props.tokenDNA} - position:({props.row}, {props.col})</span>
       <Button
         onClick={e => {
-          props.setRow(props.row-1);
+          props.setRow(props.row - 1);
         }}
       >UP
       </Button>
       <Button
         onClick={e => {
-          props.setRow(props.row+1);
+          props.setRow(props.row + 1);
         }}
       >DOWN
       </Button>
       <Button
         onClick={e => {
-          props.setRow(props.row+10);
+          props.setRow(props.row + 10);
         }}
       >DOWN 10
       </Button>
       <Button
         onClick={e => {
-          props.setCol(props.col+1);
+          props.setCol(props.col + 1);
         }}
       >RIGHT
       </Button>
       <Button
         onClick={e => {
-          props.setCol(props.col+10);
+          props.setCol(props.col + 10);
         }}
       >RIGHT 10
       </Button>
       <Button
         onClick={e => {
-          props.setCol(props.col-1);
+          props.setCol(props.col - 1);
         }}
       >LEFT
       </Button>
     </div>
   )
 }
-export default function DrawWordTool(props) {
+export default function DrawWordTool (props) {
   const yourTokens = props.yourTokens ? props.yourTokens : [];
   const [wordName, setWordName] = useState('');
   const [sending, setSending] = useState();
@@ -101,13 +101,13 @@ export default function DrawWordTool(props) {
   const setRowIdx = (idx, num) => { let cpy = [...rows]; cpy[idx] = num; setRows(cpy); };
   const [tokenIds, setTokenIds] = useState([]); //[0, 1, 2];
   const fakeDNAs = [
-    [4,1,0,6,6,7,2,5], // n
-    [7,2,0,6,2,7,0,4], // P
-    [3,5,3,6,0,5,0,0], // B
-    [2,3,1,6,0,7,3,5], // ~A
-    [7,5,7,4,7,4,4,0], // _M
-    [7,2,0,1,7,1,2,1], // _X~
-    [4,2,1,7,6,4,4,0], // 4
+    [4, 1, 0, 6, 6, 7, 2, 5], // n
+    [7, 2, 0, 6, 2, 7, 0, 4], // P
+    [3, 5, 3, 6, 0, 5, 0, 0], // B
+    [2, 3, 1, 6, 0, 7, 3, 5], // ~A
+    [7, 5, 7, 4, 7, 4, 4, 0], // _M
+    [7, 2, 0, 1, 7, 1, 2, 1], // _X~
+    [4, 2, 1, 7, 6, 4, 4, 0], // 4
   ];
   const [tokenDNAs, setTokenDNAs] = useState([]);
   const add = (tokenId) => {
@@ -134,7 +134,7 @@ export default function DrawWordTool(props) {
     let ipfsCanvasResult;
     try {
       ipfsCanvasResult = await props.ipfs.add(canBlob);
-    } catch(e) {
+    } catch (e) {
       console.log('ipfs.add of blob failed: ', e);
       return;
     }
@@ -142,7 +142,7 @@ export default function DrawWordTool(props) {
     let ipfsResult;
     try {
       ipfsResult = await metadataToIpfs(makeMetadata('ipfs://' + ipfsCanvasResult.path, wordName, tokenIds, rows, cols), props.ipfs);
-    } catch(e) {
+    } catch (e) {
       console.log('ipfs.add of metadata.json failed: ', e);
       return;
     }
@@ -179,14 +179,14 @@ export default function DrawWordTool(props) {
 
       <span>Add one of your Letters: </span>
       {yourTokens ? yourTokens.map(item => (<Button key={'add-' + item.id.toString()} onClick={e => add(item.id.toNumber())} >Add #{item.id.toString()}</Button>)) : '...'}
-      { tokenIds.map((id, idx) => (
+      {tokenIds.map((id, idx) => (
         <LetterControl key={'lc-' + idx} idx={idx} delIdx={delIdx} tokenId={tokenIds[idx]} tokenDNA={tokenDNAs[idx]} setRow={(num) => setRowIdx(idx, num)} setCol={(num) => setColIdx(idx, num)} row={rows[idx]} col={cols[idx]} />
-      )) }
+      ))}
       <DrawWord tokenIds={tokenIds} tokenDNAs={tokenDNAs} rows={rows} cols={cols} />
-      </div>
+    </div>
   );
 }
-function writeLetterToGrid(grid, letterGrid, row, col) {
+function writeLetterToGrid (grid, letterGrid, row, col) {
   // XXX setState should block bad/negative values
   row = row < 0 ? 0 : row;
   col = col < 0 ? 0 : col;
@@ -196,8 +196,8 @@ function writeLetterToGrid(grid, letterGrid, row, col) {
       if (ch == ' ' || ch == '.') {
         // skip
       } else {
-        try{
-        grid[row + i][col + j] = ch;
+        try {
+          grid[row + i][col + j] = ch;
         } catch (e) {
           debugger;
         }
@@ -205,7 +205,7 @@ function writeLetterToGrid(grid, letterGrid, row, col) {
     }
   }
 }
-function DrawWord({ tokenIds, tokenDNAs, rows, cols }) {
+function DrawWord ({ tokenIds, tokenDNAs, rows, cols }) {
   if (tokenIds.length == 0) {
     return '...';
   }
@@ -236,10 +236,10 @@ function DrawWord({ tokenIds, tokenDNAs, rows, cols }) {
   crop(grid);
 
   return (
-      <div>
-        { grid.map((row, idx) => (<pre key={'grow-' + idx} className='pre-amiga'>{row.join('')}</pre>)) }
-        <canvas id='drawword-canvas' width={canvasWidth} height={canvasHeight} ></canvas>
-      </div>
+    <div>
+      {grid.map((row, idx) => (<pre key={'grow-' + idx} className='pre-amiga'>{row.join('')}</pre>))}
+      <canvas id='drawword-canvas' width={canvasWidth} height={canvasHeight} ></canvas>
+    </div>
   );
 }
 

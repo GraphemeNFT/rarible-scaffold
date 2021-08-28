@@ -38,7 +38,7 @@ import Claim from './components/Letters/Claim'
 
 import { DAI_ABI, DAI_ADDRESS, INFURA_ID, NETWORK, NETWORKS } from "./constants";
 import { Transactor } from "./helpers";
-import { newGrid, makeRng, renderLetter } from "./helpers/grapheme";
+import { newGrid, makeRng, renderLetter } from "./components/Letters/grapheme";
 import {
   useBalance,
   useContractLoader,
@@ -527,7 +527,18 @@ function App (props) {
               }}
               to="/ipfsup"
             >
-              IPFS Upload
+              IPFS up
+            </Link>
+          </Menu.Item>
+
+          <Menu.Item key="/ipfsdown">
+            <Link
+              onClick={() => {
+                setRoute("/ipfsdown");
+              }}
+              to="/ipfsdown"
+            >
+              IPFS down
             </Link>
           </Menu.Item>
 
@@ -539,17 +550,6 @@ function App (props) {
               to="/contract"
             >
               YC Contract
-            </Link>
-          </Menu.Item>
-
-          <Menu.Item key="/ipfsdown">
-            <Link
-              onClick={() => {
-                setRoute("/ipfsdown");
-              }}
-              to="/ipfsdown"
-            >
-              IPFS Download
             </Link>
           </Menu.Item>
 

@@ -6,7 +6,7 @@ import React, { useState } from "react";
 import { Button, Input, Tooltip } from "antd";
 import { AddressInput } from ".";
 
-import { newGrid, makeRng, renderLetter, crop } from "../helpers/grapheme";
+import { newGrid, makeRng, renderLetter, crop } from "./Letters/grapheme";
 
 export default function Mint (props) {
   const [mintTo, setMintTo] = useState();

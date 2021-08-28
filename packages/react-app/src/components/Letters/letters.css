@@ -9,11 +9,12 @@
     background-color: grey;
     margin: 5px;
     padding: 10px;
-    max-width: 30vw;
-    min-height: 30vh;
+    width: 30vw;
+    min-height: 30vw;
     color: white;
     cursor: pointer;
     text-align: left;
+    font-size: 0.7em;
 }
 
 .letter-item.claimed {
@@ -24,6 +25,11 @@
 .letter-item:hover {
     border: 5px solid #ccc;
     background-color: #444;
+}
+
+.letter-inner {
+    padding: 5px;
+    color: cyan;
 }
 
 .break-word {

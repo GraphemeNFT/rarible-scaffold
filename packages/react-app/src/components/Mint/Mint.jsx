@@ -43,7 +43,7 @@ export default function Mint (props) {
           rollToMint
         </Button>
 
-        <Button
+        {/* <Button
           style={{ margin: 8 }}
           loading={sending}
           size="large"
@@ -57,7 +57,7 @@ export default function Mint (props) {
           }}
         >
           mintLetter
-        </Button>
+        </Button> */}
 
         <hr />
 

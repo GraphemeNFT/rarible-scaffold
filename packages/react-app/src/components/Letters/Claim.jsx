@@ -38,15 +38,15 @@ export default function Claim (props) {
 
     // console.log('save this .path as tokenURI in claim: ', ipfsHash);
     // await fakePause();
-    const claimed = await writeContracts.YourCollectible.claimToken(tokenId, ipfsHash);
+    const claimed = await writeContracts.YourCollectible.claimToken(tokenId, ipfsHash.path);
 
     console.log('claimed', props.tokenId, claimed);
     onClaimed({ tokenId });
   };
 
   const onClaimed = async (opts) => {
-    // console.log('onClaimed', opts)
-    const uri = await writeContracts.YourCollectible.getTokenURI(opts.tokenId);
+    console.log('onClaimed', opts)
+    // const uri = await writeContracts.YourCollectible.getTokenURI(opts.tokenId);
   }
 
   return (
