@@ -83,6 +83,8 @@ function _rnd () {
 // returns a function that will return randomness on each call. recycle for limitless fun.
 function makeRng (entropy) {
   if (!entropy) {
+    // FIXME - why getting this?
+    // just a temp hac to prevent crash
     console.warn('makeRng but no entropy', entropy);
     entropy = [4, 4, 1, 4, 1, 7, 0, 4, 0, 3, 2]
   }
