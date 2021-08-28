@@ -24,7 +24,7 @@ import {
   ThemeSwitch,
   Sell,
   // Mint,
-  Claim,
+
   RollMint,
   LazyMint,
   RaribleItemIndexer,
@@ -34,6 +34,7 @@ import {
 import Letters from "./components/Letters/Letters";
 import ClientConfig from "./helpers/ClientConfig";
 import Mint from './components/Mint/Mint'
+import Claim from './components/Letters/Claim'
 
 import { DAI_ABI, DAI_ADDRESS, INFURA_ID, NETWORK, NETWORKS } from "./constants";
 import { Transactor } from "./helpers";
@@ -667,7 +668,7 @@ function App (props) {
 
           <Route path="/mint">
             <div style={{ paddingTop: 32, width: 740, margin: "auto" }}>
-              <RollMint ensProvider={mainnetProvider} provider={userProvider} writeContracts={writeContracts} />
+              {/* <RollMint ensProvider={mainnetProvider} provider={userProvider} writeContracts={writeContracts} /> */}
               <Mint ensProvider={mainnetProvider} provider={userProvider} writeContracts={writeContracts} />
             </div>
           </Route>

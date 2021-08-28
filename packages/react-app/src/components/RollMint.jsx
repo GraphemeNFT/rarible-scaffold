@@ -1,3 +1,7 @@
+/*
+  this isn't used any more
+**/
+
 import React, { useState } from "react";
 import { Button, Input, Tooltip } from "antd";
 import { AddressInput } from ".";
@@ -15,13 +19,13 @@ export default function Mint (props) {
   const writeContracts = props.writeContracts;
 
   const fakeDNAs = [
-    [4,1,0,6,6,7,2,5], // n
-    [7,2,0,6,2,7,0,4], // P
-    [3,5,3,6,0,5,0,0], // B
-    [2,3,1,6,0,7,3,5], // ~A
-    [7,5,7,4,7,4,4,0], // _M
-    [7,2,0,1,7,1,2,1], // _X~
-    [4,2,1,7,6,4,4,0], // 4
+    [4, 1, 0, 6, 6, 7, 2, 5], // n
+    [7, 2, 0, 6, 2, 7, 0, 4], // P
+    [3, 5, 3, 6, 0, 5, 0, 0], // B
+    [2, 3, 1, 6, 0, 7, 3, 5], // ~A
+    [7, 5, 7, 4, 7, 4, 4, 0], // _M
+    [7, 2, 0, 1, 7, 1, 2, 1], // _X~
+    [4, 2, 1, 7, 6, 4, 4, 0], // 4
   ];
 
   const fakeGetDNA = async (tokenId) => {
@@ -59,9 +63,9 @@ export default function Mint (props) {
 
   return (
     <div>
-      <div><span>{ rolledTokenIds.length == 0 ? '' : 'You rolled these tokenIds: ' + rolledTokenIds.join(', ') }</span></div>
-      <div><span>{ rolledTokenDNAs.length == 0 ? '' : 'You rolled these tokenDNAs: [' + rolledTokenDNAs.join('], [') + ']'}</span></div>
-      <div>{ rolledTokenDNAs.map((dna, idx) => (
+      <div><span>{rolledTokenIds.length == 0 ? '' : 'You rolled these tokenIds: ' + rolledTokenIds.join(', ')}</span></div>
+      <div><span>{rolledTokenDNAs.length == 0 ? '' : 'You rolled these tokenDNAs: [' + rolledTokenDNAs.join('], [') + ']'}</span></div>
+      <div>{rolledTokenDNAs.map((dna, idx) => (
         <div key={'rolled-' + idx}>
           {makeLetter(dnaAry(dna)).map(row => (<pre style={letterStyle}>{row.join('')}</pre>))}
         </div>

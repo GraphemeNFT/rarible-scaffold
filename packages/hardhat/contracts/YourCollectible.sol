@@ -34,6 +34,21 @@ contract YourCollectible is ERC721 {
         _setBaseURI("https://ipfs.io/ipfs/");
     }
 
+    function claimToken(uint256 tokenId, string memory tokenURI)
+        public
+        returns (bool)
+    {
+        console.log("claimToken", tokenId, tokenURI);
+        // TODO - mint to msg.sender and take money?
+        return isClaimed(tokenId);
+    }
+
+    function isClaimed(uint256 tokenId) public view returns (bool) {
+        bool claimed = tokenId % 2 == 0 ? true : false;
+        console.log("claimToken", tokenId, "=", claimed);
+        return claimed;
+    }
+
     // mint with IPFS hash
     function mintItem(address to, string memory tokenURI)
         public

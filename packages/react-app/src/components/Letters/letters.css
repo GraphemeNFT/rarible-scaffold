@@ -6,7 +6,7 @@
 
 .letter-item {
     border: 5px solid white;
-    background-color: black;
+    background-color: grey;
 
     padding: 10px;
     max-width: 30vw;
@@ -14,6 +14,12 @@
     color: white;
     cursor: pointer;
     text-align: left;
+}
+
+.letter-item.claimed {
+    border: 5px solid black;
+    background-color: black;
+
 }
 
 .letter-item:hover {
