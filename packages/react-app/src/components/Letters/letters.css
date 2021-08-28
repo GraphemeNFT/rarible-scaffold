@@ -5,9 +5,9 @@
 }
 
 .letter-item {
-    border: 5px solid white;
+    border: 5px solid #008888;
     background-color: grey;
-
+    margin: 5px;
     padding: 10px;
     max-width: 30vw;
     min-height: 30vh;
@@ -19,12 +19,11 @@
 .letter-item.claimed {
     border: 5px solid black;
     background-color: black;
-
 }
 
 .letter-item:hover {
     border: 5px solid #ccc;
-    background-color: #111;
+    background-color: #444;
 }
 
 .break-word {

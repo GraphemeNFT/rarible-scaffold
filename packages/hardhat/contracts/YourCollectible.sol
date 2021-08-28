@@ -16,12 +16,10 @@ contract YourCollectible is ERC721 {
     using Counters for Counters.Counter;
     Counters.Counter private _tokenIds;
 
-    mapping(uint256 => ItemDetail) private _items;
-    mapping(uint256 => ItemPosition[]) private _itemPositions;
-
     struct ItemDetail {
         bool isPrimitive;
         uint256 identifier;
+        bool isClaimed;
     }
 
     struct ItemPosition {
@@ -29,6 +27,9 @@ contract YourCollectible is ERC721 {
         uint256 row;
         uint256 column;
     }
+
+    mapping(uint256 => ItemDetail) private _items;
+    mapping(uint256 => ItemPosition[]) private _itemPositions;
 
     constructor() public ERC721("YourCollectible", "YCB") {
         _setBaseURI("https://ipfs.io/ipfs/");
@@ -39,13 +40,15 @@ contract YourCollectible is ERC721 {
         returns (bool)
     {
         console.log("claimToken", tokenId, tokenURI);
+        _items[tokenId].isClaimed = true;
         // TODO - mint to msg.sender and take money?
         return isClaimed(tokenId);
     }
 
     function isClaimed(uint256 tokenId) public view returns (bool) {
-        bool claimed = tokenId % 2 == 0 ? true : false;
-        console.log("claimToken", tokenId, "=", claimed);
+        // bool claimed = tokenId % 2 == 0 ? true : false;
+        bool claimed = _items[tokenId].isClaimed;
+        console.log("isClaimed", tokenId, "=", claimed);
         return claimed;
     }
 
@@ -78,7 +81,11 @@ contract YourCollectible is ERC721 {
         _tokenIds.increment();
         uint256 id = _tokenIds.current();
         _mint(to, id);
-        _items[id] = ItemDetail({isPrimitive: true, identifier: identifier});
+        _items[id] = ItemDetail({
+            isPrimitive: true,
+            identifier: identifier,
+            isClaimed: false
+        });
         return id;
     }
 

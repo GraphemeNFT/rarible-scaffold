@@ -54,7 +54,6 @@ export default function OneLetter (props) {
 
     const { item } = props
     const itemId = item.id.toNumber()
-    // console.log('itemId', itemId)
 
     useEffect(() => {
         if (itemId) {
@@ -63,9 +62,9 @@ export default function OneLetter (props) {
                     setHex(dnaObj.toHexString())
                 })
             props.readContracts.YourCollectible.isClaimed(itemId)
-                .then((result) => {
-                    console.log('isClaimed', result)
-                    setClaimed(result)
+                .then((isClaimed) => {
+                    setClaimed(isClaimed)
+                    console.log('item', item, isClaimed)
                 })
         }
     }, [itemId])
@@ -85,7 +84,12 @@ export default function OneLetter (props) {
                 <div>
                     hex: {hex}
                 </div>
-                claimed: {claimed ? 'true' : 'false'}
+                <div>
+                    claimed: {claimed ? 'true' : 'false'}
+                </div>
+                <div>
+                    {/* name: {props.item.dataProvider.name} */}
+                </div>
 
                 <div>
                     {claimed ?
