@@ -222,18 +222,30 @@ function DrawWord({ tokenIds, tokenDNAs, rows, cols }) {
     let letterGrid = newGrid();
     renderLetter(letterGrid, makeRng(dna.split(',').map(s => parseInt(s))));
     writeLetterToGrid(grid, letterGrid, rows[idx], cols[idx]);
-
-    let canvas = document.getElementById('drawword-canvas');
-    console.log(canvas);
-    if (canvas) {
-      let ctx = canvas.getContext('2d' /* weird alias effect: , { alpha: false } */);
-      ctx.font = '14px/14px P0T-NOoDLE';
-      ctx.clearRect(0, 0, canvasWidth, canvasHeight);
-      //ctx.strokeText('Hello world', 50, 100);
-      grid.forEach((row, idx) => ctx.strokeText(row.join(''), 0, idx * 14));
-    }
   });
   crop(grid);
+  //const rand256 = () => Math.floor(Math.random()*256);
+  const split2bits = (bits) => [16*5*(bits & 0b110000) >> 4, 16*5*(bits & 0b1100) >> 2, 16*5*(bits & 0b11)];
+  const ary2rgba = (ary) => 'rgba(' + ary.join(',') + ', 1)';
+  let canvas = document.getElementById('drawword-canvas');
+  console.log(canvas);
+  if (canvas) {
+    let ctx = canvas.getContext('2d' /* weird alias effect: , { alpha: false } */);
+    ctx.font = '14px/14px P0T-NOoDLE';
+    ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+    let gradient1 = ctx.createLinearGradient(0, 0, canvasWidth, canvasHeight);
+
+    if (rows.length > 1) {
+      const color1 = (rows[0] * cols[0] * tokenDNAs[0].split(',')[0]) % 64;
+      const color2 = rows.slice(-1) * cols.slice(-1) % 16;
+      gradient1.addColorStop(0, ary2rgba(split2bits(color1)));
+      gradient1.addColorStop(1, ary2rgba(split2bits(color2)));
+      ctx.strokeStyle = gradient1;
+    }
+    grid.forEach((row, idx) => {
+      ctx.strokeText(row.join(''), 0, idx * 14)
+    });
+  }
 
   return (
       <div>
