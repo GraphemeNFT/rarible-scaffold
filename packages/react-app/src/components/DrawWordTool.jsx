@@ -1,5 +1,5 @@
 
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Button, Input } from "antd";
 import "../App.css";
 import { newGrid, makeRng, renderLetter, crop } from "./Letters/grapheme";
@@ -127,7 +127,6 @@ export default function DrawWordTool (props) {
 
   const castWord = async () => {
     let canvas = document.getElementById('drawword-canvas');
-    let ctx = canvas.getContext('2d');
     const canBlob = await new Promise((resolve, reject) => {
       canvas.toBlob((blob) => resolve(blob));
     });
@@ -206,35 +205,37 @@ function writeLetterToGrid (grid, letterGrid, row, col) {
   }
 }
 function DrawWord ({ tokenIds, tokenDNAs, rows, cols }) {
-  if (tokenIds.length == 0) {
-    return '...';
-  }
-  // tokenIds - list of tokenId (uint256)
-  // tokenDNAs - list of string of numbers - subject to change to just a bitstring
-  // rows
-  // cols
+  console.log('DrawWord: ', tokenDNAs);
+  console.log(tokenIds);
+  const [viewText, setViewText] = useState(false);
+  const [hack1, setHack1] = useState(false);
+
+  //const canvas = document.getElementById('drawword-canvas');
+  const canvasRef = useRef(null);
   const bgCh = ' ';
-  const canvasWidth = 1000;
-  const canvasHeight = 500;
   const newRow = () => [...Array(250)].map(und => bgCh);
   let grid = [...Array(80)].map(_ => newRow());
-  tokenDNAs.forEach((dna, idx) => {
-    let letterGrid = newGrid();
-    renderLetter(letterGrid, makeRng(dna.split(',').map(s => parseInt(s))));
-    writeLetterToGrid(grid, letterGrid, rows[idx], cols[idx]);
-  });
-  crop(grid);
-  //const rand256 = () => Math.floor(Math.random()*256);
-  const split2bits = (bits) => [16*5*(bits & 0b110000) >> 4, 16*5*(bits & 0b1100) >> 2, 16*5*(bits & 0b11)];
-  const ary2rgba = (ary) => 'rgba(' + ary.join(',') + ', 1)';
-  let canvas = document.getElementById('drawword-canvas');
-  console.log(canvas);
-  if (canvas) {
-    let ctx = canvas.getContext('2d' /* weird alias effect: , { alpha: false } */);
-    ctx.font = '14px/14px P0T-NOoDLE';
-    ctx.clearRect(0, 0, canvasWidth, canvasHeight);
-    let gradient1 = ctx.createLinearGradient(0, 0, canvasWidth, canvasHeight);
+  useEffect(() => {
+    if (!canvasRef.current) {
+      return;
+    }
+    const split2bits = (bits) => [16*5*(bits & 0b110000) >> 4, 16*5*(bits & 0b1100) >> 2, 16*5*(bits & 0b11)];
+    const ary2rgba = (ary) => 'rgba(' + ary.join(',') + ', 1)';
+    const fontSize = 10;
 
+    let ctx = canvasRef.current.getContext('2d');
+    //let ctx = canvasRef.current.getContext('2d' /* weird alias effect: , { alpha: false } */);
+    console.log('-------------------------');
+    ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+    //ctx.scale(0.5, 0.5);
+    let gradient1 = ctx.createLinearGradient(0, 0, canvasWidth, canvasHeight);
+    console.log(ctx.font);
+    ctx.font = `${fontSize}px/${fontSize}px P0T-NOoDLE`;
+    console.log(ctx.font);
+    if (!hack1) {
+      setHack1(true);
+      return;
+    }
     if (rows.length > 1) {
       const color1 = (rows[0] * cols[0] * tokenDNAs[0].split(',')[0]) % 64;
       const color2 = rows.slice(-1) * cols.slice(-1) % 16;
@@ -242,15 +243,43 @@ function DrawWord ({ tokenIds, tokenDNAs, rows, cols }) {
       gradient1.addColorStop(1, ary2rgba(split2bits(color2)));
       ctx.strokeStyle = gradient1;
     }
+    console.log(grid);
     grid.forEach((row, idx) => {
-      ctx.strokeText(row.join(''), 0, idx * 14)
+      ctx.strokeText(row.join(''), 0, fontSize + idx * fontSize)
     });
+  }, [hack1, grid, tokenIds, tokenDNAs, rows, cols]);
+  console.log(canvasRef);
+  const canvasWidth = 1000;
+  const canvasHeight = 500;
+  if (tokenIds.length == 0) {
+    return ''; // (<canvas id='drawword-canvas' width={canvasWidth} height={canvasHeight} ></canvas>);
   }
+
+
+  // tokenIds - list of tokenId (uint256)
+  // tokenDNAs - list of string of numbers - subject to change to just a bitstring
+  // rows
+  // cols
+  tokenDNAs.forEach((dna, idx) => {
+    let letterGrid = newGrid();
+    renderLetter(letterGrid, makeRng(dna.split(',').map(s => parseInt(s))));
+    writeLetterToGrid(grid, letterGrid, rows[idx], cols[idx]);
+  });
+  crop(grid);
+  console.log(grid);
 
   return (
     <div>
-      {grid.map((row, idx) => (<pre key={'grow-' + idx} className='pre-amiga'>{row.join('')}</pre>))}
-      <canvas id='drawword-canvas' width={canvasWidth} height={canvasHeight} ></canvas>
+      <div>
+        {
+          viewText
+          ? grid.map((row, idx) => (<pre key={'grow-' + idx} className='pre-amiga'>{row.join('')}</pre>))
+          : (<Button onClick={ () => setViewText(true) } >View as text</Button>)
+        }
+      </div>
+      <div>
+        <canvas ref={canvasRef} id='drawword-canvas' width={canvasWidth} height={canvasHeight} style={{border: '4px dotted black'}} ></canvas>
+      </div>
     </div>
   );
 }
