@@ -26,6 +26,7 @@ import {
 } from "../../hooks";
 
 import Claim from './Claim'
+import GraphUtils from '../../helpers/GraphUtils'
 
 import './letters.css'
 
@@ -41,29 +42,22 @@ const localProvider = new StaticJsonRpcProvider(localProviderUrlFromEnv);
 export default function OneLetter (props) {
     // console.log('oneLetter.props', props.item)
     // const [dna, setDna] = useState({ hex: '0x', num: 0 })
-    const [hex, setHex] = useState('0x')
-    const [itemDna, setItemDna] = useState([7, 2, 0, 6, 2, 7, 0, 4]) // P
-    // const [bigInt, setBigInt] = useState('10101')
-    const [claimed, setClaimed] = useState(false)
+    // const [itemHex, setItemHex] = useState()
+    const [metadata, setMetadata] = useState({})
+    const [itemSig, setItemSig] = useState({})
+    const [ready, setReady] = useState(false)
+    // const [itemDna, setItemDna] = useState([]) // P
     const [tokenURI, setTokenURI] = useState('')
+    const [claimed, setClaimed] = useState(false)
     const [injectedProvider, setInjectedProvider] = useState();
     const userProvider = useUserProvider(injectedProvider, localProvider);
-    const [info, setInfo] = useState({})
+    // const [info, setInfo] = useState({})
     const graphemeContract = props.readContracts.YourCollectible
 
     // const [fakeClaimed, setFakeClaimed] = useState([]);
 
     const address = useUserAddress(userProvider);
     const writeContracts = useContractLoader(userProvider);
-
-    const makeLetter = (dna) => {
-        let grid = newGrid();
-        //renderLetter(grid, makeRng([4, 4, 1, 4, 1, 7, 0, 4, 0, 3, 2]));
-        renderLetter(grid, makeRng(dna));
-        return grid;//.map(row => row.join('') ).join('<br />');
-    };
-
-
     const { item } = props
     const tokenId = item.id.toNumber()
 
@@ -78,18 +72,11 @@ export default function OneLetter (props) {
                 .then((infoRes) => {
                     // returns an array of dna, isClaimed
                     const [dnaObj, isClaimed] = infoRes
-                    // console.log('info', infoRes)
                     const hex = dnaObj.toHexString()
-                    setHex(hex)
-                    const firstHex = hex.slice(0, 12)
-                    const num = parseInt(firstHex, 16)
-                    const digits = num.toString().split('')
-                    const dna = digits.map(digit => parseInt(digit))
-
-                    // const num = dnaObj.toNumber() / 1e12
-                    setItemDna(dna) // last 6 digits e12-e18
+                    const sig = GraphUtils.calcDna(hex)
+                    setItemSig(sig)
                     setClaimed(isClaimed)
-                    console.log({ isClaimed, hex, num, dna })
+                    setReady(true)
                 })
 
         }
@@ -106,24 +93,39 @@ export default function OneLetter (props) {
     };
     const letterClass = claimed ? 'letter-item claimed' : 'letter-item'
 
+    const makeLetter = () => {
+        let grid = newGrid();
+        if (tokenId == 1) {
+            // debugger
+            console.log('make', tokenId, itemSig)
+        }
+        const cloneDna = [...itemSig.dna]
+        renderLetter(grid, makeRng(cloneDna));
+        return grid.map(row => (<pre style={letterStyle}>{row.join('')}</pre>))
+        // return grid;//.map(row => row.join('') ).join('<br />');
+    };
+
+    const wordDetails = () => {
+        return (
+            <div className='break-word'>
+                [{tokenId}]
+                hex: {itemSig.hex.slice(2, 10)} <br />
+                dna: {itemSig.dna.join('|')}<br />
+                tokenURI: {tokenURI} <br />
+                claimed: {claimed ? 'true' : 'false'} <br />
+                name: {metadata.name} <br />
+            </div>
+        )
+    }
+
+
     return (
+
         <span className={letterClass} key={props.ukey}>
             <div className='letter-inner'>
-                <div className='break-word'>
-                    [{tokenId}]
-                    hex: {hex} <br />
-                    tokenURI: {tokenURI} <br />
-                    claimed: {claimed ? 'true' : 'false'} <br />
-                    name: {info.name} <br />
-                </div>
 
-                {/* <div>
-                    {makeLetter(itemDna).map(row => {
-                        return (<pre className='grapheme'>{row.join('')}</pre>)
-                    })}
-                </div> */}
-
-                {makeLetter(itemDna).map(row => (<pre style={letterStyle}>{row.join('')}</pre>))}
+                {ready && wordDetails()}
+                {ready && makeLetter()}
 
                 {!claimed &&
                     <Claim
@@ -133,12 +135,13 @@ export default function OneLetter (props) {
                         writeContracts={writeContracts}
                         ipfs={ipfs}
                         tokenId={tokenId}
-                        tokenDNA={hex}
+                        tokenDNA={itemSig.hex}
                     />
                 }
             </div>
         </span>
     )
 }
+
 
 

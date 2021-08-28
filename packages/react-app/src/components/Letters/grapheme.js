@@ -1,4 +1,3 @@
-
 //
 
 const rows = 40;
@@ -86,13 +85,15 @@ function _rnd () {
 }
 
 // returns a function that will return randomness on each call. recycle for limitless fun.
+// this is used as a placeholder when we don't have a real hash
+
 function makeRng (entropy) {
-  if (!entropy || !entropy.shift) {
-    // FIXME - why getting this?
-    // just a temp hac to prevent crash
-    console.warn('makeRng but no entropy', entropy);
-    entropy = [4, 4, 1, 4, 1, 7, 0, 4, 0, 3, 2]
-  }
+  // if (!entropy || !entropy.shift) {
+  //   // FIXME - why getting this?
+  //   // just a temp hac to prevent crash
+  //   console.warn('makeRng but no entropy', entropy);
+  //   entropy = [4, 4, 1, 4, 1, 7, 0, 4, 0, 3, 2]
+  // }
   return () => { const x = entropy.shift(); entropy.push(x); return x; }
 }
 
@@ -216,18 +217,18 @@ function renderLetter (grid, rng) {
   crop(grid);
 }
 
-function main () {
-  let grid = newGrid();
-  let numbers = [...Array(8)].map(_ => _rnd());
-  // console.log(numbers.join(','));
-  // let rng = makeRng([4, 4, 1, 4, 1, 7, 0, 4, 0, 3, 2]);
-  let rng = makeRng(numbers);
-  renderLetter(grid, rng);
-  print(grid);
-}
-if (require.main === module) {
-  main();
-}
+// function main () {
+//   let grid = newGrid();
+//   let numbers = [...Array(8)].map(_ => _rnd());
+//   // console.log(numbers.join(','));
+//   // let rng = makeRng([4, 4, 1, 4, 1, 7, 0, 4, 0, 3, 2]);
+//   let rng = makeRng(numbers);
+//   renderLetter(grid, rng);
+//   print(grid);
+// }
+// if (require.main === module) {
+//   main();
+// }
 
 module.exports = {
   newGrid,

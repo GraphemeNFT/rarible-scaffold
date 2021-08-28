@@ -81,7 +81,7 @@ const ipfs = ipfsAPI({ host: "ipfs.infura.io", port: "5001", protocol: "https" }
 const targetNetwork = NETWORKS.localhost;
 
 // 😬 Sorry for all the console logging
-const DEBUG = (ClientConfig.debugLevel > 2) ? true : false;
+const DEBUG = (ClientConfig.logLevel > 2) ? true : false;
 
 
 // EXAMPLE STARTING JSON:
@@ -205,7 +205,6 @@ function App (props) {
 
   // If you want to call a function on a new block
   useOnBlock(mainnetProvider, () => {
-    console.log(`⛓ A new mainnet block is here: ${mainnetProvider._lastBlockNumber}`);
   });
 
   // Then read your DAI balance like:
@@ -215,10 +214,14 @@ function App (props) {
 
   // keep track of a variable from the contract in the local React state:
   const balance = useContractReader(readContracts, "YourCollectible", "balanceOf", [address]);
-  console.log("🤗 balance:", balance);
   // 📟 Listen for broadcast events
   const transferEvents = useEventListener(readContracts, "YourCollectible", "Transfer", localProvider, 1);
-  console.log("📟 Transfer events:", transferEvents);
+  if (DEBUG) {
+    console.groupCollapsed(`⛓ A new mainnet block is here: ${mainnetProvider._lastBlockNumber}`);
+    console.log("🤗 balance:", balance);
+    console.log("📟 Transfer events:", transferEvents);
+    console.groupEnd()
+  }
 
   //
   // 🧠 This effect will update yourCollectibles by polling when your balance changes
