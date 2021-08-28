@@ -168,11 +168,11 @@ function renderLetter (grid, rng) {
           _write('/' + strepeat(' ', girth) + '/\\');
           x--; y++;
           _write('/' + strepeat('_', girth) + '/  \\');
+          y++;
           while (len--) {
-            x++; y++;
             _write('\\' + strepeat(' ', girth) + '\\   \\');
+            x++; y++;
           }
-          x++; y++;
           _write('\\' + strepeat(' ', girth) + '\\  /');
           x++; y++;
           _write('\\' + strepeat('_', girth) + '\\/');
