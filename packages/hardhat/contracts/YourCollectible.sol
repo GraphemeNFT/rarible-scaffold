@@ -8,7 +8,7 @@ pragma solidity >=0.6.0 <0.9.0;
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
-//import "@nomiclabs/buidler/console.sol";
+import "@nomiclabs/buidler/console.sol";
 
 // GET LISTED ON OPENSEA: https://testnets.opensea.io/get-listed/step-two
 
@@ -98,6 +98,7 @@ contract YourCollectible is ERC721 {
     function getDNA(uint256 tokenId) public view returns (uint256) {
         // TODO: emit event
         uint256 dna = _items[tokenId].identifier;
+        console.log("getDNA", tokenId, "=>", dna);
         return dna;
     }
 
@@ -127,6 +128,5 @@ contract YourCollectible is ERC721 {
             );
     }
 
-    fallback() external payable {
-    }
+    // fallback() external payable {}
 }
