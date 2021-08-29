@@ -28,6 +28,7 @@ import {
 import Claim from './Claim'
 import GraphUtils from '../../helpers/GraphUtils'
 import LetterUtils from './LetterUtils'
+import GridCanvas from "../GridCanvas";
 
 import './letters.css'
 import { getArgumentValues } from "graphql/execution/values";
@@ -78,6 +79,7 @@ export default function OneLetter (props) {
                     const sig = GraphUtils.calcDna(hex)
                     setItemSig(sig)
                     setClaimed(isClaimed)
+                    makeGrid(sig)
                     setReady(true)
                 })
         }
@@ -101,19 +103,25 @@ export default function OneLetter (props) {
     };
     const letterClass = claimed ? 'letter-item claimed' : 'letter-item unclaimed'
 
-    const makeLetter = () => {
-        let grid = newGrid();
+    const [grid, setGrid] = useState(newGrid());
+    const makeGrid = (newSig) => {
+      console.log(newSig);
         if (tokenId == 1) {
             // debugger
-            console.log('make', tokenId, itemSig)
+            console.log('make', tokenId, newSig)
         }
-        const cloneDna = [...itemSig.dna]
-        renderLetter(grid, makeRng(cloneDna));
+        if ('dna' in newSig) {
+          const cloneDna = [...newSig.dna]
+          const _grid = newGrid(); // mem leak?
+          renderLetter(_grid, makeRng(cloneDna));
+          setGrid(_grid);
+        }
+        // return grid;//.map(row => row.join('') ).join('<br />');
+    };
+    const asText = () => {
         const key = 'row-' + tokenId
         const rows = grid.map((row, idx) => (<pre key={"pre-" + key + idx} style={letterStyle}>{row.join('')}</pre>))
         return (< div className='glyph-outer' >{rows}</div>)
-
-        // return grid;//.map(row => row.join('') ).join('<br />');
     };
 
     const wordDetails = () => {
@@ -127,14 +135,16 @@ export default function OneLetter (props) {
             </span>
         )
     }
+    const [showText, setShowText] = useState(true);
 
     return (
 
         <span className={letterClass} key={props.ukey}>
+            <span style={{font: '10px/10px P0T-NOoDLE'}}> </span>
             <div className='letter-inner'>
 
                 {ready && wordDetails()}
-                {ready && makeLetter()}
+                {ready && showText && asText()}
 
                 <div className='claim-box'>
                     {claimed ?
@@ -151,6 +161,7 @@ export default function OneLetter (props) {
                         />
                     }
                 </div>
+                {ready && <GridCanvas grid={grid} canId={'lettercan-' + tokenId} color1={0b111111} color2={0b111111} />}
             </div>
         </span>
     )

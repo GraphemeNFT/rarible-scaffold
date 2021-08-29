@@ -56,6 +56,15 @@ function crop (grid) {
       grid.forEach(row => row.pop());
     }
   } catch (e) { }
+
+  // fill empty columns up to max row length
+  let longest = 0;
+  grid.forEach(row => longest = (row.length > longest ? row.length : longest));
+  for (let i = 0; i < grid.length; i++) {
+    while (grid[i].length < longest) {
+      grid[i].push(' ');
+    }
+  }
 }
 
 function write (grid, x, y, str) {
