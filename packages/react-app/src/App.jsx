@@ -1,3 +1,6 @@
+import React, { useCallback, useEffect, useState } from "react";
+import ReactJson from "react-json-view";
+
 import { StaticJsonRpcProvider, Web3Provider } from "@ethersproject/providers";
 import { formatEther, parseEther } from "@ethersproject/units";
 import { BigNumber } from "@ethersproject/bignumber";
@@ -5,8 +8,6 @@ import WalletConnectProvider from "@walletconnect/web3-provider";
 import { Alert, Button, Card, Col, Input, List, Menu, Row } from "antd";
 import "antd/dist/antd.css";
 import { useUserAddress } from "eth-hooks";
-import React, { useCallback, useEffect, useState } from "react";
-import ReactJson from "react-json-view";
 import { BrowserRouter, Link, Route, Switch } from "react-router-dom";
 import Web3Modal from "web3modal";
 
@@ -35,11 +36,11 @@ import {
 import Letters from "./components/Letters/Letters";
 import ClientConfig from "./helpers/ClientConfig";
 import Mint from './components/Mint/Mint'
-import Claim from './components/Letters/Claim'
+import LetterGrid from './components/Letters/LetterGrid'
+// import Claim from './components/Letters/Claim'
 
 import { DAI_ABI, DAI_ADDRESS, INFURA_ID, NETWORK, NETWORKS } from "./constants";
 import { Transactor } from "./helpers";
-import { newGrid, makeRng, renderLetter } from "./components/Letters/grapheme";
 import {
   useBalance,
   useContractLoader,
@@ -88,10 +89,6 @@ const targetNetwork = NETWORKS.ropsten;
 // 😬 Sorry for all the console logging
 const DEBUG = (ClientConfig.logLevel > 2) ? true : false;
 
-let keyCounter = 0
-function counter () {
-  return keyCounter++
-}
 
 // EXAMPLE STARTING JSON:
 const STARTING_JSON = {
@@ -441,20 +438,9 @@ function App (props) {
 
   const [sellOrderContent, setSellOrderContent] = useState();
 
-  const [transferToAddresses, setTransferToAddresses] = useState({});
-  const [approveAddresses, setApproveAddresses] = useState({});
+  // const [transferToAddresses, setTransferToAddresses] = useState({});
+  // const [approveAddresses, setApproveAddresses] = useState({});
 
-  const makeLetter = (dna) => {
-    let grid = newGrid();
-    //renderLetter(grid, makeRng([4, 4, 1, 4, 1, 7, 0, 4, 0, 3, 2]));
-    renderLetter(grid, makeRng(dna));
-    return grid;//.map(row => row.join('') ).join('<br />');
-  };
-  const letterStyle = {
-    textAlign: 'left', fontWeight: 'bold',
-    fontSize: '6px', lineHeight: '6px',
-    letterSpacing: '0px', marginBottom: 0
-  };
   // const fakeDNAs = [
   //   [4, 1, 0, 6, 6, 7, 2, 5], // n
   //   [7, 2, 0, 6, 2, 7, 0, 4], // P
@@ -644,39 +630,7 @@ function App (props) {
           <Route path="/words">
 
             <DrawWordTool yourTokens={yourCollectibles} ipfs={ipfs} writeContracts={writeContracts} readContracts={readContracts} />
-
-            <div style={{ width: '100%', margin: "auto", marginTop: 32, paddingBottom: 32 }}>
-              <List
-                //bordered
-                grid={{ gutter: 16, column: 4 }}
-                dataSource={letters}
-                renderItem={item => {
-                  // console.log(letters);
-                  const id = item.tokenId;
-                  // const key = id + "_" + item.tokenURI + "_" + item.owner
-                  // FIXME - these vars are not defined
-                  const key = `item-${id}-${counter()}`;
-                  // console.log('key:', key)
-                  return (
-                    <List.Item key={key}>
-                      <Card
-                        title={
-                          <div key={'d1' + id}>
-                            <span style={{ fontSize: 16, marginRight: 8 }}>#{id}</span> {item.firstHex}
-                          </div>
-                        }
-                      >
-                        <div key={'d4' + id}>
-                          {makeLetter([...item.info.dna]).map((row, idx) => (<pre key={key + idx} style={letterStyle}>{row.join('')}</pre>))}
-                        </div>
-                      </Card>
-
-                    </List.Item>
-                  );
-                }}
-              />
-            </div>
-
+            <LetterGrid letters={letters} />
 
           </Route>
 

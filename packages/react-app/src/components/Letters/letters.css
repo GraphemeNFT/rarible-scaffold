@@ -50,20 +50,21 @@
     bottom: 0px;
     top: 0px;
     color: #224422;
-    /* border: 1px solid yellow; */
+    border-bottom: 1px solid yellow;
     word-wrap: break-word;
     font-family: monospace;
     padding: 5px;
+    padding-top: 25px;
     font-size: 14px;
     line-height: 18px;
     width: 100%; /* of parent */
-    height: 50%; /* limit area */
+    min-height: 50%; /* limit area */
     /* z-index: 2; */
 }
 
 .word-details:hover {
     color: greenyellow;
-    /* background-color: #444; */
+    background-color: rgba(0, 80, 30, 0.8);
     /* z-index: 20; */
     /* font-size: 20px; */
 }

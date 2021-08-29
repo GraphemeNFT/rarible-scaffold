@@ -1,0 +1,52 @@
+{
+    "index": 13,
+    "id": 41,
+    "owner": "0xcF2ab8d5d15A4B58fb5c263fFA88Ba2Cb930038a",
+    "tokenId": 41,
+    "metadata": {
+        "description": "A Grapheme NFT Word",
+        "external_url": "https://austingriffith.com/portfolio/paintings/",
+        "image": "https://ipfs.io/ipfs/QmYS58hMoPqpSUtpM1W9TKLqHLmG8LUKUon4sDqmh6JcJ9",
+        "name": "test4",
+        "attributes": [
+            {
+                "trait_type": "tokenId_0",
+                "value": 20
+            },
+            {
+                "trait_type": "row_0",
+                "value": 1
+            },
+            {
+                "trait_type": "col_0",
+                "value": 1
+            },
+            {
+                "trait_type": "tokenId_1",
+                "value": 24
+            },
+            {
+                "trait_type": "row_1",
+                "value": 1
+            },
+            {
+                "trait_type": "col_1",
+                "value": 51
+            }
+        ]
+    },
+    "tokenURI": "https://ipfs.io/ipfs/QmX9t2WFq9ruiHaBWckXSG3F1xpXzCFbRYrT2VXH2DqphB",
+    "info": {
+        "isClaimed": false,
+        "owner": "0xcF2ab8d5d15A4B58fb5c263fFA88Ba2Cb930038a",
+        "isPrimitive": false,
+        "hex": "0x00",
+        "dna": [
+            0
+        ],
+        "firstHex": "00",
+        "digits": [
+            "0"
+        ]
+    }
+}

@@ -105,9 +105,11 @@ export default function OneLetter (props) {
             <span className='word-details'>
                 [{tokenId}] name: {letter.metadata.name} <br />
                 hex: {letter.info.hex.slice(2, 10)} <br />
-                dna: {letter.info.dna.join(' ')}<br />
-                {/* tokenURI: {letter.tokenURI} <br /> */}
+                dna: {letter.info.dna.join('')}<br />
                 claimed: {letter.info.isClaimed ? 'true' : 'false'} <br />
+                letter: {letter.info.isPrimitive ? 'true' : 'false'} <br />
+                <a href={letter.metadata.image} target='_blank' rel="noopener noreferrer">image</a> &nbsp;
+                <a href={letter.tokenURI} target='_blank' rel="noopener noreferrer">metadata</a>
             </span>
         )
     }
