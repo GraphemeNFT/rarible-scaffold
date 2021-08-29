@@ -38,3 +38,8 @@
   width: 100%;
   padding: 5px;
 }
+
+.tiny-icon {
+  width: 20px;
+  height: 20px;
+}

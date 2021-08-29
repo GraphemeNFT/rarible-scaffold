@@ -1,6 +1,15 @@
 import React, { useCallback, useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { Alert, Button, Card, Col, Input, List, Menu, Row } from "antd";
+
+import {
+    EditOutlined, EllipsisOutlined,
+    SettingOutlined, LinkOutlined
+} from '@ant-design/icons';
+
 import { newGrid, makeRng, renderLetter } from "./grapheme";
+
+
 
 let keyCounter = 0
 function counter () {
@@ -30,22 +39,34 @@ export default function LetterGrid (props) {
                 grid={{ gutter: 16, column: 3 }}
                 dataSource={letters}
                 renderItem={item => {
-                    console.log(letters);
+                    // console.log(letters);
                     const id = item.tokenId;
 
                     // FIXME - these vars are not defined
                     // const key = id + "_" + item.tokenURI + "_" + item.owner
                     const key = `item-${id}-${counter()}`;
-                    const claimed = item.info.isClaimed ? 'claimed' : '[claim]'
+                    const actionType = item.info.isClaimed ? 'add' : 'claim'
                     const itemType = item.info.isPrimitive ? 'letter' : 'word'
+                    const rarible = `https://ropsten.rarible.com/token/0x1725eab2faa1e9b97487b818318ba2310334e029:${item.tokenId}?tab=details`
 
                     const title = <span className='card-title'>
-                        #{id} | {item.metadata.name || 'no name'} | {claimed} | {itemType}
+                        #{id} | {item.metadata.name || 'no name'}
                     </span>
                     return (
                         <List.Item key={key}>
                             <Card
                                 title={title}
+                                actions={[
+                                    <a href={rarible} target="_blank" rel="noopener noreferrer">
+                                        <img className='tiny-icon' src='rarible-icon.jpg' />
+                                    </a>,
+                                    <span>
+                                        {itemType}
+                                    </span>,
+                                    <Button size='small'>
+                                        {actionType}
+                                    </Button>
+                                ]}
                             >
                                 {makeLetter([...item.info.dna]).map((row, idx) => (<pre key={key + idx} style={letterStyle}>{row.join('')}</pre>))}
                             </Card>
