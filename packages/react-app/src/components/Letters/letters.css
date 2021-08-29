@@ -12,7 +12,7 @@
     position: relative;
     align-self: flex-start;
     width: 45vw;
-    height: 45vw;
+    /* height: 45vw; */
 
     background-color: black;
     margin: 5px;

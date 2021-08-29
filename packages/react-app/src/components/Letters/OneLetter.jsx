@@ -15,27 +15,18 @@ import {
 } from "antd";
 
 import {
-    useBalance,
     useContractLoader,
-    useContractReader,
-    useEventListener,
-    useExchangePrice,
-    useExternalContractLoader,
-    useGasPrice,
-    useOnBlock,
     useUserProvider,
 } from "../../hooks";
 
 import Claim from './Claim'
-import GraphUtils from '../../helpers/GraphUtils'
-import LetterUtils from './LetterUtils'
 import GridCanvas from "../GridCanvas";
 
-import './letters.css'
-// import { getArgumentValues } from "graphql/execution/values";
 import useStore from '../../helpers/Store'
+import './letters.css'
 
 // TODO move these up to Letters and prop drill them down?
+// or into the Claim component?
 const ipfsAPI = require("ipfs-http-client");
 const ipfs = ipfsAPI({ host: "ipfs.infura.io", port: "5001", protocol: "https" });
 const targetNetwork = NETWORKS.localhost;
@@ -47,57 +38,18 @@ const localProvider = new StaticJsonRpcProvider(localProviderUrlFromEnv);
 export default function OneLetter (props) {
 
     const { tokenId } = props
-    // const tokenId = letter.id // one off?
     const letter = useStore(state => state.letters.find(l => l.tokenId === tokenId))
-
-    useEffect(() => {
-        console.log('OneLetter:', letter)
-    }, [letter])
-
-    // const [letter, setLetter] = useState(null)
-
-    // console.log('oneLetter.props', props.item)
-    // const [dna, setDna] = useState({ hex: '0x', num: 0 })
-    // const [itemHex, setItemHex] = useState()
-    // const [metadata, setMetadata] = useState({})
-    // const [itemSig, setItemSig] = useState({})
+    const [showText, setShowText] = useState(true);
     const [ready, setReady] = useState(false)
-    // const [itemDna, setItemDna] = useState([]) // P
-    // const [tokenURI, setTokenURI] = useState('')
-    // const [claimed, setClaimed] = useState(false)
     const [injectedProvider, setInjectedProvider] = useState();
     const userProvider = useUserProvider(injectedProvider, localProvider);
-    // const [info, setInfo] = useState({})
-    const graphemeContract = props.readContracts.YourCollectible
-
-    // const [fakeClaimed, setFakeClaimed] = useState([]);
 
     const address = useUserAddress(userProvider);
     const writeContracts = useContractLoader(userProvider);
 
-    // useEffect(() => {
-    //     if (tokenId) {
-    //         graphemeContract.tokenURI(tokenId).then(uri => {
-    //             console.log('uri', uri)
-    //             setTokenURI(uri)
-    //         })
-
-    //         graphemeContract.getInfo(tokenId)
-    //             .then((infoRes) => {
-    //                 // returns an array of dna, isClaimed
-    //                 const [dnaObj, isClaimed] = infoRes
-    //                 const hex = dnaObj.toHexString()
-    //                 const sig = GraphUtils.calcDna(hex)
-    //                 setItemSig(sig)
-    //                 setClaimed(isClaimed)
-    //                 makeGrid(sig)
-    //                 setReady(true)
-    //             })
-    //         LetterUtils.getMetadata(tokenId, graphemeContract).then(metadata => {
-    //             setMetadata(metadata)
-    //         })
-    //     }
-    // }, [tokenId])
+    useEffect(() => {
+        console.log('OneLetter:', letter)
+    }, [letter])
 
     useEffect(() => {
         if (letter && letter.info) {
@@ -134,11 +86,13 @@ export default function OneLetter (props) {
         }
         // return grid;//.map(row => row.join('') ).join('<br />');
     };
+
     const asText = () => {
         const key = 'row-' + tokenId
         const rows = grid.map((row, idx) => (<pre key={"pre-" + key + idx} style={letterStyle}>{row.join('')}</pre>))
-        return (< div className='glyph-outer' >{rows}</div>)
+        return (<div className='glyph-outer' >{rows}</div>)
     };
+
     const copyTextToClip = () => {
         navigator.clipboard.writeText(grid.map(row => row.join('')).join('\n'));
     };
@@ -154,7 +108,6 @@ export default function OneLetter (props) {
             </span>
         )
     }
-    const [showText, setShowText] = useState(false);
 
     if (!ready) {
         return (<div>loading</div>)
