@@ -30,10 +30,10 @@ import './letters.css'
 const ipfsAPI = require("ipfs-http-client");
 const ipfs = ipfsAPI({ host: "ipfs.infura.io", port: "5001", protocol: "https" });
 
-const targetNetwork = NETWORKS.localhost;
-const localProviderUrl = targetNetwork.rpcUrl;
-const localProviderUrlFromEnv = process.env.REACT_APP_PROVIDER ? process.env.REACT_APP_PROVIDER : localProviderUrl;
-const localProvider = new StaticJsonRpcProvider(localProviderUrlFromEnv);
+// const targetNetwork = NETWORKS.localhost;
+// const localProviderUrl = targetNetwork.rpcUrl;
+// const localProviderUrlFromEnv = process.env.REACT_APP_PROVIDER ? process.env.REACT_APP_PROVIDER : localProviderUrl;
+// const localProvider = new StaticJsonRpcProvider(localProviderUrlFromEnv);
 
 
 export default function OneLetter (props) {
@@ -42,11 +42,11 @@ export default function OneLetter (props) {
     const letter = useStore(state => state.letters.find(l => l.tokenId === tokenId))
     const [showText, setShowText] = useState(true);
     const [ready, setReady] = useState(false)
-    const [injectedProvider, setInjectedProvider] = useState();
-    const userProvider = useUserProvider(injectedProvider, localProvider);
+    // const [injectedProvider, setInjectedProvider] = useState();
+    // const userProvider = useUserProvider(injectedProvider, localProvider);
 
-    const address = useUserAddress(userProvider);
-    const writeContracts = props.writeContracts;
+    // const address = useUserAddress(userProvider);
+    // const writeContracts = props.writeContracts;
 
     useEffect(() => {
         console.log('OneLetter:', letter)
