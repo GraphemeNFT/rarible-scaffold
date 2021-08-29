@@ -11,6 +11,13 @@ const useStore = create(set => ({
     setBalance: (balance) => set({ balance }),
     setName: (name) => set({ name }),
     setLetters: (letters) => set({ letters }),
+
+    // getLetterByTokenId: (state, tokenId) => {
+    //     if (state.letters) {
+    //         return state.letters.find(letter => letter.tokenId === tokenId)
+    //     }
+    // }
+
 }))
 
 export default useStore

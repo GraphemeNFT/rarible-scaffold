@@ -54,6 +54,7 @@ import {
 import { matchSellOrder, prepareMatchingOrder } from "./rarible/createOrders";
 
 import "./App.css";
+import LetterUtils from "./components/Letters/LetterUtils";
 
 const { BufferList } = require("bl");
 // https://www.npmjs.com/package/ipfs-http-client
@@ -249,39 +250,30 @@ function App (props) {
     const updateYourCollectibles = async () => {
       const collectibleUpdate = [];
       for (let tokenIndex = 0; tokenIndex < balance; tokenIndex++) {
+        const graphemeContract = readContracts.YourCollectible  // inside or it will run b4 we have contract
         console.group('updateYourCollectibles: ', tokenIndex)
         try {
-          console.log("Getting tokenId", tokenIndex);
-          const ownerToken = await readContracts.YourCollectible.tokenOfOwnerByIndex(address, tokenIndex);
-          console.log("tokenId:", ownerToken);
-          // const tokenURI = await readContracts.YourCollectible.tokenURI(tokenId);
-          // console.log("tokenURI:", tokenURI);
-          collectibleUpdate.push({
+          // console.log("toeknIndex:", tokenIndex);
+          const ownerToken = await graphemeContract.tokenOfOwnerByIndex(address, tokenIndex);
+          // console.log("ownerToken:", ownerToken);
+          const tokenId = ownerToken.toNumber();
+          const metadata = await LetterUtils.getMetadata(tokenId, graphemeContract);
+          const tokenURI = await graphemeContract.tokenURI(tokenId)
+          const info = await LetterUtils.getInfo(tokenId, graphemeContract);
+
+          const letter = {
             index: tokenIndex,
-            ownerToken: ownerToken,
-            id: ownerToken,
-            owner: address
-          });
+            id: tokenId,
+            owner: address,
+            tokenId,
+            // ownerToken,
+            metadata,
+            tokenURI,
+            info
+          };
+          console.log('letter', letter)
+          collectibleUpdate.push(letter)
 
-          //   // update hash?
-          //   const ipfsHash = tokenURI.replace("https://ipfs.io/ipfs/", "");
-          //   console.log("ipfsHash", ipfsHash);
-
-          //   try {
-          //     let jsonManifest = {}
-          //     if (!tokenURI) {
-          //       const jsonManifestBuffer = await getFromIPFS(ipfsHash);
-          //       jsonManifest = JSON.parse(jsonManifestBuffer.toString());
-          //       console.log("jsonManifest", jsonManifest);
-          //     } else {
-          //       console.log("No tokenURI for tokenId", tokenId);
-          //     }
-          //     collectibleUpdate.push({ id: tokenId, uri: tokenURI, owner: address, ...jsonManifest });
-          //   } catch (e) {
-          //     console.log('parseManifest error', e);
-          //   } finally {
-          //     console.log('handled update')
-          //   }
         } catch (e) {
           console.log('updateCollectibles error', e);
         }

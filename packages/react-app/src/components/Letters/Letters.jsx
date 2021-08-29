@@ -17,10 +17,11 @@ export default function Letters (props) {
     // const localWallet = useStore(state => state.wallet);
 
     const inner = (letters) => {
-        return letters.map(item => {
-            const ukey = 'item-' + item.id.toNumber()
+        return letters.map(letter => {
+            console.log('letter', letter)
+            const ukey = 'letter-' + letter.id
             return (
-                <OneLetter readContracts={props.readContracts} key={ukey} item={item} />
+                <OneLetter readContracts={props.readContracts} key={ukey} tokenId={letter.tokenId} />
             )
         })
     }

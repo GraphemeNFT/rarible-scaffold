@@ -29,6 +29,42 @@ const LetterUtils = {
         return metadata
     },
 
+    async getInfo (tokenId, letterContract) {
+        const info = await letterContract.getInfo(tokenId);
+        // returns an array of dna, isClaimed
+        const [dna,
+            isClaimed,
+            tokenUri,
+            owner,
+            isPrimitive] = info
+
+        // const [dnaObj, isClaimed] = info
+        const hex = dna.toHexString()
+        const sig = LetterUtils.calcDna(hex)
+        const result = {
+            isClaimed,
+            owner,
+            isPrimitive,
+            ...sig
+        }
+        return result
+
+        // setItemSig(sig)
+        // setClaimed(isClaimed)
+        // makeGrid(sig)
+        // setReady(true)
+    },
+
+    calcDna (hex) {
+        const firstHex = hex.slice(2, 10) // 8 numbers max?
+        const num = parseInt(firstHex, 16)  // eg 6016001671988620
+        const digits = num.toString().split('').slice(0, 8) // first 8 digits
+        const dna = digits.map(digit => parseInt(digit))
+        const result = { hex, dna, firstHex, digits }
+        // console.log('calcDna', firstHex, dna)
+        return result
+    },
+
     // helper function to "Get" from IPFS
     // you usually go content.toString() after this...
     async getFromIPFS (tokenURI) {
