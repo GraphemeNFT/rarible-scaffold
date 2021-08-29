@@ -49,14 +49,25 @@ async function metadataToIpfs (metadata, ipfs) {
 
 function LetterControl (props) {
   return (
-    <div>
+    <div className='info-group'>
+
       <Button
         onClick={e => {
           props.delIdx(props.idx);
         }}
       >X (del)
       </Button>
-      <span>Control for tokenId:{props.tokenId} - DNA:{props.tokenDNA} - position:({props.row}, {props.col})</span>
+      <Input className='info-label' value={props.tokenId} disabled />
+      <Input className='info-label' value={props.col} disabled />
+      <Input className='info-label' value={props.row} disabled />
+
+      {/* {props.tokenDNA} */}
+      <Button
+        onClick={e => {
+          props.setCol(props.col - 1);
+        }}
+      >LEFT</Button>
+
       <Button
         onClick={e => {
           props.setRow(props.row - 1);
@@ -86,12 +97,6 @@ function LetterControl (props) {
           props.setCol(props.col + 10);
         }}
       >RIGHT 10
-      </Button>
-      <Button
-        onClick={e => {
-          props.setCol(props.col - 1);
-        }}
-      >LEFT
       </Button>
     </div>
   )
