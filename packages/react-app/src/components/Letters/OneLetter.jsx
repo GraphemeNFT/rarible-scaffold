@@ -46,7 +46,7 @@ export default function OneLetter (props) {
     const userProvider = useUserProvider(injectedProvider, localProvider);
 
     const address = useUserAddress(userProvider);
-    // const writeContracts = useContractLoader(userProvider);
+    const writeContracts = props.writeContracts;
 
     useEffect(() => {
         console.log('OneLetter:', letter)

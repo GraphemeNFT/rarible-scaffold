@@ -455,17 +455,17 @@ function App (props) {
     fontSize: '6px', lineHeight: '6px',
     letterSpacing: '0px', marginBottom: 0
   };
-  const fakeDNAs = [
-    [4, 1, 0, 6, 6, 7, 2, 5], // n
-    [7, 2, 0, 6, 2, 7, 0, 4], // P
-    [3, 5, 3, 6, 0, 5, 0, 0], // B
-    [2, 3, 1, 6, 0, 7, 3, 5], // ~A
-    [7, 5, 7, 4, 7, 4, 4, 0], // _M
-    [7, 2, 0, 1, 7, 1, 2, 1], // _X~
-    [4, 2, 1, 7, 6, 4, 4, 0], // 4
-  ];
+  // const fakeDNAs = [
+  //   [4, 1, 0, 6, 6, 7, 2, 5], // n
+  //   [7, 2, 0, 6, 2, 7, 0, 4], // P
+  //   [3, 5, 3, 6, 0, 5, 0, 0], // B
+  //   [2, 3, 1, 6, 0, 7, 3, 5], // ~A
+  //   [7, 5, 7, 4, 7, 4, 4, 0], // _M
+  //   [7, 2, 0, 1, 7, 1, 2, 1], // _X~
+  //   [4, 2, 1, 7, 6, 4, 4, 0], // 4
+  // ];
 
-  const [fakeClaimed, setFakeClaimed] = useState([]);
+  // const [fakeClaimed, setFakeClaimed] = useState([]);
   const letters = useStore(state => state.letters);
 
   return (
@@ -632,7 +632,8 @@ function App (props) {
           </Route>
 
           <Route path="/letters">
-            <Letters dataSource={yourCollectibles}
+            <Letters
+              dataSource={yourCollectibles}
               ensProvider={mainnetProvider}
               provider={userProvider}
               writeContracts={writeContracts}
