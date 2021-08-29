@@ -7,11 +7,12 @@ import { DAI_ABI, DAI_ADDRESS, INFURA_ID, NETWORK, NETWORKS } from "../../consta
 import { newGrid, makeRng, renderLetter } from "./grapheme";
 
 
-// import {
+import {
 //     List,
 //     // Alert, Button, Card, Col, Input,
+  Button
 //     // Menu, Row
-// } from "antd";
+} from "antd";
 
 import {
     useBalance,
@@ -123,6 +124,9 @@ export default function OneLetter (props) {
         const rows = grid.map((row, idx) => (<pre key={"pre-" + key + idx} style={letterStyle}>{row.join('')}</pre>))
         return (< div className='glyph-outer' >{rows}</div>)
     };
+    const copyTextToClip = () => {
+      navigator.clipboard.writeText(grid.map(row => row.join('')).join('\n'));
+    };
 
     const wordDetails = () => {
         return (
@@ -135,7 +139,7 @@ export default function OneLetter (props) {
             </span>
         )
     }
-    const [showText, setShowText] = useState(true);
+    const [showText, setShowText] = useState(false);
 
     return (
 
@@ -145,6 +149,9 @@ export default function OneLetter (props) {
 
                 {ready && wordDetails()}
                 {ready && showText && asText()}
+                <div style={{marginTop: 100}}>
+                  <Button onClick={copyTextToClip} >Copy text to clipboard</Button>
+                </div>
 
                 <div className='claim-box'>
                     {claimed ?
