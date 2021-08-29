@@ -1,6 +1,8 @@
 const ClientConfig = {
 
-    debugLevel: 1,
+    // 1 = no debug
+    // >2 = full debug
+    debugLevel: 3,
 
     // ADDRESS TO MINT TO / browser wallet address
 
@@ -10,6 +12,5 @@ const ClientConfig = {
     // add a comment here in case we overwrite each others wallet addresses
 
 }
-
 
 module.exports = ClientConfig;

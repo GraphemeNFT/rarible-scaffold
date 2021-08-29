@@ -82,7 +82,8 @@ const ipfs = ipfsAPI({ host: "ipfs.infura.io", port: "5001", protocol: "https" }
 
 /// 📡 What chain are your contracts deployed to?
 //  select your target frontend network (localhost, rinkeby, xdai, mainnet)
-const targetNetwork = NETWORKS.localhost;
+// const targetNetwork = NETWORKS.localhost;
+const targetNetwork = NETWORKS.ropsten;
 
 // 😬 Sorry for all the console logging
 const DEBUG = (ClientConfig.logLevel > 2) ? true : false;
@@ -644,34 +645,34 @@ function App (props) {
             <DrawWordTool yourTokens={yourCollectibles} ipfs={ipfs} />
 
             <div style={{ width: '100%', margin: "auto", marginTop: 32, paddingBottom: 32 }}>
-            <List
-              //bordered
-              grid={{ gutter: 16, column: 4 }}
-              dataSource={letters}
-              renderItem={item => {
-                console.log(letters);
-                const id = item.tokenId;
-                // const key = id + "_" + item.tokenURI + "_" + item.owner
-                // FIXME - these vars are not defined
-                const key = `item-${id}-${counter()}`;
-                // console.log('key:', key)
-                return (
-                  <List.Item key={key}>
-                  <Card
-                  title={
-                    <div key={'d1' + id}>
-                    <span style={{ fontSize: 16, marginRight: 8 }}>#{id}</span> {item.firstHex}
-                    </div>
-                  }
-                  >
-                  <div key={'d4' + id}>
-                  {makeLetter([...item.info.dna]).map((row, idx) => (<pre key={key + idx} style={letterStyle}>{row.join('')}</pre>))}
-                  </div>
-                  </Card>
+              <List
+                //bordered
+                grid={{ gutter: 16, column: 4 }}
+                dataSource={letters}
+                renderItem={item => {
+                  console.log(letters);
+                  const id = item.tokenId;
+                  // const key = id + "_" + item.tokenURI + "_" + item.owner
+                  // FIXME - these vars are not defined
+                  const key = `item-${id}-${counter()}`;
+                  // console.log('key:', key)
+                  return (
+                    <List.Item key={key}>
+                      <Card
+                        title={
+                          <div key={'d1' + id}>
+                            <span style={{ fontSize: 16, marginRight: 8 }}>#{id}</span> {item.firstHex}
+                          </div>
+                        }
+                      >
+                        <div key={'d4' + id}>
+                          {makeLetter([...item.info.dna]).map((row, idx) => (<pre key={key + idx} style={letterStyle}>{row.join('')}</pre>))}
+                        </div>
+                      </Card>
 
-                  </List.Item>
-                );
-              }}
+                    </List.Item>
+                  );
+                }}
               />
             </div>
 

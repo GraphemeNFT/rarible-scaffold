@@ -37,7 +37,8 @@ then get contract address eg:
 0xc5a5C42992dECbae36851359345FE25997F5C42d
 0xE6E340D132b5f46d1e472DebcD681B2aBc16e57E
 
-server side minting will pick up the Contract address from [./artifacts/YourCollectible.address](../packages/hardhat/artifacts/YourCollectible.address)
+server side minting will pick up the Contract address from 
+[./artifacts/YourCollectible.address](../packages/hardhat/artifacts/YourCollectible.address)
 
 but this is different from the *deployed* contract address
 

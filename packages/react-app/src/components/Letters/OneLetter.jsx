@@ -29,6 +29,7 @@ import './letters.css'
 // or into the Claim component?
 const ipfsAPI = require("ipfs-http-client");
 const ipfs = ipfsAPI({ host: "ipfs.infura.io", port: "5001", protocol: "https" });
+
 const targetNetwork = NETWORKS.localhost;
 const localProviderUrl = targetNetwork.rpcUrl;
 const localProviderUrlFromEnv = process.env.REACT_APP_PROVIDER ? process.env.REACT_APP_PROVIDER : localProviderUrl;
@@ -45,7 +46,7 @@ export default function OneLetter (props) {
     const userProvider = useUserProvider(injectedProvider, localProvider);
 
     const address = useUserAddress(userProvider);
-    const writeContracts = useContractLoader(userProvider);
+    // const writeContracts = useContractLoader(userProvider);
 
     useEffect(() => {
         console.log('OneLetter:', letter)
@@ -126,10 +127,10 @@ export default function OneLetter (props) {
                             <div>Claimed!</div>
                             :
                             <Claim
-                                provider={userProvider}
-                                accountAddress={address}
+                                // provider={userProvider}
+                                // accountAddress={address}
                                 // ERC721Address={writeContracts.YourCollectible.address}
-                                writeContracts={writeContracts}
+                                writeContracts={props.writeContracts}
                                 ipfs={ipfs}
                                 tokenId={tokenId}
                                 tokenDNA={letter.info.hex}
