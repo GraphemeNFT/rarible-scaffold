@@ -450,10 +450,9 @@ function App (props) {
     return grid;//.map(row => row.join('') ).join('<br />');
   };
   const letterStyle = {
-    fontFamily: 'monospace',
     textAlign: 'left', fontWeight: 'bold',
-    fontSize: '16px', lineHeight: '16px',
-    letterSpacing: '-2px', marginBottom: 0
+    fontSize: '6px', lineHeight: '6px',
+    letterSpacing: '0px', marginBottom: 0
   };
   const fakeDNAs = [
     [4, 1, 0, 6, 6, 7, 2, 5], // n
@@ -466,6 +465,7 @@ function App (props) {
   ];
 
   const [fakeClaimed, setFakeClaimed] = useState([]);
+  const letters = useStore(state => state.letters);
 
   return (
     <div className="App">
@@ -642,6 +642,39 @@ function App (props) {
           <Route path="/words">
 
             <DrawWordTool yourTokens={yourCollectibles} ipfs={ipfs} />
+
+            <div style={{ width: '100%', margin: "auto", marginTop: 32, paddingBottom: 32 }}>
+            <List
+              //bordered
+              grid={{ gutter: 16, column: 4 }}
+              dataSource={letters}
+              renderItem={item => {
+                console.log(letters);
+                const id = item.tokenId;
+                // const key = id + "_" + item.tokenURI + "_" + item.owner
+                // FIXME - these vars are not defined
+                const key = `item-${id}-${counter()}`;
+                // console.log('key:', key)
+                return (
+                  <List.Item key={key}>
+                  <Card
+                  title={
+                    <div key={'d1' + id}>
+                    <span style={{ fontSize: 16, marginRight: 8 }}>#{id}</span> {item.firstHex}
+                    </div>
+                  }
+                  >
+                  <div key={'d4' + id}>
+                  {makeLetter([...item.info.dna]).map((row, idx) => (<pre key={key + idx} style={letterStyle}>{row.join('')}</pre>))}
+                  </div>
+                  </Card>
+
+                  </List.Item>
+                );
+              }}
+              />
+            </div>
+
 
           </Route>
 

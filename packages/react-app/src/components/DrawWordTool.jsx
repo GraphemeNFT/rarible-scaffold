@@ -125,10 +125,10 @@ export default function DrawWordTool (props) {
 
   const realDNAs = letters ? letters.map(l => l.info.dna) : [];
 
-  const add = (tokenId) => {
+  const add = (tokenId, index) => {
     setRows([...rows].concat([1]));
     setCols([...cols].concat([1]));
-    setTokenDNAs([...tokenDNAs].concat([realDNAs[tokenId].join(',')]));
+    setTokenDNAs([...tokenDNAs].concat([realDNAs[index].join(',')]));
     setTokenIds([...tokenIds].concat([tokenId]));
   };
   const delIdx = (idx) => {
@@ -167,7 +167,7 @@ export default function DrawWordTool (props) {
 
   const letterTray = () => {
     return letters.map(item => {
-      return (<Button key={'add-' + item.id} onClick={e => add(item.id)} >
+      return (<Button key={'add-' + item.index} onClick={e => add(item.id, item.index)} >
         Add #{item.id.toString()}
       </Button>)
     })
