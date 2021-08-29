@@ -8,6 +8,7 @@ const LetterUtils = {
     async getMetadata (tokenId, letterContract, setter) {
 
         const tokenURI = await letterContract.tokenURI(tokenId);
+        // debugger
 
         if (tokenURI.length < 25) {
             console.warn('no ipfsHash for tokenId:', tokenId, '=>', tokenURI);
