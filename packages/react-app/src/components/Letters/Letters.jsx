@@ -14,7 +14,7 @@ import useStore from '../../helpers/Store'
 export default function Letters (props) {
     // console.log('letters.props', props.dataSource)
     // const wallet = useStore(state => state.wallet)
-    const localWallet = useStore(state => state.wallet);
+    // const localWallet = useStore(state => state.wallet);
 
     const inner = (letters) => {
         return letters.map(item => {
