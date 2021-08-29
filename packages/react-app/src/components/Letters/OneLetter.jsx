@@ -109,8 +109,8 @@ export default function OneLetter (props) {
         }
         const cloneDna = [...itemSig.dna]
         renderLetter(grid, makeRng(cloneDna));
-        const key = 'row-' + Date.now()
-        const rows = grid.map(row => (<pre key={key} style={letterStyle}>{row.join('')}</pre>))
+        const key = 'row-' + tokenId
+        const rows = grid.map((row, idx) => (<pre key={"pre-" + key + idx} style={letterStyle}>{row.join('')}</pre>))
         return (< div className='glyph-outer' >{rows}</div>)
 
         // return grid;//.map(row => row.join('') ).join('<br />');
