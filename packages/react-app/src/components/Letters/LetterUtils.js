@@ -15,16 +15,16 @@ const LetterUtils = {
             return {}
         }
 
-        console.log('getMetaData:', { tokenId, tokenURI });
+        // console.log('getMetaData:', { tokenId, tokenURI });
 
         let metadata = {}
         try {
             const jsonManifestBuffer = await LetterUtils.getFromIPFS(tokenURI);
             metadata = JSON.parse(jsonManifestBuffer.toString());
         } catch (e) {
-            console.log('parseManifest error', e);
+            console.warning('parseManifest error', e);
         }
-        console.log("set metadata", tokenId, '=>', metadata);
+        // console.log("set metadata", tokenId, '=>', metadata);
         if (setter) { setter(metadata); }
         return metadata
     },
@@ -71,13 +71,13 @@ const LetterUtils = {
         const ipfsHash = tokenURI.replace("https://ipfs.io/ipfs/", "");
 
         for await (const file of ipfs.get(ipfsHash)) {
-            console.log(file.path);
+            // console.log(file.path);
             if (!file.content) continue;
             const content = new BufferList();
             for await (const chunk of file.content) {
                 content.append(chunk);
             }
-            console.log(content);
+            // console.log(content);
             return content;
         }
     }

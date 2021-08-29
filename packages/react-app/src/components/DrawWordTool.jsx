@@ -49,14 +49,25 @@ async function metadataToIpfs (metadata, ipfs) {
 
 function LetterControl (props) {
   return (
-    <div>
+    <div className='info-group'>
+
       <Button
         onClick={e => {
           props.delIdx(props.idx);
         }}
       >X (del)
       </Button>
-      <span>Control for tokenId:{props.tokenId} - DNA:{props.tokenDNA} - position:({props.row}, {props.col})</span>
+      <Input className='info-label' value={props.tokenId} disabled />
+      <Input className='info-label' value={props.col} disabled />
+      <Input className='info-label' value={props.row} disabled />
+
+      {/* {props.tokenDNA} */}
+      <Button
+        onClick={e => {
+          props.setCol(props.col - 1);
+        }}
+      >LEFT</Button>
+
       <Button
         onClick={e => {
           props.setRow(props.row - 1);
@@ -86,12 +97,6 @@ function LetterControl (props) {
           props.setCol(props.col + 10);
         }}
       >RIGHT 10
-      </Button>
-      <Button
-        onClick={e => {
-          props.setCol(props.col - 1);
-        }}
-      >LEFT
       </Button>
     </div>
   )
@@ -141,7 +146,8 @@ export default function DrawWordTool (props) {
   const wrapStyle = { padding: 10, border: '5px solid gold', minHeight: 100 };
 
   const castWord = async () => {
-    let canvas = document.getElementById('drawword-canvas');
+    // let canvas = document.getElementById('drawword-canvas');
+    let canvas = document.querySelector('canvas')
     const canBlob = await new Promise((resolve, reject) => {
       canvas.toBlob((blob) => resolve(blob));
     });
@@ -176,36 +182,43 @@ export default function DrawWordTool (props) {
   return (
     <div style={wrapStyle}>
       <h1>WordTool</h1>
-      <Input
-        value={wordName}
-        placeholder="Give your Word a name"
-        onChange={e => {
-          setWordName(e.target.value);
-        }}
-      />
-      <Button
-        style={{ margin: 8 }}
-        loading={sending}
-        size="large"
-        shape="round"
-        type="primary"
-        onClick={async () => {
-          setSending(true);
-          await castWord();
-          // console.log("minting to mintTo", mintTo);
-          // await writeContracts.YourCollectible.mintItem(mintTo, ipfsHash);
-          setSending(false);
-        }}
-      >
-        Cast Word
-      </Button>
 
-      <span>Add one of your Letters: </span>
+      <div className='info-group'>
+        <Input
+          value={wordName}
+          placeholder="Give your Word a name"
+          onChange={e => {
+            setWordName(e.target.value);
+          }}
+        />
+        <Button
+          style={{ margin: 8 }}
+          loading={sending}
+          size="large"
+          shape="round"
+          type="primary"
+          onClick={async () => {
+            setSending(true);
+            await castWord();
+            // console.log("minting to mintTo", mintTo);
+            // await writeContracts.YourCollectible.mintItem(mintTo, ipfsHash);
+            setSending(false);
+          }}
+        >
+          Cast Word
+        </Button>
+      </div>
 
-      {letters && letterTray()}
+      <div className='info-group'>
+        <span>Add one of your Letters: </span>
+        {letters && letterTray()}
+      </div>
 
       {tokenIds.map((id, idx) => (
-        <LetterControl key={'lc-' + idx} idx={idx} delIdx={delIdx} tokenId={tokenIds[idx]} tokenDNA={tokenDNAs[idx]} setRow={(num) => setRowIdx(idx, num)} setCol={(num) => setColIdx(idx, num)} row={rows[idx]} col={cols[idx]} />
+        <LetterControl key={'lc-' + idx} idx={idx} delIdx={delIdx} tokenId={tokenIds[idx]} tokenDNA={tokenDNAs[idx]}
+          setRow={
+            (num) => setRowIdx(idx, num)} setCol={(num) => setColIdx(idx, num)} row={rows[idx]} col={cols[idx]}
+        />
       ))}
       <DrawWord tokenIds={tokenIds} tokenDNAs={tokenDNAs} rows={rows} cols={cols} />
     </div>
@@ -233,8 +246,7 @@ function writeLetterToGrid (grid, letterGrid, row, col) {
 }
 
 function DrawWord ({ tokenIds, tokenDNAs, rows, cols }) {
-  console.log('DrawWord: ', tokenDNAs);
-  console.log(tokenIds);
+  console.log('DrawWord: ', tokenDNAs, tokenIds);
   const [viewText, setViewText] = useState(false);
 
   const bgCh = ' ';
@@ -257,7 +269,7 @@ function DrawWord ({ tokenIds, tokenDNAs, rows, cols }) {
   });
 
   crop(grid);
-  console.log(grid);
+  // console.log('grid', grid);
 
   return (
     <div>
