@@ -59,12 +59,9 @@ export default function OneLetter (props) {
     }, [letter])
 
     const letterStyle = {
-        fontFamily: 'monospace',
         textAlign: 'left',
-        fontWeight: 'bold',
         fontSize: '12px',
         lineHeight: '12px',
-        letterSpacing: '-2px',
         marginBottom: 0
     };
     const letterClass = letter?.info.isClaimed ? 'letter-item claimed' : 'letter-item unclaimed'

@@ -469,6 +469,8 @@ function App (props) {
 
   return (
     <div className="App">
+      <span id='force-noodle' style={{ font: '10px/10px P0T-NOoDLE' }}> </span>
+
       <Header />
       {networkDisplay}
       <BrowserRouter>
