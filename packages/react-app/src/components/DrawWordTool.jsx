@@ -5,6 +5,8 @@ import "../App.css";
 import { newGrid, makeRng, renderLetter, crop } from "./Letters/grapheme";
 import GridCanvas from "./GridCanvas";
 
+import useStore from '../helpers/Store'
+
 // EXAMPLE STARTING JSON:
 const STARTING_JSON = {
   description: "A Grapheme NFT Word",
@@ -95,8 +97,13 @@ function LetterControl (props) {
   )
 }
 
+
+
 export default function DrawWordTool (props) {
-  const yourTokens = props.yourTokens ? props.yourTokens : [];
+  // const yourTokens = props.yourTokens ? props.yourTokens : [];
+
+  const letters = useStore(state => state.letters);
+
   const [wordName, setWordName] = useState('');
   const [sending, setSending] = useState();
   const [rows, setRows] = useState([]); //useState([1, 4, 2]);
@@ -154,6 +161,14 @@ export default function DrawWordTool (props) {
     // await writeContracts.YourCollectible.castWord(mintTo, ipfsHash, );
   };
 
+  const letterTray = () => {
+    return letters.map(item => {
+      return (<Button key={'add-' + item.id} onClick={e => add(item.id)} >
+        Add #{item.id.toString()}
+      </Button>)
+    })
+  }
+
   return (
     <div style={wrapStyle}>
       <h1>WordTool</h1>
@@ -182,7 +197,9 @@ export default function DrawWordTool (props) {
       </Button>
 
       <span>Add one of your Letters: </span>
-      {yourTokens ? yourTokens.map(item => (<Button key={'add-' + item.id.toString()} onClick={e => add(item.id.toNumber())} >Add #{item.id.toString()}</Button>)) : '...'}
+
+      {letters && letterTray()}
+
       {tokenIds.map((id, idx) => (
         <LetterControl key={'lc-' + idx} idx={idx} delIdx={delIdx} tokenId={tokenIds[idx]} tokenDNA={tokenDNAs[idx]} setRow={(num) => setRowIdx(idx, num)} setCol={(num) => setColIdx(idx, num)} row={rows[idx]} col={cols[idx]} />
       ))}
@@ -240,7 +257,7 @@ function DrawWord ({ tokenIds, tokenDNAs, rows, cols }) {
 
   return (
     <div>
-      <span className='preload-font-hack' style={{font: '10px/10px P0T-NOoDLE'}}> </span>
+      <span className='preload-font-hack' style={{ font: '10px/10px P0T-NOoDLE' }}> </span>
       <div>
         {
           viewText
