@@ -19,13 +19,13 @@ const LetterUtils = {
 
         let metadata = {}
         try {
-            const jsonManifestBuffer = await LetterUtils.getFromIPFS(tokenId);
+            const jsonManifestBuffer = await LetterUtils.getFromIPFS(tokenURI);
             metadata = JSON.parse(jsonManifestBuffer.toString());
         } catch (e) {
             console.log('parseManifest error', e);
         }
-        console.log("metadata", metadata);
-        setter(metadata);
+        console.log("set metadata", tokenId, '=>', metadata);
+        if (setter) { setter(metadata); }
         return metadata
     },
 

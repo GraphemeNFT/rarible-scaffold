@@ -82,13 +82,10 @@ export default function OneLetter (props) {
                     makeGrid(sig)
                     setReady(true)
                 })
+            LetterUtils.getMetadata(tokenId, graphemeContract).then(metadata => {
+                setMetadata(metadata)
+            })
         }
-
-        // call async method immediately
-        const getMeta = async () => {
-            await LetterUtils.getMetadata(tokenId, graphemeContract, setMetadata)
-        }
-        getMeta()
 
     }, [tokenId])
 
@@ -105,16 +102,16 @@ export default function OneLetter (props) {
 
     const [grid, setGrid] = useState(newGrid());
     const makeGrid = (newSig) => {
-      console.log(newSig);
+        console.log(newSig);
         if (tokenId == 1) {
             // debugger
             console.log('make', tokenId, newSig)
         }
         if ('dna' in newSig) {
-          const cloneDna = [...newSig.dna]
-          const _grid = newGrid(); // mem leak?
-          renderLetter(_grid, makeRng(cloneDna));
-          setGrid(_grid);
+            const cloneDna = [...newSig.dna]
+            const _grid = newGrid(); // mem leak?
+            renderLetter(_grid, makeRng(cloneDna));
+            setGrid(_grid);
         }
         // return grid;//.map(row => row.join('') ).join('<br />');
     };
@@ -140,7 +137,7 @@ export default function OneLetter (props) {
     return (
 
         <span className={letterClass} key={props.ukey}>
-            <span style={{font: '10px/10px P0T-NOoDLE'}}> </span>
+            <span style={{ font: '10px/10px P0T-NOoDLE' }}> </span>
             <div className='letter-inner'>
 
                 {ready && wordDetails()}

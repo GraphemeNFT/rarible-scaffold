@@ -251,14 +251,15 @@ function App (props) {
       for (let tokenIndex = 0; tokenIndex < balance; tokenIndex++) {
         console.group('updateYourCollectibles: ', tokenIndex)
         try {
-          console.log("Getting token index", tokenIndex);
-          const tokenId = await readContracts.YourCollectible.tokenOfOwnerByIndex(address, tokenIndex);
-          console.log("tokenId:", tokenId);
+          console.log("Getting tokenId", tokenIndex);
+          const ownerToken = await readContracts.YourCollectible.tokenOfOwnerByIndex(address, tokenIndex);
+          console.log("tokenId:", ownerToken);
           // const tokenURI = await readContracts.YourCollectible.tokenURI(tokenId);
           // console.log("tokenURI:", tokenURI);
           collectibleUpdate.push({
-            id: tokenId,
-            // uri: tokenURI,
+            index: tokenIndex,
+            ownerToken: ownerToken,
+            id: ownerToken,
             owner: address
           });
 
@@ -287,7 +288,7 @@ function App (props) {
 
         console.groupEnd()
       }
-      setYourCollectibles(collectibleUpdate);
+      setYourCollectibles(collectibleUpdate);        // TODO - remove dupcation
       setLetters(collectibleUpdate);
     };
     updateYourCollectibles();

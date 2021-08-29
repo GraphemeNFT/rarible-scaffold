@@ -4,6 +4,11 @@ import React, { useState, useEffect, useRef } from "react";
 import "../App.css";
 import { newGrid, makeRng, renderLetter, crop } from "./Letters/grapheme";
 */
+
+// disable logging for this file
+// const clog = console.log
+const clog = () => { };
+
 export default function GridCanvas ({ grid, canId, color1, color2 }) {
   const [viewText, setViewText] = useState(false);
   const [hack1, setHack1] = useState(false);
@@ -20,13 +25,13 @@ export default function GridCanvas ({ grid, canId, color1, color2 }) {
 
     let ctx = canvasRef.current.getContext('2d');
     //let ctx = canvasRef.current.getContext('2d' /* weird alias effect: , { alpha: false } */);
-    console.log('-------------------------');
+    clog('-------------------------');
     ctx.clearRect(0, 0, canvasWidth, canvasHeight);
     //ctx.scale(0.5, 0.5);
     let gradient1 = ctx.createLinearGradient(0, 0, canvasWidth, canvasHeight);
-    console.log(ctx.font);
+    clog(ctx.font);
     ctx.font = `${fontSize}px/${fontSize}px P0T-NOoDLE`;
-    console.log(ctx.font);
+    clog(ctx.font);
     if (!hack1) {
       setHack1(true);
       return;
@@ -34,13 +39,13 @@ export default function GridCanvas ({ grid, canId, color1, color2 }) {
     gradient1.addColorStop(0, ary2rgba(split2bits(color1)));
     gradient1.addColorStop(1, ary2rgba(split2bits(color2)));
     ctx.strokeStyle = gradient1;
-    console.log(grid);
+    clog(grid);
     grid.forEach((row, idx) => {
       ctx.strokeText(row.join(''), 0, fontSize + idx * fontSize)
     });
   }, [hack1, grid]);
 
-  console.log(canvasRef);
+  clog(canvasRef);
   const pixelWidth = 5;
   const canvasWidth = grid[0].length * pixelWidth; //1000;
   const canvasHeight = grid.length * 10; // 500;
