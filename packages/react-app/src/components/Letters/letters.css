@@ -58,7 +58,7 @@
     line-height: 18px;
     width: 100%; /* of parent */
     height: 50%; /* limit area */
-    z-index: 2;
+    /* z-index: 2; */
 }
 
 .word-details:hover {
@@ -118,6 +118,7 @@
     position: absolute;
     top: 0px;
     right: 0px;
+    z-index: 20;
 }
 
 .claim-inner {
@@ -129,8 +130,8 @@
 }
 
 .claimed-info {
-    font-size: 16px;
     position: absolute;
+    font-size: 16px;
     bottom: 0px;
 }
 

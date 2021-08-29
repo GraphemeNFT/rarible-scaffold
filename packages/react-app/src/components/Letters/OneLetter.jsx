@@ -93,6 +93,11 @@ export default function OneLetter (props) {
 
     const copyTextToClip = () => {
         navigator.clipboard.writeText(grid.map(row => row.join('')).join('\n'));
+        console.log('copied data')
+    };
+    const copyDataToClip = () => {
+        navigator.clipboard.writeText(JSON.stringify(letter, null, 2));
+        console.log('copied data')
     };
 
     const wordDetails = () => {
@@ -115,7 +120,8 @@ export default function OneLetter (props) {
             <span className={letterClass} key={props.ukey}>
                 {/* <span style={{ font: '10px/10px P0T-NOoDLE' }}> </span> */}
                 <div className='copy-button'>
-                    <Button size='small' onClick={copyTextToClip} >Copy</Button>
+                    <Button size='small' onClick={copyTextToClip} >Copy Text</Button>
+                    <Button size='small' onClick={copyDataToClip} >Copy Data</Button>
                 </div>
                 <div className='letter-inner'>
 
