@@ -162,7 +162,7 @@ export default function DrawWordTool (props) {
     console.log('canBlob ipfs cid: ', ipfsCanvasResult);
     let tokenURI
     try {
-      tokenURI = await metadataToIpfs(makeMetadata('ipfs://' + ipfsCanvasResult.path, wordName, tokenIds, rows, cols), props.ipfs);
+      tokenURI = await metadataToIpfs(makeMetadata('https://ipfs.io/ipfs/' + ipfsCanvasResult.path, wordName, tokenIds, rows, cols), props.ipfs);
     } catch (e) {
       console.log('ipfs.add of metadata.json failed: ', e);
       return;
@@ -177,7 +177,7 @@ export default function DrawWordTool (props) {
     //   uint256[] memory rows,
     //   uint256[] memory cols
 
-    await props.writeContracts.YourCollectible.mintWord(wallet, tokenURI, tokenIds, rows, cols);
+    await props.writeContracts.YourCollectible.mintWord(wallet, tokenURI.path, tokenIds, rows, cols);
   };
 
   const letterTray = () => {

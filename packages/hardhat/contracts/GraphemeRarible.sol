@@ -73,18 +73,19 @@ contract GraphemeRarible is ERC721, Ownable, RoyaltiesV2Impl {
 
         uint256 counter = 0;
         uint256 totalRoyaltyCount = 0;
-        LibPart.Part[] memory royalties = new LibPart.Part[](tokenIds.length);
+        LibPart.Part[] memory royaltiesToSet = new LibPart.Part[](tokenIds.length);
 
-        // uint256 perShare = 8000 / tokenIds.length; // 80% is Royalties to Letter owners
-        // for (counter = 0; counter < tokenIds.length; counter++) {
-        //     address payable owner = ownerOf(tokenIds[counter]);
-        //     royalties[counter] = LibPart.Part({
-        //         account: owner,
-        //         value: perShare
-        //     });
-        // }
+        uint96 perShare = uint96(80000 / tokenIds.length); // 80% is Royalties to Letter owners
+        for (counter = 0; counter < tokenIds.length; counter++) {
+            address payable owner = royalties[tokenIds[counter]][0].account;
 
-        // _saveRoyalties(id, royalties);
+            royaltiesToSet[counter] = LibPart.Part({
+                account: owner,
+                value: perShare
+            });
+        }
+
+        _saveRoyalties(id, royaltiesToSet);
 
         return id;
     }
