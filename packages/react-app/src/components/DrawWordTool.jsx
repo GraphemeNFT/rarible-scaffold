@@ -118,6 +118,7 @@ export default function DrawWordTool (props) {
   // const yourTokens = props.yourTokens ? props.yourTokens : [];
 
   const letters = useStore(state => state.letters);
+  const wallet = useStore(state => state.wallet);
 
   const [wordName, setWordName] = useState('');
   const [sending, setSending] = useState();
@@ -159,16 +160,24 @@ export default function DrawWordTool (props) {
       return;
     }
     console.log('canBlob ipfs cid: ', ipfsCanvasResult);
-    let ipfsResult;
+    let tokenURI
     try {
-      ipfsResult = await metadataToIpfs(makeMetadata('ipfs://' + ipfsCanvasResult.path, wordName, tokenIds, rows, cols), props.ipfs);
+      tokenURI = await metadataToIpfs(makeMetadata('ipfs://' + ipfsCanvasResult.path, wordName, tokenIds, rows, cols), props.ipfs);
     } catch (e) {
       console.log('ipfs.add of metadata.json failed: ', e);
       return;
     }
-    console.log('castWord ipfsResult: ', ipfsResult);
+    console.log('castWord ipfsResult: ', tokenURI);
+
     // TODO take cid and pass to contract to mint Word
-    // await writeContracts.YourCollectible.castWord(mintTo, ipfsHash, );
+    // function mintWord (
+    //   address payable to,
+    //   string memory tokenURI,
+    //   uint256[] memory tokenIds,
+    //   uint256[] memory rows,
+    //   uint256[] memory cols
+
+    await props.writeContracts.YourCollectible.mintWord(wallet, tokenURI, tokenIds, rows, cols);
   };
 
   const letterTray = () => {

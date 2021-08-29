@@ -643,7 +643,7 @@ function App (props) {
 
           <Route path="/words">
 
-            <DrawWordTool yourTokens={yourCollectibles} ipfs={ipfs} />
+            <DrawWordTool yourTokens={yourCollectibles} ipfs={ipfs} writeContracts={writeContracts} readContracts={readContracts} />
 
             <div style={{ width: '100%', margin: "auto", marginTop: 32, paddingBottom: 32 }}>
               <List
@@ -651,7 +651,7 @@ function App (props) {
                 grid={{ gutter: 16, column: 4 }}
                 dataSource={letters}
                 renderItem={item => {
-                  console.log(letters);
+                  // console.log(letters);
                   const id = item.tokenId;
                   // const key = id + "_" + item.tokenURI + "_" + item.owner
                   // FIXME - these vars are not defined
