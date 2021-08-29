@@ -271,7 +271,7 @@ function App (props) {
             tokenURI,
             info
           };
-          console.log('letter', letter)
+          // console.log('letter', letter)
           collectibleUpdate.push(letter)
 
         } catch (e) {
@@ -871,7 +871,9 @@ function App (props) {
               Download from IPFS
             </Button>
 
-            <pre style={{ padding: 16, width: 500, margin: "auto", paddingBottom: 150 }}>{ipfsContent}</pre>
+            <div
+              className='debug-field'
+            >{ipfsContent}</div>
           </Route>
 
           <Route path="/contract">

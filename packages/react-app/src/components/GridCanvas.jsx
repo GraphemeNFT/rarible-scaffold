@@ -6,8 +6,8 @@ import { newGrid, makeRng, renderLetter, crop } from "./Letters/grapheme";
 */
 
 // disable logging for this file
-const clog = console.log
-// const clog = () => { };
+// const clog = console.log
+const clog = () => { };
 
 export default function GridCanvas ({ grid, canId, color1, color2 }) {
   const [viewText, setViewText] = useState(false);
@@ -29,9 +29,9 @@ export default function GridCanvas ({ grid, canId, color1, color2 }) {
     ctx.clearRect(0, 0, canvasWidth, canvasHeight);
     //ctx.scale(0.5, 0.5);
     let gradient1 = ctx.createLinearGradient(0, 0, canvasWidth, canvasHeight);
-    console.log('f1', ctx.font);
+    clog('f1', ctx.font);
     ctx.font = `${fontSize}px/${fontSize}px P0T-NOoDLE`;
-    console.log('f2', ctx.font);
+    clog('f2', ctx.font);
     if (!hack1) {
       setHack1(true);
       return;
