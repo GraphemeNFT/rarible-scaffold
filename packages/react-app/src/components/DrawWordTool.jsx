@@ -255,7 +255,7 @@ function writeLetterToGrid (grid, letterGrid, row, col) {
 }
 
 function DrawWord ({ tokenIds, tokenDNAs, rows, cols }) {
-  console.log('DrawWord: ', tokenDNAs, tokenIds);
+  // console.log('DrawWord: ', tokenDNAs, tokenIds);
   const [viewText, setViewText] = useState(false);
 
   const bgCh = ' ';

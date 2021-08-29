@@ -278,7 +278,8 @@ function App (props) {
               };
               // console.log('letter', letter)
               collectibleUpdate.push(letter)
-              setLetters(collectibleUpdate);  // update ALL on each refresh - may cause too much redrawing?
+              // update ALL on each refresh - may cause too much redrawing?
+              setLetters(collectibleUpdate);
             });
           });
 
@@ -288,7 +289,7 @@ function App (props) {
 
         console.groupEnd()
       }
-      // setYourCollectibles(collectibleUpdate);        // TODO - remove dupcation
+      // this should not be needed since we do it above
       setLetters(collectibleUpdate);
     };
     updateYourCollectibles();
