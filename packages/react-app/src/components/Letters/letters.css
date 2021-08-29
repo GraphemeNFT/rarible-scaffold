@@ -63,8 +63,9 @@
 }
 
 .word-details:hover {
-    color: greenyellow;
-    background-color: rgba(0, 80, 30, 0.8);
+    color: yellow;
+    /* color: greenyellow; */
+    /* background-color: rgba(0, 80, 30, 0.8); */
     /* z-index: 20; */
     /* font-size: 20px; */
 }

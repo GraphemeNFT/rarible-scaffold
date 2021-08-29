@@ -54,20 +54,20 @@ export default function OneLetter (props) {
         image: "https://austingriffith.com/images/paintings/buffalo.jpg",
         name: "Buffalo",
         attributes: [
-          {
-            trait_type: "tokenId_0",
-            value: "",
-          },
-          {
-            trait_type: "row_0",
-            value: "",
-          },
-          {
-            trait_type: "col_0",
-            value: "",
-          },
+            {
+                trait_type: "tokenId_0",
+                value: "",
+            },
+            {
+                trait_type: "row_0",
+                value: "",
+            },
+            {
+                trait_type: "col_0",
+                value: "",
+            },
         ],
-      };
+    };
 
     useEffect(() => {
         console.log('OneLetter:', letter)
@@ -150,7 +150,7 @@ export default function OneLetter (props) {
         const claimed = await props.writeContracts.YourCollectible.claimToken(tokenId, tokenURI.path);
     };
 
-    function makeMetadata(imageCid, name, dna) {
+    function makeMetadata (imageCid, name, dna) {
         let metadata = Object.assign({}, STARTING_JSON);
         metadata.name = name;
         metadata.image = imageCid;
@@ -158,7 +158,7 @@ export default function OneLetter (props) {
         return metadata;
     }
 
-    async function metadataToIpfs(metadata, ipfs) {
+    async function metadataToIpfs (metadata, ipfs) {
         const result = await ipfs.add(JSON.stringify(metadata));
         return result;
     }
@@ -194,7 +194,7 @@ export default function OneLetter (props) {
                     {ready && showText && asText()}
 
                     {letter?.info.isClaimed ?
-                        <span className='claimed-info'>Claimed!</span>
+                        <span className='claimed-info'>[{tokenId}] {letter.metadata.name} Claimed!</span>
                         :
                         <Claim
                             // provider={userProvider}
@@ -204,7 +204,7 @@ export default function OneLetter (props) {
                             ipfs={ipfs}
                             tokenId={tokenId}
                             tokenDNA={letter.info.hex}
-                            claimTokenFunc = {claimTokenFunc}
+                            claimTokenFunc={claimTokenFunc}
                         />
                     }
 

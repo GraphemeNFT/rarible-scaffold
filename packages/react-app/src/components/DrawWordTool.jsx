@@ -10,7 +10,7 @@ import useStore from '../helpers/Store'
 // EXAMPLE STARTING JSON:
 const STARTING_JSON = {
   description: "A Grapheme NFT Word",
-  external_url: "https://austingriffith.com/portfolio/paintings/", // <-- this can link to a page for the specific file too
+  external_url: "https://graphemenft.github.io/", // <-- this can link to a page for the specific file too
   image: "https://austingriffith.com/images/paintings/buffalo.jpg",
   name: "Buffalo",
   attributes: [

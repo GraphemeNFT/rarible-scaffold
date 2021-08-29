@@ -234,12 +234,13 @@ function App (props) {
   // 🧠 This effect will update yourCollectibles by polling when your balance changes
   //
   const yourBalance = balance && balance.toNumber && balance.toNumber();
-  const [yourCollectibles, setYourCollectibles] = useState();
+  // const [yourCollectibles, setYourCollectibles] = useState();
 
   // zustand Store stuff
   const setWallet = useStore(state => state.setWallet);
   const setBalance = useStore(state => state.setBalance);
   const setLetters = useStore(state => state.setLetters);
+  const letters = useStore(state => state.letters);
 
 
   // get minimal info on token on update
@@ -277,6 +278,7 @@ function App (props) {
               };
               // console.log('letter', letter)
               collectibleUpdate.push(letter)
+              setLetters(collectibleUpdate);  // update ALL on each refresh - may cause too much redrawing?
             });
           });
 
@@ -286,13 +288,13 @@ function App (props) {
 
         console.groupEnd()
       }
-      setYourCollectibles(collectibleUpdate);        // TODO - remove dupcation
+      // setYourCollectibles(collectibleUpdate);        // TODO - remove dupcation
       setLetters(collectibleUpdate);
     };
     updateYourCollectibles();
   }, [address, yourBalance]);
 
-
+  // make users wallet available to store
   useEffect(() => {
     const localWallet = address.replace(/^0x/, '');
     setWallet(localWallet)
@@ -449,18 +451,6 @@ function App (props) {
   // const [transferToAddresses, setTransferToAddresses] = useState({});
   // const [approveAddresses, setApproveAddresses] = useState({});
 
-  // const fakeDNAs = [
-  //   [4, 1, 0, 6, 6, 7, 2, 5], // n
-  //   [7, 2, 0, 6, 2, 7, 0, 4], // P
-  //   [3, 5, 3, 6, 0, 5, 0, 0], // B
-  //   [2, 3, 1, 6, 0, 7, 3, 5], // ~A
-  //   [7, 5, 7, 4, 7, 4, 4, 0], // _M
-  //   [7, 2, 0, 1, 7, 1, 2, 1], // _X~
-  //   [4, 2, 1, 7, 6, 4, 4, 0], // 4
-  // ];
-
-  // const [fakeClaimed, setFakeClaimed] = useState([]);
-  const letters = useStore(state => state.letters);
 
   return (
     <div className="App">
@@ -478,7 +468,7 @@ function App (props) {
               }}
               to="/"
             >
-              Menu
+              About
             </Link>
           </Menu.Item>
 
@@ -627,7 +617,7 @@ function App (props) {
 
           <Route path="/letters">
             <Letters
-              dataSource={yourCollectibles}
+              // dataSource={yourCollectibles}
               ensProvider={mainnetProvider}
               provider={userProvider}
               writeContracts={writeContracts}
@@ -637,7 +627,7 @@ function App (props) {
 
           <Route path="/words">
 
-            <DrawWordTool yourTokens={yourCollectibles} ipfs={ipfs} writeContracts={writeContracts} readContracts={readContracts} />
+            <DrawWordTool yourTokens={letters} ipfs={ipfs} writeContracts={writeContracts} readContracts={readContracts} />
             <LetterGrid letters={letters} />
 
           </Route>
