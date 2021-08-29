@@ -98,6 +98,16 @@ function LetterControl (props) {
 }
 
 
+// const fakeDNAs = [
+//   [4, 1, 0, 6, 6, 7, 2, 5], // n
+//   [7, 2, 0, 6, 2, 7, 0, 4], // P
+//   [3, 5, 3, 6, 0, 5, 0, 0], // B
+//   [2, 3, 1, 6, 0, 7, 3, 5], // ~A
+//   [7, 5, 7, 4, 7, 4, 4, 0], // _M
+//   [7, 2, 0, 1, 7, 1, 2, 1], // _X~
+//   [4, 2, 1, 7, 6, 4, 4, 0], // 4
+// ];
+
 
 export default function DrawWordTool (props) {
   // const yourTokens = props.yourTokens ? props.yourTokens : [];
@@ -111,20 +121,14 @@ export default function DrawWordTool (props) {
   const setColIdx = (idx, num) => { let cpy = [...cols]; cpy[idx] = num; setCols(cpy); };
   const setRowIdx = (idx, num) => { let cpy = [...rows]; cpy[idx] = num; setRows(cpy); };
   const [tokenIds, setTokenIds] = useState([]); //[0, 1, 2];
-  const fakeDNAs = [
-    [4, 1, 0, 6, 6, 7, 2, 5], // n
-    [7, 2, 0, 6, 2, 7, 0, 4], // P
-    [3, 5, 3, 6, 0, 5, 0, 0], // B
-    [2, 3, 1, 6, 0, 7, 3, 5], // ~A
-    [7, 5, 7, 4, 7, 4, 4, 0], // _M
-    [7, 2, 0, 1, 7, 1, 2, 1], // _X~
-    [4, 2, 1, 7, 6, 4, 4, 0], // 4
-  ];
   const [tokenDNAs, setTokenDNAs] = useState([]);
+
+  const realDNAs = letters ? letters.map(l => l.info.dna) : [];
+
   const add = (tokenId) => {
     setRows([...rows].concat([1]));
     setCols([...cols].concat([1]));
-    setTokenDNAs([...tokenDNAs].concat([fakeDNAs[tokenId].join(',')]));
+    setTokenDNAs([...tokenDNAs].concat([realDNAs[tokenId].join(',')]));
     setTokenIds([...tokenIds].concat([tokenId]));
   };
   const delIdx = (idx) => {
