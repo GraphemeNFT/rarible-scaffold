@@ -210,17 +210,11 @@ function writeLetterToGrid (grid, letterGrid, row, col) {
   }
 }
 
-function DrawWord ({ tokenIds, tokenDNAs, rows, cols }) {
-  console.log('DrawWord: ', tokenDNAs);
-  console.log(tokenIds);
+function GridCanvas ({ grid, canId, color1, color2 }) {
   const [viewText, setViewText] = useState(false);
   const [hack1, setHack1] = useState(false);
 
-  //const canvas = document.getElementById('drawword-canvas');
   const canvasRef = useRef(null);
-  const bgCh = ' ';
-  const newRow = () => [...Array(250)].map(und => bgCh);
-  let grid = [...Array(80)].map(_ => newRow());
 
   useEffect(() => {
     if (!canvasRef.current) {
@@ -243,24 +237,39 @@ function DrawWord ({ tokenIds, tokenDNAs, rows, cols }) {
       setHack1(true);
       return;
     }
-    if (rows.length > 1) {
-      const color1 = (rows[0] * cols[0] * tokenDNAs[0].split(',')[0]) % 64;
-      const color2 = rows.slice(-1) * cols.slice(-1) % 16;
-      gradient1.addColorStop(0, ary2rgba(split2bits(color1)));
-      gradient1.addColorStop(1, ary2rgba(split2bits(color2)));
-      ctx.strokeStyle = gradient1;
-    }
+    gradient1.addColorStop(0, ary2rgba(split2bits(color1)));
+    gradient1.addColorStop(1, ary2rgba(split2bits(color2)));
+    ctx.strokeStyle = gradient1;
     console.log(grid);
     grid.forEach((row, idx) => {
       ctx.strokeText(row.join(''), 0, fontSize + idx * fontSize)
     });
-  }, [hack1, grid, tokenIds, tokenDNAs, rows, cols]);
+  }, [hack1, grid]);
 
   console.log(canvasRef);
-  const canvasWidth = 1000;
-  const canvasHeight = 500;
+  const pixelWidth = 5;
+  const canvasWidth = grid[0].length * pixelWidth; //1000;
+  const canvasHeight = grid.length * 10; // 500;
+
+  return (
+    <div>
+      <canvas ref={canvasRef} id={canId} width={canvasWidth} height={canvasHeight} style={{ border: '4px dotted black' }} ></canvas>
+    </div>
+  );
+
+}
+function DrawWord ({ tokenIds, tokenDNAs, rows, cols }) {
+  console.log('DrawWord: ', tokenDNAs);
+  console.log(tokenIds);
+  const [viewText, setViewText] = useState(false);
+
+  const bgCh = ' ';
+  const newRow = () => [...Array(250)].map(und => bgCh);
+  let grid = [...Array(80)].map(_ => newRow());
+  const color1 = tokenIds.length ? (rows[0] * cols[0] * tokenDNAs[0].split(',')[0]) % 64 : 0;
+  const color2 = tokenIds.length ? rows.slice(-1) * cols.slice(-1) % 16 : 0;
   if (tokenIds.length == 0) {
-    return ''; // (<canvas id='drawword-canvas' width={canvasWidth} height={canvasHeight} ></canvas>);
+    return '';
   }
 
   // tokenIds - list of tokenId (uint256)
@@ -286,7 +295,7 @@ function DrawWord ({ tokenIds, tokenDNAs, rows, cols }) {
         }
       </div>
       <div>
-        <canvas ref={canvasRef} id='drawword-canvas' width={canvasWidth} height={canvasHeight} style={{ border: '4px dotted black' }} ></canvas>
+        <GridCanvas grid={grid} canid='drawword-canvas' color1={color1} color2={color2} />
       </div>
     </div>
   );
