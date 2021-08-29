@@ -21,7 +21,7 @@ export default function Letters (props) {
             console.log('letter', letter)
             const ukey = 'letter-' + letter.id
             return (
-                <OneLetter readContracts={props.readContracts} key={ukey} tokenId={letter.tokenId} />
+                <OneLetter readContracts={props.readContracts} writeContracts={props.writeContracts} key={ukey} tokenId={letter.tokenId} />
             )
         })
     }
