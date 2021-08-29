@@ -328,14 +328,25 @@ export const NETWORKS = {
     faucet: "https://faucet.rinkeby.io/",
     blockExplorer: "https://rinkeby.etherscan.io/",
   },
+
+  // ropsten: {
+  //   name: "ropsten",
+  //   color: "#F60D09",
+  //   chainId: 3,
+  //   faucet: "https://faucet.ropsten.be/",
+  //   blockExplorer: "https://ropsten.etherscan.io/",
+  //   rpcUrl: `https://ropsten.infura.io/v3/${INFURA_ID}`,
+  // },
+
   ropsten: {
     name: "ropsten",
     color: "#F60D09",
     chainId: 3,
     faucet: "https://faucet.ropsten.be/",
     blockExplorer: "https://ropsten.etherscan.io/",
-    rpcUrl: `https://ropsten.infura.io/v3/${INFURA_ID}`,
+    rpcUrl: 'https://ropsten.infura.io/v3/860c79f9dd874dd081cf6b41c94635fb',
   },
+
   goerli: {
     name: "goerli",
     color: "#0975F6",

@@ -1,4 +1,5 @@
 
+import { childContextTypes } from "qrcode.react";
 import React, { useState, useEffect, useRef } from "react";
 /*import { Button, Input } from "antd";
 import "../App.css";
@@ -24,6 +25,9 @@ export default function GridCanvas ({ grid, canId, color1, color2 }) {
     const fontSize = 10;
 
     let ctx = canvasRef.current.getContext('2d');
+    ctx.filter = "url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxmaWx0ZXIgaWQ9ImZpbHRlciIgeD0iMCIgeT0iMCIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgY29sb3ItaW50ZXJwb2xhdGlvbi1maWx0ZXJzPSJzUkdCIj48ZmVDb21wb25lbnRUcmFuc2Zlcj48ZmVGdW5jUiB0eXBlPSJpZGVudGl0eSIvPjxmZUZ1bmNHIHR5cGU9ImlkZW50aXR5Ii8+PGZlRnVuY0IgdHlwZT0iaWRlbnRpdHkiLz48ZmVGdW5jQSB0eXBlPSJkaXNjcmV0ZSIgdGFibGVWYWx1ZXM9IjAgMSIvPjwvZmVDb21wb25lbnRUcmFuc2Zlcj48L2ZpbHRlcj48L3N2Zz4=#filter)";
+    ctx.imageSmoothingEnabled = false
+
     //let ctx = canvasRef.current.getContext('2d' /* weird alias effect: , { alpha: false } */);
     clog('-------------------------');
     ctx.clearRect(0, 0, canvasWidth, canvasHeight);
@@ -39,9 +43,11 @@ export default function GridCanvas ({ grid, canId, color1, color2 }) {
     gradient1.addColorStop(0, ary2rgba(split2bits(color1)));
     gradient1.addColorStop(1, ary2rgba(split2bits(color2)));
     ctx.strokeStyle = gradient1;
+    ctx.fillStyle = '#44FF88'
     clog(grid);
     grid.forEach((row, idx) => {
-      ctx.strokeText(row.join(''), 0, fontSize + idx * fontSize)
+      // ctx.strokeText(row.join(''), 0, fontSize + idx * fontSize)
+      ctx.fillText(row.join(''), 0, fontSize + idx * fontSize)
     });
   }, [hack1, grid]);
 
@@ -51,7 +57,7 @@ export default function GridCanvas ({ grid, canId, color1, color2 }) {
   const canvasHeight = grid.length * 10; // 500;
 
   return (
-    <div>
+    <div className='letter-canvas'>
       <canvas ref={canvasRef} id={canId} width={canvasWidth} height={canvasHeight} style={{ border: '4px dotted black' }} ></canvas>
     </div>
   );

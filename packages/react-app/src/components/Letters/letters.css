@@ -11,8 +11,8 @@
 .letter-item {
     position: relative;
     align-self: flex-start;
-    width: 45vw;
-    /* height: 45vw; */
+    width: 30vw;
+    height: 30vw;
 
     background-color: black;
     margin: 5px;
@@ -36,7 +36,7 @@
 
 .letter-item:hover {
     border: 2px solid #44ff73;
-    /* background-color: #444; */
+    background-color: #14005c;
 }
 
 .letter-inner {
@@ -54,18 +54,17 @@
     word-wrap: break-word;
     font-family: monospace;
     padding: 5px;
-    font-size: 12px;
-    line-height: 15px;
+    font-size: 14px;
+    line-height: 18px;
     width: 100%; /* of parent */
-    height: 80px; /* limit area */
-    /* flex-basis: 33%; */
-
+    height: 50%; /* limit area */
+    z-index: 2;
 }
 
 .word-details:hover {
     color: greenyellow;
-    background-color: #444;
-    z-index: 20;
+    /* background-color: #444; */
+    /* z-index: 20; */
     /* font-size: 20px; */
 }
 
@@ -90,9 +89,48 @@
     margin-bottom: 0;
 }
 
-.claim-box {
-    position: absolute;
-    bottom: 0px;
+/* .claim-box {
     font-size: 16px;
     color: #44FF88;
+} */
+
+.letter-canvas {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    width: 30vw;
 }
+
+/* input and button to claim */
+.claim-bar {
+    /* border: 1px solid yellow; */
+    position: absolute;
+    bottom: 0px;
+    z-index: 10;
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+}
+
+.copy-button {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+}
+
+.claim-inner {
+
+}
+
+.claim-input {
+    width: 50%;
+}
+
+.claimed-info {
+    font-size: 16px;
+    position: absolute;
+    bottom: 0px;
+}
+

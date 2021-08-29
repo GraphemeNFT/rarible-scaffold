@@ -1,6 +1,7 @@
 import React from "react";
 import { Button, Input, Tooltip } from "antd";
-import { AddressInput } from "..";
+// import { AddressInput } from "..";
+import './letters.css'
 
 // EXAMPLE STARTING JSON:
 const STARTING_JSON = {
@@ -15,6 +16,7 @@ const STARTING_JSON = {
     },
   ],
 };
+
 
 // props: { writeContracts, tokenId, tokenDNA, ipfs, onClaimed } // as well as provider, accountAddress
 export default function Claim (props) {
@@ -52,10 +54,11 @@ export default function Claim (props) {
   }
 
   return (
-    <div>
+    <div className='claim-bar'>
       <Input
         value={name}
-        placeholder="Give your letter a name"
+        className='claim-input'
+        placeholder="name your letter"
         onChange={e => {
           setName(e.target.value);
         }}
@@ -64,8 +67,8 @@ export default function Claim (props) {
       <Button
         style={{ margin: 8 }}
         loading={sending}
-        size="large"
-        shape="round"
+        // size="large"
+        // shape="round"
         type="primary"
         onClick={async () => {
           setSending(true);

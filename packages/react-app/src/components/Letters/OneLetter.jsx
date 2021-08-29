@@ -21,7 +21,7 @@ import {
 
 import Claim from './Claim'
 import GridCanvas from "../GridCanvas";
-
+import ClientConfig from '../../helpers/ClientConfig'
 import useStore from '../../helpers/Store'
 import './letters.css'
 
@@ -40,7 +40,7 @@ export default function OneLetter (props) {
 
     const { tokenId } = props
     const letter = useStore(state => state.letters.find(l => l.tokenId === tokenId))
-    const [showText, setShowText] = useState(true);
+    const [showText, setShowText] = useState(ClientConfig.showLetterText)
     const [ready, setReady] = useState(false)
     // const [injectedProvider, setInjectedProvider] = useState();
     // const userProvider = useUserProvider(injectedProvider, localProvider);
@@ -101,7 +101,7 @@ export default function OneLetter (props) {
                 [{tokenId}] name: {letter.metadata.name} <br />
                 hex: {letter.info.hex.slice(2, 10)} <br />
                 dna: {letter.info.dna.join(' ')}<br />
-                tokenURI: {letter.tokenURI} <br />
+                {/* tokenURI: {letter.tokenURI} <br /> */}
                 claimed: {letter.info.isClaimed ? 'true' : 'false'} <br />
             </span>
         )
@@ -113,30 +113,29 @@ export default function OneLetter (props) {
         return (
 
             <span className={letterClass} key={props.ukey}>
-                <span style={{ font: '10px/10px P0T-NOoDLE' }}> </span>
+                {/* <span style={{ font: '10px/10px P0T-NOoDLE' }}> </span> */}
+                <div className='copy-button'>
+                    <Button size='small' onClick={copyTextToClip} >Copy</Button>
+                </div>
                 <div className='letter-inner'>
 
                     {ready && wordDetails()}
                     {ready && showText && asText()}
-                    <div style={{ marginTop: 100 }}>
-                        <Button onClick={copyTextToClip} >Copy text to clipboard</Button>
-                    </div>
 
-                    <div className='claim-box'>
-                        {letter?.info.isClaimed ?
-                            <div>Claimed!</div>
-                            :
-                            <Claim
-                                // provider={userProvider}
-                                // accountAddress={address}
-                                // ERC721Address={writeContracts.YourCollectible.address}
-                                writeContracts={props.writeContracts}
-                                ipfs={ipfs}
-                                tokenId={tokenId}
-                                tokenDNA={letter.info.hex}
-                            />
-                        }
-                    </div>
+                    {letter?.info.isClaimed ?
+                        <span className='claimed-info'>Claimed!</span>
+                        :
+                        <Claim
+                            // provider={userProvider}
+                            // accountAddress={address}
+                            // ERC721Address={writeContracts.YourCollectible.address}
+                            writeContracts={props.writeContracts}
+                            ipfs={ipfs}
+                            tokenId={tokenId}
+                            tokenDNA={letter.info.hex}
+                        />
+                    }
+
                     {ready && <GridCanvas grid={grid} canId={'lettercan-' + tokenId} color1={0b111111} color2={0b111111} />}
                 </div>
             </span>

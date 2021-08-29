@@ -3,6 +3,7 @@ const ClientConfig = {
     // 1 = no debug
     // >2 = full debug
     debugLevel: 3,
+    showLetterText: false,
 
     // ADDRESS TO MINT TO / browser wallet address
 
