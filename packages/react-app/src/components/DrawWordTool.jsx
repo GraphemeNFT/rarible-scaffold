@@ -5,6 +5,8 @@ import "../App.css";
 import { newGrid, makeRng, renderLetter, crop } from "./Letters/grapheme";
 import GridCanvas from "./GridCanvas";
 
+import useStore from '../helpers/Store'
+
 // EXAMPLE STARTING JSON:
 const STARTING_JSON = {
   description: "A Grapheme NFT Word",
@@ -95,8 +97,23 @@ function LetterControl (props) {
   )
 }
 
+
+// const fakeDNAs = [
+//   [4, 1, 0, 6, 6, 7, 2, 5], // n
+//   [7, 2, 0, 6, 2, 7, 0, 4], // P
+//   [3, 5, 3, 6, 0, 5, 0, 0], // B
+//   [2, 3, 1, 6, 0, 7, 3, 5], // ~A
+//   [7, 5, 7, 4, 7, 4, 4, 0], // _M
+//   [7, 2, 0, 1, 7, 1, 2, 1], // _X~
+//   [4, 2, 1, 7, 6, 4, 4, 0], // 4
+// ];
+
+
 export default function DrawWordTool (props) {
-  const yourTokens = props.yourTokens ? props.yourTokens : [];
+  // const yourTokens = props.yourTokens ? props.yourTokens : [];
+
+  const letters = useStore(state => state.letters);
+
   const [wordName, setWordName] = useState('');
   const [sending, setSending] = useState();
   const [rows, setRows] = useState([]); //useState([1, 4, 2]);
@@ -104,20 +121,14 @@ export default function DrawWordTool (props) {
   const setColIdx = (idx, num) => { let cpy = [...cols]; cpy[idx] = num; setCols(cpy); };
   const setRowIdx = (idx, num) => { let cpy = [...rows]; cpy[idx] = num; setRows(cpy); };
   const [tokenIds, setTokenIds] = useState([]); //[0, 1, 2];
-  const fakeDNAs = [
-    [4, 1, 0, 6, 6, 7, 2, 5], // n
-    [7, 2, 0, 6, 2, 7, 0, 4], // P
-    [3, 5, 3, 6, 0, 5, 0, 0], // B
-    [2, 3, 1, 6, 0, 7, 3, 5], // ~A
-    [7, 5, 7, 4, 7, 4, 4, 0], // _M
-    [7, 2, 0, 1, 7, 1, 2, 1], // _X~
-    [4, 2, 1, 7, 6, 4, 4, 0], // 4
-  ];
   const [tokenDNAs, setTokenDNAs] = useState([]);
+
+  const realDNAs = letters ? letters.map(l => l.info.dna) : [];
+
   const add = (tokenId) => {
     setRows([...rows].concat([1]));
     setCols([...cols].concat([1]));
-    setTokenDNAs([...tokenDNAs].concat([fakeDNAs[tokenId].join(',')]));
+    setTokenDNAs([...tokenDNAs].concat([realDNAs[tokenId].join(',')]));
     setTokenIds([...tokenIds].concat([tokenId]));
   };
   const delIdx = (idx) => {
@@ -154,6 +165,14 @@ export default function DrawWordTool (props) {
     // await writeContracts.YourCollectible.castWord(mintTo, ipfsHash, );
   };
 
+  const letterTray = () => {
+    return letters.map(item => {
+      return (<Button key={'add-' + item.id} onClick={e => add(item.id)} >
+        Add #{item.id.toString()}
+      </Button>)
+    })
+  }
+
   return (
     <div style={wrapStyle}>
       <h1>WordTool</h1>
@@ -182,7 +201,9 @@ export default function DrawWordTool (props) {
       </Button>
 
       <span>Add one of your Letters: </span>
-      {yourTokens ? yourTokens.map(item => (<Button key={'add-' + item.id.toString()} onClick={e => add(item.id.toNumber())} >Add #{item.id.toString()}</Button>)) : '...'}
+
+      {letters && letterTray()}
+
       {tokenIds.map((id, idx) => (
         <LetterControl key={'lc-' + idx} idx={idx} delIdx={delIdx} tokenId={tokenIds[idx]} tokenDNA={tokenDNAs[idx]} setRow={(num) => setRowIdx(idx, num)} setCol={(num) => setColIdx(idx, num)} row={rows[idx]} col={cols[idx]} />
       ))}
@@ -240,7 +261,7 @@ function DrawWord ({ tokenIds, tokenDNAs, rows, cols }) {
 
   return (
     <div>
-      <span className='preload-font-hack' style={{font: '10px/10px P0T-NOoDLE'}}> </span>
+      <span className='preload-font-hack' style={{ font: '10px/10px P0T-NOoDLE' }}> </span>
       <div>
         {
           viewText
