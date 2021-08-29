@@ -16,7 +16,7 @@ describe("Grapheme Tests", function () {
 
     describe("Contact stuff", function () {
         it("should deploy contract", async function () {
-            const Grapheme = await ethers.getContractFactory("Grapheme");
+            const Grapheme = await ethers.getContractFactory("YourCollectible");
             graphemeInstance = await Grapheme.deploy();
             [owner, addr1, addr2, addr3, _] = await ethers.getSigners();
         });
@@ -94,8 +94,11 @@ describe("Grapheme Tests", function () {
                 expect(await graphemeInstance.balanceOf(addr3.address)).to.equal(1);
 
                 expect(await graphemeInstance.balanceOf(addr3.address)).to.equal(1);
+                expect(await graphemeInstance.tokenURI(await graphemeInstance.totalSupply())).to.equal('https://ipfs.io/ipfs/testUrl1');
 
                 let resWord = await graphemeInstance.GetWord(await graphemeInstance.totalSupply());
+
+                https://ipfs.io/ipfs/
                 // console.log('resWord',resWord);
                 assert.notDeepEqual(tokenIds, [1,1,1]); // test false
                 assert.deepEqual(resWord[0].map(a => a.toNumber()), tokenIds);

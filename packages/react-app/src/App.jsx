@@ -252,25 +252,33 @@ function App (props) {
         console.group('updateYourCollectibles: ', tokenIndex)
         try {
           // console.log("toeknIndex:", tokenIndex);
-          const ownerToken = await graphemeContract.tokenOfOwnerByIndex(address, tokenIndex);
-          // console.log("ownerToken:", ownerToken);
-          const tokenId = ownerToken.toNumber();
-          const metadata = await LetterUtils.getMetadata(tokenId, graphemeContract);
-          const tokenURI = await graphemeContract.tokenURI(tokenId)
-          const info = await LetterUtils.getInfo(tokenId, graphemeContract);
+          await graphemeContract.tokenOfOwnerByIndex(address, tokenIndex).then(ownerToken => {
+            // console.log("ownerToken:", ownerToken);
+            const tokenId = ownerToken.toNumber();
+            // const metadata = await LetterUtils.getMetadata(tokenId, graphemeContract);
+            // const tokenURI = await graphemeContract.tokenURI(tokenId)
+            // const info = await LetterUtils.getInfo(tokenId, graphemeContract);
 
-          const letter = {
-            index: tokenIndex,
-            id: tokenId,
-            owner: address,
-            tokenId,
-            // ownerToken,
-            metadata,
-            tokenURI,
-            info
-          };
-          // console.log('letter', letter)
-          collectibleUpdate.push(letter)
+            var metadata = LetterUtils.getMetadata(tokenId, graphemeContract);
+            var tokenURI = graphemeContract.tokenURI(tokenId)
+            var info = LetterUtils.getInfo(tokenId, graphemeContract);
+
+            Promise.all([metadata, tokenURI, info]).then(values => {
+              [metadata, tokenURI, info] = values;
+              const letter = {
+                index: tokenIndex,
+                id: tokenId,
+                owner: address,
+                tokenId,
+                // ownerToken,
+                metadata,
+                tokenURI,
+                info
+              };
+              // console.log('letter', letter)
+              collectibleUpdate.push(letter)
+            });
+          });
 
         } catch (e) {
           console.log('updateCollectibles error', e);
