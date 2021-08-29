@@ -126,9 +126,10 @@ export default function DrawWordTool (props) {
   const realDNAs = letters ? letters.map(l => l.info.dna) : [];
 
   const add = (tokenId) => {
+    const index = (tokenId - 1)
     setRows([...rows].concat([1]));
     setCols([...cols].concat([1]));
-    setTokenDNAs([...tokenDNAs].concat([realDNAs[tokenId].join(',')]));
+    setTokenDNAs([...tokenDNAs].concat([realDNAs[index].join(',')]));
     setTokenIds([...tokenIds].concat([tokenId]));
   };
   const delIdx = (idx) => {
