@@ -22,7 +22,7 @@ const LetterUtils = {
             const jsonManifestBuffer = await LetterUtils.getFromIPFS(tokenURI);
             metadata = JSON.parse(jsonManifestBuffer.toString());
         } catch (e) {
-            console.warning('parseManifest error', e);
+            console.log('parseManifest error', e);
         }
         // console.log("set metadata", tokenId, '=>', metadata);
         if (setter) { setter(metadata); }
