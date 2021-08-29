@@ -1,49 +1,97 @@
+/* main box around all items */
 .letter-holder {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
+    align-items: flex-start;
 }
 
+/* single letter */
 .letter-item {
-    border: 5px solid #008888;
-    background-color: grey;
+    position: relative;
+    align-self: flex-start;
+    width: 45vw;
+    height: 45vw;
+
+    background-color: black;
     margin: 5px;
-    padding: 10px;
-    width: 30vw;
-    min-height: 30vw;
+    border: 2px solid black;
+    /* padding: 10px; */
     color: white;
     cursor: pointer;
     text-align: left;
     font-size: 0.7em;
 }
 
+.letter-item.unclaimed {
+    border: 2px dashed #fff;
+    background-color: #222;
+}
+
 .letter-item.claimed {
-    border: 5px solid black;
+    border: 2px solid black;
     background-color: black;
 }
 
 .letter-item:hover {
-    border: 5px solid #ccc;
-    background-color: #444;
+    border: 2px solid #44ff73;
+    /* background-color: #444; */
 }
 
 .letter-inner {
-    padding: 5px;
+    /* padding: 5px; */
     color: cyan;
 }
 
-.break-word {
-      word-wrap: break-word;
+/* debug info - show on hover? */
+.word-details {
+    position: absolute;
+    bottom: 0px;
+    top: 0px;
+    color: #224422;
+    /* border: 1px solid yellow; */
+    word-wrap: break-word;
+    font-family: monospace;
+    padding: 5px;
+    font-size: 12px;
+    line-height: 15px;
+    width: 100%; /* of parent */
+    height: 80px; /* limit area */
+    /* flex-basis: 33%; */
+
 }
 
-.grapheme {
+.word-details:hover {
+    color: greenyellow;
+    background-color: #444;
+    z-index: 20;
+    /* font-size: 20px; */
+}
+
+
+.glyph-outer {
+    /* border: 1px solid red; */
+    font-size: 10px;
+    overflow-x: hidden;
+    overflow-y: hidden;
+    color: #44FF88;
+    z-index: 1;
+}
+
+.letter-style {
     color: #44FF88;
     font-family: monospace;
     text-align: left;
     font-weight: bold;
-    font-size: 12px;
+    font-size: 10px;
     line-height: 10px;
     letter-spacing: -2px;
     margin-bottom: 0;
 }
 
+.claim-box {
+    position: absolute;
+    bottom: 0px;
+    font-size: 16px;
+    color: #44FF88;
+}

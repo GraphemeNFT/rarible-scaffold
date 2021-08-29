@@ -88,12 +88,12 @@ function _rnd () {
 // this is used as a placeholder when we don't have a real hash
 
 function makeRng (entropy) {
-  // if (!entropy || !entropy.shift) {
-  //   // FIXME - why getting this?
-  //   // just a temp hac to prevent crash
-  //   console.warn('makeRng but no entropy', entropy);
-  //   entropy = [4, 4, 1, 4, 1, 7, 0, 4, 0, 3, 2]
-  // }
+  if (!entropy || !entropy.shift) {
+    // FIXME - why getting this?
+    // just a temp hac to prevent crash
+    console.error('makeRng but no entropy', entropy);
+    entropy = [4, 4, 1, 4, 1, 7, 0, 4, 0, 3, 2]
+  }
   return () => { const x = entropy.shift(); entropy.push(x); return x; }
 }
 

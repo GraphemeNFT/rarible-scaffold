@@ -91,7 +91,7 @@ export default function OneLetter (props) {
         letterSpacing: '-2px',
         marginBottom: 0
     };
-    const letterClass = claimed ? 'letter-item claimed' : 'letter-item'
+    const letterClass = claimed ? 'letter-item claimed' : 'letter-item unclaimed'
 
     const makeLetter = () => {
         let grid = newGrid();
@@ -101,23 +101,23 @@ export default function OneLetter (props) {
         }
         const cloneDna = [...itemSig.dna]
         renderLetter(grid, makeRng(cloneDna));
-        return grid.map(row => (<pre style={letterStyle}>{row.join('')}</pre>))
+        const rows = grid.map(row => (<pre style={letterStyle}>{row.join('')}</pre>))
+        return (< div className='glyph-outer' >{rows}</div>)
+
         // return grid;//.map(row => row.join('') ).join('<br />');
     };
 
     const wordDetails = () => {
         return (
-            <div className='break-word'>
-                [{tokenId}]
+            <span className='word-details'>
+                [{tokenId}] name: {metadata.name} <br />
                 hex: {itemSig.hex.slice(2, 10)} <br />
-                dna: {itemSig.dna.join('|')}<br />
+                dna: {itemSig.dna.join(' ')}<br />
                 tokenURI: {tokenURI} <br />
                 claimed: {claimed ? 'true' : 'false'} <br />
-                name: {metadata.name} <br />
-            </div>
+            </span>
         )
     }
-
 
     return (
 
@@ -127,17 +127,21 @@ export default function OneLetter (props) {
                 {ready && wordDetails()}
                 {ready && makeLetter()}
 
-                {!claimed &&
-                    <Claim
-                        provider={userProvider}
-                        accountAddress={address}
-                        // ERC721Address={writeContracts.YourCollectible.address}
-                        writeContracts={writeContracts}
-                        ipfs={ipfs}
-                        tokenId={tokenId}
-                        tokenDNA={itemSig.hex}
-                    />
-                }
+                <div className='claim-box'>
+                    {claimed ?
+                        <div>Claimed!</div>
+                        :
+                        <Claim
+                            provider={userProvider}
+                            accountAddress={address}
+                            // ERC721Address={writeContracts.YourCollectible.address}
+                            writeContracts={writeContracts}
+                            ipfs={ipfs}
+                            tokenId={tokenId}
+                            tokenDNA={itemSig.hex}
+                        />
+                    }
+                </div>
             </div>
         </span>
     )

@@ -447,11 +447,22 @@ function App (props) {
 
   return (
     <div className="App">
-      {/* ✏️ Edit the header and change the title to your project name */}
       <Header />
       {networkDisplay}
       <BrowserRouter>
         <Menu style={{ textAlign: "center" }} selectedKeys={[route]} mode="horizontal">
+
+          <Menu.Item key="/">
+            <Link
+              onClick={() => {
+                setRoute("/");
+              }}
+              to="/"
+            >
+              Menu
+            </Link>
+          </Menu.Item>
+
           <Menu.Item key="/letters">
             <Link
               onClick={() => {
@@ -463,16 +474,17 @@ function App (props) {
             </Link>
           </Menu.Item>
 
-          <Menu.Item key="/">
+          <Menu.Item key="/words">
             <Link
               onClick={() => {
-                setRoute("/");
+                setRoute("/words");
               }}
-              to="/"
+              to="/words"
             >
-              YourCollectibles
+              Words
             </Link>
           </Menu.Item>
+
           <Menu.Item key="/mint">
             <Link
               onClick={() => {
@@ -577,13 +589,36 @@ function App (props) {
         <Switch>
 
           <Route exact path="/">
-            {/*
-                🎛 this scaffolding is full of commonly used components
-                this <Contract/> component will automatically parse your ABI
-                and give you a form to interact with it locally
-            */}
+
+            <div className='main-menu'>
+              <ol>
+                <li>
+                  <Link to="/letters"
+                    onClick={() => { setRoute("/mint"); }}
+                  >Mint and then claim some letters</Link>
+                </li>
+                <li>
+                  <Link to="/words"
+                    onClick={() => { setRoute("/words"); }}
+                  >Make words from Letters and Mint the word!</Link>
+                </li>
+              </ol>
+            </div>
+          </Route>
+
+          <Route path="/letters">
+            <Letters dataSource={yourCollectibles}
+              ensProvider={mainnetProvider}
+              provider={userProvider}
+              writeContracts={writeContracts}
+              readContracts={readContracts}
+            />
+          </Route>
+
+          <Route path="/words">
 
             <DrawWordTool yourTokens={yourCollectibles} ipfs={ipfs} />
+
             <div style={{ width: 640, margin: "auto", marginTop: 32, paddingBottom: 32 }}>
               <List
                 bordered
@@ -684,6 +719,7 @@ function App (props) {
               <Mint ensProvider={mainnetProvider} provider={userProvider} writeContracts={writeContracts} />
             </div>
           </Route>
+
           <Route path="/lazyMint">
             <div style={{ paddingTop: 32, width: 740, margin: "auto" }}>
               <LazyMint
@@ -872,6 +908,7 @@ function App (props) {
 
             <div style={{ padding: 16, paddingBottom: 150 }}>{ipfsHash}</div>
           </Route>
+
           <Route path="/ipfsdown">
             <div style={{ paddingTop: 32, width: 740, margin: "auto" }}>
               <Input
@@ -912,15 +949,6 @@ function App (props) {
               provider={localProvider}
               address={address}
               blockExplorer={blockExplorer}
-            />
-          </Route>
-
-          <Route path="/letters">
-            <Letters dataSource={yourCollectibles}
-              ensProvider={mainnetProvider}
-              provider={userProvider}
-              writeContracts={writeContracts}
-              readContracts={readContracts}
             />
           </Route>
 

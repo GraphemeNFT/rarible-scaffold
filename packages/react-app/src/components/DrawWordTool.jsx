@@ -221,6 +221,7 @@ function DrawWord ({ tokenIds, tokenDNAs, rows, cols }) {
   const bgCh = ' ';
   const newRow = () => [...Array(250)].map(und => bgCh);
   let grid = [...Array(80)].map(_ => newRow());
+
   useEffect(() => {
     if (!canvasRef.current) {
       return;
@@ -254,13 +255,13 @@ function DrawWord ({ tokenIds, tokenDNAs, rows, cols }) {
       ctx.strokeText(row.join(''), 0, fontSize + idx * fontSize)
     });
   }, [hack1, grid, tokenIds, tokenDNAs, rows, cols]);
+
   console.log(canvasRef);
   const canvasWidth = 1000;
   const canvasHeight = 500;
   if (tokenIds.length == 0) {
     return ''; // (<canvas id='drawword-canvas' width={canvasWidth} height={canvasHeight} ></canvas>);
   }
-
 
   // tokenIds - list of tokenId (uint256)
   // tokenDNAs - list of string of numbers - subject to change to just a bitstring
@@ -271,6 +272,7 @@ function DrawWord ({ tokenIds, tokenDNAs, rows, cols }) {
     renderLetter(letterGrid, makeRng(dna.split(',').map(s => parseInt(s))));
     writeLetterToGrid(grid, letterGrid, rows[idx], cols[idx]);
   });
+
   crop(grid);
   console.log(grid);
 
