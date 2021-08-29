@@ -9,12 +9,12 @@ import './letters.css'
 // const scaffoldEthProvider = null; // new StaticJsonRpcProvider("https://rpc.scaffoldeth.io:48544");
 // const mainnetInfura = new StaticJsonRpcProvider("https://mainnet.infura.io/v3/" + INFURA_ID);
 
-import useStore from '../../helpers/Store'
+// import useStore from '../../helpers/Store'
 
 export default function Letters (props) {
     // console.log('letters.props', props.dataSource)
     // const wallet = useStore(state => state.wallet)
-    const localWallet = useStore(state => state.wallet);
+    // const localWallet = useStore(state => state.wallet);
 
     const inner = (letters) => {
         return letters.map(item => {

@@ -110,7 +110,6 @@ export default function OneLetter (props) {
             // debugger
             console.log('make', tokenId, newSig)
         }
-        console.log('dna' in newSig);
         if ('dna' in newSig) {
           const cloneDna = [...newSig.dna]
           const _grid = newGrid(); // mem leak?
@@ -120,7 +119,8 @@ export default function OneLetter (props) {
         // return grid;//.map(row => row.join('') ).join('<br />');
     };
     const asText = () => {
-        const rows = grid.map(row => (<pre style={letterStyle}>{row.join('')}</pre>))
+        const key = 'row-' + tokenId
+        const rows = grid.map((row, idx) => (<pre key={"pre-" + key + idx} style={letterStyle}>{row.join('')}</pre>))
         return (< div className='glyph-outer' >{rows}</div>)
     };
 

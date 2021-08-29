@@ -58,6 +58,19 @@ module.exports = [
     "anonymous": false,
     "inputs": [
       {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "tokenId",
+        "type": "uint256"
+      }
+    ],
+    "name": "Claimed",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
         "indexed": true,
         "internalType": "address",
         "name": "previousOwner",
@@ -90,6 +103,37 @@ module.exports = [
       }
     ],
     "name": "Roll",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "tokenId",
+        "type": "uint256"
+      },
+      {
+        "components": [
+          {
+            "internalType": "address payable",
+            "name": "account",
+            "type": "address"
+          },
+          {
+            "internalType": "uint96",
+            "name": "value",
+            "type": "uint96"
+          }
+        ],
+        "indexed": false,
+        "internalType": "struct LibPart.Part[]",
+        "name": "royalties",
+        "type": "tuple[]"
+      }
+    ],
+    "name": "RoyaltiesSet",
     "type": "event"
   },
   {
@@ -264,13 +308,59 @@ module.exports = [
     "outputs": [
       {
         "internalType": "uint256",
-        "name": "",
+        "name": "dna",
         "type": "uint256"
       },
       {
         "internalType": "bool",
-        "name": "",
+        "name": "isClaimed",
         "type": "bool"
+      },
+      {
+        "internalType": "string",
+        "name": "tokenUri",
+        "type": "string"
+      },
+      {
+        "internalType": "address",
+        "name": "owner",
+        "type": "address"
+      },
+      {
+        "internalType": "bool",
+        "name": "isPrimitive",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "id",
+        "type": "uint256"
+      }
+    ],
+    "name": "getRaribleV2Royalties",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "address payable",
+            "name": "account",
+            "type": "address"
+          },
+          {
+            "internalType": "uint96",
+            "name": "value",
+            "type": "uint96"
+          }
+        ],
+        "internalType": "struct LibPart.Part[]",
+        "name": "",
+        "type": "tuple[]"
       }
     ],
     "stateMutability": "view",
@@ -322,7 +412,7 @@ module.exports = [
   {
     "inputs": [
       {
-        "internalType": "address",
+        "internalType": "address payable",
         "name": "to",
         "type": "address"
       },
@@ -346,7 +436,7 @@ module.exports = [
   {
     "inputs": [
       {
-        "internalType": "address",
+        "internalType": "address payable",
         "name": "to",
         "type": "address"
       },
@@ -437,7 +527,7 @@ module.exports = [
   {
     "inputs": [
       {
-        "internalType": "address",
+        "internalType": "address payable",
         "name": "to",
         "type": "address"
       }

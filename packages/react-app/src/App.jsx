@@ -86,6 +86,10 @@ const targetNetwork = NETWORKS.localhost;
 // 😬 Sorry for all the console logging
 const DEBUG = (ClientConfig.logLevel > 2) ? true : false;
 
+let keyCounter = 0
+function counter () {
+  return keyCounter++
+}
 
 // EXAMPLE STARTING JSON:
 const STARTING_JSON = {
@@ -233,13 +237,10 @@ function App (props) {
   const yourBalance = balance && balance.toNumber && balance.toNumber();
   const [yourCollectibles, setYourCollectibles] = useState();
 
+  // zustand Store stuff
   const setWallet = useStore(state => state.setWallet);
   const setBalance = useStore(state => state.setBalance);
-  useEffect(() => {
-    const localWallet = address.replace(/^0x/, '');
-    setWallet(localWallet)
-    setBalance(balance)
-  }, [address, balance]);
+  const setLetters = useStore(state => state.setLetters);
 
 
   // get minimal info on token on update
@@ -287,9 +288,17 @@ function App (props) {
         console.groupEnd()
       }
       setYourCollectibles(collectibleUpdate);
+      setLetters(collectibleUpdate);
     };
     updateYourCollectibles();
   }, [address, yourBalance]);
+
+
+  useEffect(() => {
+    const localWallet = address.replace(/^0x/, '');
+    setWallet(localWallet)
+    setBalance(balance)
+  }, [address, balance]);
 
   /*
   const addressFromENS = useResolveName(mainnetProvider, "austingriffith.eth");
@@ -645,8 +654,12 @@ function App (props) {
                 dataSource={yourCollectibles}
                 renderItem={item => {
                   const id = item.id.toNumber();
+                  // const key = id + "_" + item.tokenURI + "_" + item.owner
+                  // FIXME - these vars are not defined
+                  const key = `item-${id}-${counter()}`;
+                  // console.log('key:', key)
                   return (
-                    <List.Item key={id + "_" + item.uri + "_" + item.owner}>
+                    <List.Item key={key}>
                       <Card
                         title={
                           <div key={'d1' + id}>
@@ -659,7 +672,7 @@ function App (props) {
                         </div>
                         <div key={'d3' + id}>{item.description}</div>
                         <div key={'d4' + id}>
-                          {makeLetter(fakeDNAs[id]).map(row => (<pre style={letterStyle}>{row.join('')}</pre>))}
+                          {makeLetter(fakeDNAs[id]).map((row, idx) => (<pre key={key + idx} style={letterStyle}>{row.join('')}</pre>))}
                         </div>
                       </Card>
 

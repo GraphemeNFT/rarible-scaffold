@@ -9,7 +9,7 @@ import useStore from "../../helpers/Store";
 export default function Mint (props) {
   const wallet = useStore(state => state.wallet);
 
-  const [mintTo, setMintTo] = React.useState(wallet);
+  const [mintTo, setMintTo] = React.useState();
   const [ipfsHash, setIpfsHash] = React.useState('Qmc9hvaC9EUK7efbCfJc2QESB9NxW84jbPiTvz1p6Lh91d');
   const [tokenId, setTokenId] = React.useState(1);
   const [itemDna, setItemDna] = React.useState('-');

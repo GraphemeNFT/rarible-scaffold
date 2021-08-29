@@ -6,9 +6,11 @@ const useStore = create(set => ({
     wallet: null,
     balance: 0,
     name: '',
+
     setWallet: (wallet) => set({ wallet }),
     setBalance: (balance) => set({ balance }),
     setName: (name) => set({ name }),
+    setLetters: (letters) => set({ letters }),
 }))
 
 export default useStore
