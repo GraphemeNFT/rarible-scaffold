@@ -1,6 +1,6 @@
 pragma solidity 0.7.5;
-
-// pragma abicoder v2;
+// pragma solidity ^0.8.0;
+pragma abicoder v2;
 //SPDX-License-Identifier: MIT
 
 //import "hardhat/console.sol";
@@ -8,14 +8,16 @@ import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
+import "@rarible/royalties/contracts/impl/RoyaltiesV2Impl.sol";
 
 // GET LISTED ON OPENSEA: https://testnets.opensea.io/get-listed/step-two
 
-contract YourCollectible is ERC721, Ownable {
+contract YourCollectible is ERC721, Ownable, RoyaltiesV2Impl {
     using Counters for Counters.Counter;
     Counters.Counter private _tokenIds;
 
     event Roll(address indexed owner, uint256[] tokens);
+    event Claimed(uint256 tokenId);
 
     mapping(uint256 => ItemDetail) private _items;
     mapping(uint256 => uint256[]) private _wordTokenIds;
@@ -41,7 +43,7 @@ contract YourCollectible is ERC721, Ownable {
         _setBaseURI("https://ipfs.io/ipfs/");
     }
 
-    function mintItem(address to, string memory tokenURI)
+    function mintItem(address payable to, string memory tokenURI)
         public
         returns (uint256)
     {
@@ -51,10 +53,24 @@ contract YourCollectible is ERC721, Ownable {
         _mint(to, id);
         _setTokenURI(id, tokenURI);
 
+        uint256 dna;
+        _items[id] = ItemDetail({
+            isPrimitive: false,
+            dna: dna,
+            isClaimed: false
+        });
+
+        LibPart.Part[] memory royalties = new LibPart.Part[](1);
+        royalties[0] = LibPart.Part({account: to, value: 10});
+        _saveRoyalties(id, royalties);
+
         return id;
     }
 
-    function reserveToken(address to, uint256 dna) private returns (uint256) {
+    function reserveToken(address payable to, uint256 dna)
+        private
+        returns (uint256)
+    {
         _tokenIds.increment();
 
         uint256 id = _tokenIds.current();
@@ -64,6 +80,10 @@ contract YourCollectible is ERC721, Ownable {
             dna: dna,
             isClaimed: false
         });
+
+        LibPart.Part[] memory royalties = new LibPart.Part[](1);
+        royalties[0] = LibPart.Part({account: to, value: 10});
+        _saveRoyalties(id, royalties);
         return id;
     }
 
@@ -91,11 +111,6 @@ contract YourCollectible is ERC721, Ownable {
         return _items[tokenId].dna;
     }
 
-    function getInfo(uint256 tokenId) public view returns (uint256, bool) {
-        return (_items[tokenId].dna, _items[tokenId].isClaimed);
-        // _getTokenURI(tokenId)
-    }
-
     function isClaimed(uint256 tokenId) public view returns (bool) {
         return _items[tokenId].isClaimed;
     }
@@ -121,7 +136,7 @@ contract YourCollectible is ERC721, Ownable {
         // To do
     }
 
-    function rollToMint(address to) public payable {
+    function rollToMint(address payable to) public payable {
         // should mint 'n' tokens.
         // should some funds go to DAO/Owner as creation fee??
         uint256 i = 0;
@@ -170,10 +185,12 @@ contract YourCollectible is ERC721, Ownable {
 
         _items[tokenId].isClaimed = true;
         _setTokenURI(tokenId, tokenURI);
+
+        emit Claimed(tokenId);
     }
 
     function mintWord(
-        address to,
+        address payable to,
         string memory tokenURI,
         uint256[] memory tokenIds,
         uint256[] memory rows,
@@ -223,6 +240,26 @@ contract YourCollectible is ERC721, Ownable {
             _wordTokenIds[tokenId],
             _wordRows[tokenId],
             _wordColumns[tokenId]
+        );
+    }
+
+    function getInfo(uint256 tokenId)
+        public
+        view
+        returns (
+            uint256 dna,
+            bool isClaimed,
+            string memory tokenUri,
+            address owner,
+            bool isPrimitive
+        )
+    {
+        return (
+            _items[tokenId].dna,
+            _items[tokenId].isClaimed,
+            tokenURI(tokenId),
+            ownerOf(tokenId),
+            _items[tokenId].isPrimitive
         );
     }
 }

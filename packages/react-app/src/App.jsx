@@ -9,7 +9,8 @@ import React, { useCallback, useEffect, useState } from "react";
 import ReactJson from "react-json-view";
 import { BrowserRouter, Link, Route, Switch } from "react-router-dom";
 import Web3Modal from "web3modal";
-import "./App.css";
+
+import useStore from "./helpers/Store";
 
 // main components
 import {
@@ -51,6 +52,8 @@ import {
   useUserProvider,
 } from "./hooks";
 import { matchSellOrder, prepareMatchingOrder } from "./rarible/createOrders";
+
+import "./App.css";
 
 const { BufferList } = require("bl");
 // https://www.npmjs.com/package/ipfs-http-client
@@ -164,6 +167,7 @@ const logoutOfWeb3Modal = async () => {
 function App (props) {
   const mainnetProvider = scaffoldEthProvider && scaffoldEthProvider._network ? scaffoldEthProvider : mainnetInfura;
 
+
   const [injectedProvider, setInjectedProvider] = useState();
   /* 💵 This hook will get the price of ETH from 🦄 Uniswap: */
   const price = useExchangePrice(targetNetwork, mainnetProvider);
@@ -204,8 +208,8 @@ function App (props) {
   // const mainnetDAIContract = useExternalContractLoader(mainnetProvider, DAI_ADDRESS, DAI_ABI);
 
   // If you want to call a function on a new block
-  useOnBlock(mainnetProvider, () => {
-  });
+  // useOnBlock(mainnetProvider, () => {
+  // });
 
   // Then read your DAI balance like:
   // const myMainnetDAIBalance = useContractReader({ DAI: mainnetDAIContract }, "DAI", "balanceOf", [
@@ -228,6 +232,15 @@ function App (props) {
   //
   const yourBalance = balance && balance.toNumber && balance.toNumber();
   const [yourCollectibles, setYourCollectibles] = useState();
+
+  const setWallet = useStore(state => state.setWallet);
+  const setBalance = useStore(state => state.setBalance);
+  useEffect(() => {
+    const localWallet = address.replace(/^0x/, '');
+    setWallet(localWallet)
+    setBalance(balance)
+  }, [address, balance]);
+
 
   // get minimal info on token on update
   // more details are pulled on letters page as needed

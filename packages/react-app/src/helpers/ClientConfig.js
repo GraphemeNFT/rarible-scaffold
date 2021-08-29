@@ -1,6 +1,6 @@
 const ClientConfig = {
 
-    debugLevel: 1,
+    debugLevel: 3,
 
     // ADDRESS TO MINT TO / browser wallet address
 

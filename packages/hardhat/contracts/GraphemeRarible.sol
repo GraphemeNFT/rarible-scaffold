@@ -12,7 +12,7 @@ import "@rarible/royalties/contracts/impl/RoyaltiesV2Impl.sol";
 
 // GET LISTED ON OPENSEA: https://testnets.opensea.io/get-listed/step-two
 
-contract Grapheme is ERC721, Ownable, RoyaltiesV2Impl {
+contract GraphemeRarible is ERC721, Ownable, RoyaltiesV2Impl {
     using Counters for Counters.Counter;
     Counters.Counter private _tokenIds;
 
@@ -53,16 +53,38 @@ contract Grapheme is ERC721, Ownable, RoyaltiesV2Impl {
         _mint(to, id);
         _setTokenURI(id, tokenURI);
 
-        uint256 dna;
-        _items[id] = ItemDetail({
-            isPrimitive: false,
-            dna: dna,
-            isClaimed: false
-        });
-
         LibPart.Part[] memory royalties = new LibPart.Part[](1);
-        royalties[0] = LibPart.Part({account: to, value: 10});
+        royalties[0] = LibPart.Part({account: to, value: 10000});
         _saveRoyalties(id, royalties);
+
+        return id;
+    }
+
+    function mintItemForWord(
+        address payable to,
+        string memory tokenURI,
+        uint256[] memory tokenIds
+    ) public returns (uint256) {
+        _tokenIds.increment();
+
+        uint256 id = _tokenIds.current();
+        _mint(to, id);
+        _setTokenURI(id, tokenURI);
+
+        uint256 counter = 0;
+        uint256 totalRoyaltyCount = 0;
+        LibPart.Part[] memory royalties = new LibPart.Part[](tokenIds.length);
+
+        // uint256 perShare = 8000 / tokenIds.length; // 80% is Royalties to Letter owners
+        // for (counter = 0; counter < tokenIds.length; counter++) {
+        //     address payable owner = ownerOf(tokenIds[counter]);
+        //     royalties[counter] = LibPart.Part({
+        //         account: owner,
+        //         value: perShare
+        //     });
+        // }
+
+        // _saveRoyalties(id, royalties);
 
         return id;
     }
@@ -196,7 +218,7 @@ contract Grapheme is ERC721, Ownable, RoyaltiesV2Impl {
         uint256[] memory rows,
         uint256[] memory cols
     ) public returns (uint256) {
-        uint256 tokenId = mintItem(to, tokenURI);
+        uint256 tokenId = mintItemForWord(to, tokenURI, tokenIds);
 
         _wordTokenIds[tokenId] = tokenIds;
         _wordRows[tokenId] = rows;
@@ -250,16 +272,14 @@ contract Grapheme is ERC721, Ownable, RoyaltiesV2Impl {
             uint256 dna,
             bool isClaimed,
             string memory tokenUri,
-            address owner,
-            bool isPrimitive
+            address owner
         )
     {
         return (
             _items[tokenId].dna,
             _items[tokenId].isClaimed,
             tokenURI(tokenId),
-            ownerOf(tokenId),
-            _items[tokenId].isPrimitive
+            ownerOf(tokenId)
         );
     }
 }

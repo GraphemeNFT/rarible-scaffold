@@ -101,6 +101,10 @@ describe("Grapheme Tests", function () {
                 assert.deepEqual(resWord[0].map(a => a.toNumber()), tokenIds);
                 assert.deepEqual(resWord[1].map(a => a.toNumber()), rows);
                 assert.deepEqual(resWord[2].map(a => a.toNumber()), cols);
+
+
+                let res = await graphemeInstance.getInfo(await graphemeInstance.totalSupply());
+                console.log('getInfo for Word', res);
             });
 
             it("Save and get word", async function () {
@@ -131,6 +135,20 @@ describe("Grapheme Tests", function () {
             await graphemeInstance.connect(addr1).claimToken(1, 'testUri1');
             expect(await graphemeInstance.isClaimed(1)).to.be.true;
             expect(await graphemeInstance.tokenURI(1)).to.contain('testUri1');
+        });
+    });
+
+    describe("Utility", function () {
+        it("getInfo", async function () {
+            let res = await graphemeInstance.getInfo(1);
+            console.log('Info for Letter', res);
+        });
+    });
+
+    describe("Rarible", function () {
+        it("Royalty", async function () {
+            let res = await graphemeInstance.getRaribleV2Royalties(1);
+            console.log(res);
         });
     });
 
