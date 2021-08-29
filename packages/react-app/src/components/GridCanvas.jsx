@@ -6,8 +6,8 @@ import { newGrid, makeRng, renderLetter, crop } from "./Letters/grapheme";
 */
 
 // disable logging for this file
-// const clog = console.log
-const clog = () => { };
+const clog = console.log
+// const clog = () => { };
 
 export default function GridCanvas ({ grid, canId, color1, color2 }) {
   const [viewText, setViewText] = useState(false);
