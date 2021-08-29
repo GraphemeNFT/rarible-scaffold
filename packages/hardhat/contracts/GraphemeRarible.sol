@@ -53,9 +53,16 @@ contract GraphemeRarible is ERC721, Ownable, RoyaltiesV2Impl {
         _mint(to, id);
         _setTokenURI(id, tokenURI);
 
-        LibPart.Part[] memory royalties = new LibPart.Part[](1);
-        royalties[0] = LibPart.Part({account: to, value: 10000});
-        _saveRoyalties(id, royalties);
+        uint256 dna;
+        _items[id] = ItemDetail({
+            isPrimitive: false,
+            dna: dna,
+            isClaimed: false
+        });
+
+        // LibPart.Part[] memory royalties = new LibPart.Part[](1);
+        // royalties[0] = LibPart.Part({account: to, value: 10});
+        // _saveRoyalties(id, royalties);
 
         return id;
     }
@@ -71,20 +78,23 @@ contract GraphemeRarible is ERC721, Ownable, RoyaltiesV2Impl {
         _mint(to, id);
         _setTokenURI(id, tokenURI);
 
-        uint256 counter = 0;
-        uint256 totalRoyaltyCount = 0;
-        LibPart.Part[] memory royaltiesToSet = new LibPart.Part[](tokenIds.length);
+        uint256 dna;
+        _items[id] = ItemDetail({
+            isPrimitive: false,
+            dna: dna,
+            isClaimed: false
+        });
 
-        uint96 perShare = uint96(80000 / tokenIds.length); // 80% is Royalties to Letter owners
+        uint256 counter = 0;
+        LibPart.Part[] memory royaltiesToSet = new LibPart.Part[](tokenIds.length);
+        uint96 perShare = uint96(8000 / tokenIds.length); // 80% is Royalties to Letter owners
         for (counter = 0; counter < tokenIds.length; counter++) {
             address payable owner = royalties[tokenIds[counter]][0].account;
-
             royaltiesToSet[counter] = LibPart.Part({
                 account: owner,
                 value: perShare
             });
         }
-
         _saveRoyalties(id, royaltiesToSet);
 
         return id;
@@ -273,14 +283,16 @@ contract GraphemeRarible is ERC721, Ownable, RoyaltiesV2Impl {
             uint256 dna,
             bool isClaimed,
             string memory tokenUri,
-            address owner
+            address owner,
+            bool isPrimitive
         )
     {
         return (
             _items[tokenId].dna,
             _items[tokenId].isClaimed,
             tokenURI(tokenId),
-            ownerOf(tokenId)
+            ownerOf(tokenId),
+            _items[tokenId].isPrimitive
         );
     }
 }
