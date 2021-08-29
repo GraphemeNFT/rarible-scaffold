@@ -27,8 +27,10 @@ import {
 
 import Claim from './Claim'
 import GraphUtils from '../../helpers/GraphUtils'
+import LetterUtils from './LetterUtils'
 
 import './letters.css'
+import { getArgumentValues } from "graphql/execution/values";
 
 // TODO move these up to Letters and prop drill them down?
 const ipfsAPI = require("ipfs-http-client");
@@ -78,8 +80,14 @@ export default function OneLetter (props) {
                     setClaimed(isClaimed)
                     setReady(true)
                 })
-
         }
+
+        // call async method immediately
+        const getMeta = async () => {
+            await LetterUtils.getMetadata(tokenId, graphemeContract, setMetadata)
+        }
+        getMeta()
+
     }, [tokenId])
 
     const letterStyle = {

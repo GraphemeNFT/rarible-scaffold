@@ -36,6 +36,8 @@ export default function Claim (props) {
     const ipfsHash = await props.ipfs.add(JSON.stringify(metadata));
     console.log('upload', metadata, 'ipfsHash:', ipfsHash);
 
+    // TODO - render image and attach to metadata
+
     // console.log('save this .path as tokenURI in claim: ', ipfsHash);
     // await fakePause();
     const claimed = await writeContracts.YourCollectible.claimToken(tokenId, ipfsHash.path);

@@ -229,6 +229,8 @@ function App (props) {
   const yourBalance = balance && balance.toNumber && balance.toNumber();
   const [yourCollectibles, setYourCollectibles] = useState();
 
+  // get minimal info on token on update
+  // more details are pulled on letters page as needed
   useEffect(() => {
     const updateYourCollectibles = async () => {
       const collectibleUpdate = [];
@@ -238,32 +240,37 @@ function App (props) {
           console.log("Getting token index", tokenIndex);
           const tokenId = await readContracts.YourCollectible.tokenOfOwnerByIndex(address, tokenIndex);
           console.log("tokenId:", tokenId);
-          const tokenURI = await readContracts.YourCollectible.tokenURI(tokenId);
-          console.log("tokenURI:", tokenURI);
+          // const tokenURI = await readContracts.YourCollectible.tokenURI(tokenId);
+          // console.log("tokenURI:", tokenURI);
+          collectibleUpdate.push({
+            id: tokenId,
+            // uri: tokenURI,
+            owner: address
+          });
 
+          //   // update hash?
+          //   const ipfsHash = tokenURI.replace("https://ipfs.io/ipfs/", "");
+          //   console.log("ipfsHash", ipfsHash);
 
-          // update hash?
-          const ipfsHash = tokenURI.replace("https://ipfs.io/ipfs/", "");
-          console.log("ipfsHash", ipfsHash);
-
-          try {
-            let jsonManifest = {}
-            if (!tokenURI) {
-              const jsonManifestBuffer = await getFromIPFS(ipfsHash);
-              jsonManifest = JSON.parse(jsonManifestBuffer.toString());
-              console.log("jsonManifest", jsonManifest);
-            } else {
-              console.log("No tokenURI for tokenId", tokenId);
-            }
-            collectibleUpdate.push({ id: tokenId, uri: tokenURI, owner: address, ...jsonManifest });
-          } catch (e) {
-            console.log('parseManifest error', e);
-          } finally {
-            console.log('handled update')
-          }
+          //   try {
+          //     let jsonManifest = {}
+          //     if (!tokenURI) {
+          //       const jsonManifestBuffer = await getFromIPFS(ipfsHash);
+          //       jsonManifest = JSON.parse(jsonManifestBuffer.toString());
+          //       console.log("jsonManifest", jsonManifest);
+          //     } else {
+          //       console.log("No tokenURI for tokenId", tokenId);
+          //     }
+          //     collectibleUpdate.push({ id: tokenId, uri: tokenURI, owner: address, ...jsonManifest });
+          //   } catch (e) {
+          //     console.log('parseManifest error', e);
+          //   } finally {
+          //     console.log('handled update')
+          //   }
         } catch (e) {
           console.log('updateCollectibles error', e);
         }
+
         console.groupEnd()
       }
       setYourCollectibles(collectibleUpdate);
@@ -594,7 +601,7 @@ function App (props) {
               <ol>
                 <li>
                   <Link to="/letters"
-                    onClick={() => { setRoute("/mint"); }}
+                    onClick={() => { setRoute("/letters"); }}
                   >Mint and then claim some letters</Link>
                 </li>
                 <li>
