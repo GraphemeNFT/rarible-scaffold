@@ -48,6 +48,27 @@ export default function OneLetter (props) {
     // const address = useUserAddress(userProvider);
     // const writeContracts = props.writeContracts;
 
+    const STARTING_JSON = {
+        description: "A Grapheme NFT Word",
+        external_url: "https://austingriffith.com/portfolio/paintings/", // <-- this can link to a page for the specific file too
+        image: "https://austingriffith.com/images/paintings/buffalo.jpg",
+        name: "Buffalo",
+        attributes: [
+          {
+            trait_type: "tokenId_0",
+            value: "",
+          },
+          {
+            trait_type: "row_0",
+            value: "",
+          },
+          {
+            trait_type: "col_0",
+            value: "",
+          },
+        ],
+      };
+
     useEffect(() => {
         console.log('OneLetter:', letter)
     }, [letter])
@@ -100,6 +121,48 @@ export default function OneLetter (props) {
         console.log('copied data')
     };
 
+    const claimTokenFunc = async (name) => {
+        let canvas = document.getElementById('lettercan-' + tokenId);
+        // let canvas = document.querySelector('canvas')
+        const canBlob = await new Promise((resolve, reject) => {
+            canvas.toBlob((blob) => resolve(blob));
+        });
+        let ipfsCanvasResult;
+        try {
+            ipfsCanvasResult = await ipfs.add(canBlob);
+        } catch (e) {
+            console.log('ipfs.add of blob failed: ', e);
+            return;
+        }
+        console.log('canBlob ipfs cid: ', ipfsCanvasResult);
+        let tokenURI
+        try {
+            // let ipfsGateway = 'https://cloudflare-ipfs.com/ipfs/';
+            let ipfsGateway = 'https://ipfs.io/ipfs/';
+            // let ipfsGateway = 'ipfs://ipfs/';
+            tokenURI = await metadataToIpfs(makeMetadata(ipfsGateway + ipfsCanvasResult.path, name, letter?.info?.dna.join(' ')), ipfs);
+        } catch (e) {
+            console.log('ipfs.add of metadata.json failed: ', e);
+            return;
+        }
+        console.log('castWord ipfsResult: ', tokenURI);
+
+        const claimed = await props.writeContracts.YourCollectible.claimToken(tokenId, tokenURI.path);
+    };
+
+    function makeMetadata(imageCid, name, dna) {
+        let metadata = Object.assign({}, STARTING_JSON);
+        metadata.name = name;
+        metadata.image = imageCid;
+        metadata.attributes = [{ dna }];
+        return metadata;
+    }
+
+    async function metadataToIpfs(metadata, ipfs) {
+        const result = await ipfs.add(JSON.stringify(metadata));
+        return result;
+    }
+
     const wordDetails = () => {
         return (
             <span className='word-details'>
@@ -139,6 +202,7 @@ export default function OneLetter (props) {
                             ipfs={ipfs}
                             tokenId={tokenId}
                             tokenDNA={letter.info.hex}
+                            claimTokenFunc = {claimTokenFunc}
                         />
                     }
 

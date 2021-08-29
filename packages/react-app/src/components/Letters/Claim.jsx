@@ -29,22 +29,8 @@ export default function Claim (props) {
   // const fakePause = async () => await new Promise(resolve => setTimeout(resolve, 2000));
 
   const claimTokenId = async () => {
-    // IPFS
-    let metadata = STARTING_JSON;
-    metadata.description = 'A Grapheme NFT Letter';
-    metadata.name = name;
-    // TODO - normalize names eg tokenHex ?
-    metadata.attributes[0].value = props.tokenDNA;
-    const ipfsHash = await props.ipfs.add(JSON.stringify(metadata));
-    console.log('upload', metadata, 'ipfsHash:', ipfsHash);
-
-    // TODO - render image and attach to metadata
-
-    // console.log('save this .path as tokenURI in claim: ', ipfsHash);
-    // await fakePause();
-    const claimed = await writeContracts.YourCollectible.claimToken(tokenId, ipfsHash.path);
-
-    console.log('claimed', props.tokenId, claimed);
+    await props.claimTokenFunc(name);
+    console.log('claimed', props.tokenId);
     onClaimed({ tokenId });
   };
 
