@@ -25,6 +25,7 @@ const STARTING_JSON = {
     },
   ],
 };
+
 function makeMetadata (imageCid, name, tokenIds, rows, cols) {
   let metadata = Object.assign({}, STARTING_JSON);
   metadata.name = name;
@@ -37,6 +38,7 @@ function makeMetadata (imageCid, name, tokenIds, rows, cols) {
   }
   return metadata;
 }
+
 async function metadataToIpfs (metadata, ipfs) {
   const result = await ipfs.add(JSON.stringify(metadata));
   return result;
@@ -91,6 +93,7 @@ function LetterControl (props) {
     </div>
   )
 }
+
 export default function DrawWordTool (props) {
   const yourTokens = props.yourTokens ? props.yourTokens : [];
   const [wordName, setWordName] = useState('');
@@ -149,6 +152,7 @@ export default function DrawWordTool (props) {
     // TODO take cid and pass to contract to mint Word
     // await writeContracts.YourCollectible.castWord(mintTo, ipfsHash, );
   };
+
   return (
     <div style={wrapStyle}>
       <h1>WordTool</h1>
@@ -185,6 +189,7 @@ export default function DrawWordTool (props) {
     </div>
   );
 }
+
 function writeLetterToGrid (grid, letterGrid, row, col) {
   // XXX setState should block bad/negative values
   row = row < 0 ? 0 : row;
@@ -204,6 +209,7 @@ function writeLetterToGrid (grid, letterGrid, row, col) {
     }
   }
 }
+
 function DrawWord ({ tokenIds, tokenDNAs, rows, cols }) {
   console.log('DrawWord: ', tokenDNAs);
   console.log(tokenIds);
@@ -219,7 +225,7 @@ function DrawWord ({ tokenIds, tokenDNAs, rows, cols }) {
     if (!canvasRef.current) {
       return;
     }
-    const split2bits = (bits) => [16*5*(bits & 0b110000) >> 4, 16*5*(bits & 0b1100) >> 2, 16*5*(bits & 0b11)];
+    const split2bits = (bits) => [16 * 5 * (bits & 0b110000) >> 4, 16 * 5 * (bits & 0b1100) >> 2, 16 * 5 * (bits & 0b11)];
     const ary2rgba = (ary) => 'rgba(' + ary.join(',') + ', 1)';
     const fontSize = 10;
 
@@ -273,14 +279,15 @@ function DrawWord ({ tokenIds, tokenDNAs, rows, cols }) {
       <div>
         {
           viewText
-          ? grid.map((row, idx) => (<pre key={'grow-' + idx} className='pre-amiga'>{row.join('')}</pre>))
-          : (<Button onClick={ () => setViewText(true) } >View as text</Button>)
+            ? grid.map((row, idx) => (<pre key={'grow-' + idx} className='pre-amiga'>{row.join('')}</pre>))
+            : (<Button onClick={() => setViewText(true)} >View as text</Button>)
         }
       </div>
       <div>
-        <canvas ref={canvasRef} id='drawword-canvas' width={canvasWidth} height={canvasHeight} style={{border: '4px dotted black'}} ></canvas>
+        <canvas ref={canvasRef} id='drawword-canvas' width={canvasWidth} height={canvasHeight} style={{ border: '4px dotted black' }} ></canvas>
       </div>
     </div>
   );
+
 }
 
