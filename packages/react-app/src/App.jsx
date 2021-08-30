@@ -239,10 +239,12 @@ function App (props) {
   // zustand Store stuff
   const setWallet = useStore(state => state.setWallet);
   const setBalance = useStore(state => state.setBalance);
-  const setContractAddress = useStore(state => state.setContractAddress);
   const setLetters = useStore(state => state.setLetters);
   const letters = useStore(state => state.letters);
-
+  const setContractAddress = useStore(state => state.setContractAddress);
+  const contractAddress = useStore(state => state.contractAddress);
+  const raribleHome = useStore(state => state.raribleHome);
+  const setRaribleHome = useStore(state => state.setRaribleHome);
 
   // get minimal info on token on update
   // more details are pulled on letters page as needed
@@ -458,8 +460,10 @@ function App (props) {
   useEffect(() => {
     if (readContracts) {
       let contract = readContracts.YourCollectible;
+      setContractAddress(contract.addresss)
+      const _raribleHome = `https://ropsten.rarible.com/collection/${contract.address}`
+      setRaribleHome(_raribleHome)
       console.log('contract.address', contract.address)
-
     }
   }, [readContracts]);
 
@@ -624,8 +628,16 @@ function App (props) {
                     onClick={() => { setRoute("/words"); }}
                   >Make words from Letters and Mint the word!</Link>
                 </li>
+                <li>
+                  <a href={raribleHome} target="_blank" rel="noopener noreferrer">
+                    View and Trade the Collection on <img className='tiny-icon' src='rarible-icon.jpg' /> RARIBLE!
+                  </a>
+                </li>
               </ol>
+
+
             </div>
+
           </Route>
 
           <Route path="/letters">

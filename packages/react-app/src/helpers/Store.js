@@ -7,6 +7,7 @@ const useStore = create(set => ({
     balance: 0,
     name: '',
     contractAddress: '0x1725eab2faa1e9b97487b818318ba2310334e029',
+    raribleHome: '',
     // claimedLetters: letters.
 
     setWallet: (wallet) => set({ wallet }),
@@ -14,6 +15,8 @@ const useStore = create(set => ({
     setName: (name) => set({ name }),
     setLetters: (letters) => set({ letters }),
     setContractAddress: (contractAddress) => set({ contractAddress }),
+    setRaribleHome: (raribleHome) => set({ raribleHome }),
+
     // getLetterByTokenId: (state, tokenId) => {
     //     if (state.letters) {
     //         return state.letters.find(letter => letter.tokenId === tokenId)
