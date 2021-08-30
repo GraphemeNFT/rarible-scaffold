@@ -60,11 +60,12 @@ function crop (grid) {
   // fill empty columns up to max row length
   let longest = 0;
   grid.forEach(row => longest = (row.length > longest ? row.length : longest));
-  for (let i = 0; i < grid.length; i++) {
-    while (grid[i].length < longest) {
-      grid[i].push(' ');
+  // grid[i] would fail when array indices become missing and length is not last element
+  grid.forEach(row => {
+    while (row.length < longest) {
+      row.push(' ');
     }
-  }
+  });
 }
 
 function write (grid, x, y, str) {
