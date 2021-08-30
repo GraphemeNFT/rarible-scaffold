@@ -11,9 +11,9 @@ const main = async () => {
 
 
   // TODO add in constructor args like below
-  const yourCollectible = await deploy("YourCollectible")
+  // const yourCollectible = await deploy("YourCollectible")
   // const grapheme = await deploy("Grapheme")
-  // const grapheme = await deploy("GraphemeRarible")
+  const grapheme = await deploy("GraphemeRarible")
   // console.log('deployed', yourCollectible)
   // console.log('functions', yourCollectible.functions)
   console.log('\ndeployed YourCollectible to address', yourCollectible.address, '\n')

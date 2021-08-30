@@ -74,6 +74,7 @@ contract YourCollectible is ERC721, Ownable, RoyaltiesV2Impl {
 
         uint256 id = _tokenIds.current();
         _mint(to, id);
+        _setTokenURI(id, 'QmW93rNp27mrdYChqa21jo2wfRoVpNp34N5V2KKgEdtrmm');
         _items[id] = ItemDetail({
             isPrimitive: true,
             dna: dna,

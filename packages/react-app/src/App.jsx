@@ -89,21 +89,21 @@ const targetNetwork = NETWORKS.ropsten;
 // 😬 Sorry for all the console logging
 const DEBUG = (ClientConfig.logLevel > 2) ? true : false;
 
-
+let ipfsGateway = 'https://ipfs.io/ipfs/';
 // EXAMPLE STARTING JSON:
 const STARTING_JSON = {
-  description: "It's actually a bison?",
-  external_url: "https://austingriffith.com/portfolio/paintings/", // <-- this can link to a page for the specific file too
-  image: "https://austingriffith.com/images/paintings/buffalo.jpg",
-  name: "Buffalo",
+  description: "Grapheme NFT Letter",
+  // external_url: "https://austingriffith.com/portfolio/paintings/", // <-- this can link to a page for the specific file too
+  image: ipfsGateway + 'QmSygLmdfeStPU7TTCTbazvrUCggtGh5aNEK6cLarWZVsX',
+  name: "Grapheme",
   attributes: [
     {
-      trait_type: "BackgroundColor",
-      value: "green",
+      trait_type: "Claim Status",
+      value: "Unclaimed",
     },
     {
-      trait_type: "Eyes",
-      value: "googly",
+      trait_type: "Tags",
+      value: "No Tag Yet. Claim and add",
     },
   ],
 };
