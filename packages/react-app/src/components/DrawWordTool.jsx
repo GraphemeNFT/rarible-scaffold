@@ -12,29 +12,18 @@ const grapheme = require("./Letters/grapheme").default;
 const STARTING_JSON = {
   description: "A Grapheme NFT Word",
   external_url: "https://graphemenft.github.io/", // <-- this can link to a page for the specific file too
-  image: "https://austingriffith.com/images/paintings/buffalo.jpg",
-  name: "Buffalo",
+  image: "https://graphemenft.github.io/logo-image.png",
+  name: "Grapheme",
   attributes: [
-    {
-      trait_type: "tokenId_0",
-      value: "",
-    },
-    {
-      trait_type: "row_0",
-      value: "",
-    },
-    {
-      trait_type: "col_0",
-      value: "",
-    },
   ],
 };
 
-function makeMetadata(letters, imageCid, name, tokenIds, rows, cols) {
+function makeMetadata (letters, imageCid, name, tokenIds, rows, cols) {
   let metadata = Object.assign({}, STARTING_JSON);
   metadata.name = name;
   metadata.image = imageCid;
   metadata.graphemeSrc = { tokenIds, rows, cols };
+  // metadata.isPrimitive = false;
   metadata.attributes = [{
     trait_type: "Type",
     value: "Word",
