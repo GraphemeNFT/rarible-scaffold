@@ -239,9 +239,10 @@ function renderLetter (grid, rng) {
 //   main();
 // }
 
-module.exports = {
+const grapheme = {
   newGrid,
   makeRng,
   renderLetter,
   crop
 }
+export default grapheme;

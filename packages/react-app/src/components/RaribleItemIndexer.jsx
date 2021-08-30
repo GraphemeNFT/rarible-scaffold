@@ -36,7 +36,8 @@ export default function RaribleItemIndexer(props) {
         shape="round"
         type="primary"
         onClick={async () => {
-                const getItemMetaByIdUrl = `https://api-dev.rarible.com/protocol/v0.1/ethereum/nft/items/${collectionContract}:${tokenId}/meta`;
+//                const getItemMetaByIdUrl = `https://api-dev.rarible.com/protocol/v0.1/ethereum/nft/items/${collectionContract}:${tokenId}/meta`;
+                const getItemMetaByIdUrl = `https://ethereum-api-dev.rarible.org/v0.1//nft/items/${collectionContract}:${tokenId}/meta`;
                 setDownloading(true);
                 const getItemMetaResult = await fetch(getItemMetaByIdUrl);
                 const metaResultJson = await getItemMetaResult.json();
