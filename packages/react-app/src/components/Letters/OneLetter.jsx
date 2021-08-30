@@ -1,11 +1,17 @@
-import { StaticJsonRpcProvider, Web3Provider } from "@ethersproject/providers";
+// import { StaticJsonRpcProvider, Web3Provider } from "@ethersproject/providers";
 
 import React, { useEffect, useState } from "react"; // useCallback, useEffect, useState
 
-import { useUserAddress } from "eth-hooks";
-import { DAI_ABI, DAI_ADDRESS, INFURA_ID, NETWORK, NETWORKS } from "../../constants";
-import { newGrid, makeRng, renderLetter } from "./grapheme";
+import {
+    InfoCircleOutlined,
+    CaretDownOutlined,
+    EditOutlined, EllipsisOutlined,
+    SettingOutlined, LinkOutlined
+} from '@ant-design/icons';
 
+// import { useUserAddress } from "eth-hooks";
+// import { DAI_ABI, DAI_ADDRESS, INFURA_ID, NETWORK, NETWORKS } from "../../constants";
+import { newGrid, makeRng, renderLetter } from "./grapheme";
 
 import {
     //     List,
@@ -22,7 +28,7 @@ import {
 import Claim from './Claim'
 import GridCanvas from "../GridCanvas";
 import ClientConfig from '../../helpers/ClientConfig'
-import useStore from '../../helpers/Store'
+import { useStore } from '../../helpers/Store'
 import './letters.css'
 
 // TODO move these up to Letters and prop drill them down?
@@ -166,13 +172,18 @@ export default function OneLetter (props) {
     const wordDetails = () => {
         return (
             <span className='word-details'>
-                [{tokenId}] name: {letter.metadata.name} <br />
+                <InfoCircleOutlined />  [{tokenId}] <CaretDownOutlined /> <br />
+                name: {letter.metadata.name} <br />
                 hex: {letter.info.hex.slice(2, 10)} <br />
                 dna: {letter.info.dna.join('')}<br />
                 claimed: {letter.info.isClaimed ? 'true' : 'false'} <br />
                 letter: {letter.info.isPrimitive ? 'true' : 'false'} <br />
-                <a href={letter.metadata.image} target='_blank' rel="noopener noreferrer">image</a> &nbsp;
-                <a href={letter.tokenURI} target='_blank' rel="noopener noreferrer">metadata</a>
+                {letter.info.isClaimed &&
+                    <span>
+                        <a href={letter.metadata.image} target='_blank' rel="noopener noreferrer">image</a><br />
+                        <a href={letter.tokenURI} target='_blank' rel="noopener noreferrer">metadata</a>
+                    </span>
+                }
             </span>
         )
     }
@@ -207,8 +218,9 @@ export default function OneLetter (props) {
                             claimTokenFunc={claimTokenFunc}
                         />
                     }
-
-                    {ready && <GridCanvas grid={grid} canId={'lettercan-' + tokenId} color1={0b111111} color2={0b111111} />}
+                    <div className='letter-canvas-box'>
+                        {ready && <GridCanvas grid={grid} canId={'lettercan-' + tokenId} color1={0b111111} color2={0b111111} />}
+                    </div>
                 </div>
             </span>
         )

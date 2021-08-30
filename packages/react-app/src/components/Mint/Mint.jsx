@@ -4,7 +4,7 @@ import { AddressInput } from "..";
 import { getSelectedOperationName } from "graphiql";
 // import { Alert, Button, Card, Col, Input, List, Menu, Row } from "antd";
 
-import useStore from "../../helpers/Store";
+import { useStore } from "../../helpers/Store";
 
 export default function Mint (props) {
   const wallet = useStore(state => state.wallet);
@@ -50,6 +50,9 @@ export default function Mint (props) {
         >
           rollToMint
         </Button>
+        <span>
+          it can take a few minutes for the minting to complete!
+        </span>
 
       </Card>
 

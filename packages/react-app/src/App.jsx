@@ -11,7 +11,7 @@ import { useUserAddress } from "eth-hooks";
 import { BrowserRouter, Link, Route, Switch } from "react-router-dom";
 import Web3Modal from "web3modal";
 
-import useStore from "./helpers/Store";
+import { useStore } from "./helpers/Store";
 
 // main components
 import {
@@ -241,7 +241,10 @@ function App (props) {
   const setBalance = useStore(state => state.setBalance);
   const setLetters = useStore(state => state.setLetters);
   const letters = useStore(state => state.letters);
-
+  const setContractAddress = useStore(state => state.setContractAddress);
+  const contractAddress = useStore(state => state.contractAddress);
+  const raribleHome = useStore(state => state.raribleHome);
+  const setRaribleHome = useStore(state => state.setRaribleHome);
 
   // get minimal info on token on update
   // more details are pulled on letters page as needed
@@ -454,6 +457,17 @@ function App (props) {
   // const [transferToAddresses, setTransferToAddresses] = useState({});
   // const [approveAddresses, setApproveAddresses] = useState({});
 
+  useEffect(() => {
+    if (readContracts) {
+      let contract = readContracts.YourCollectible;
+      setContractAddress(contract.addresss)
+      const _raribleHome = `https://ropsten.rarible.com/collection/${contract.address}`
+      setRaribleHome(_raribleHome)
+      console.log('contract.address', contract.address)
+    }
+  }, [readContracts]);
+
+  // const  = useContractLoader(provider);
 
   return (
     <div className="App">
@@ -614,8 +628,16 @@ function App (props) {
                     onClick={() => { setRoute("/words"); }}
                   >Make words from Letters and Mint the word!</Link>
                 </li>
+                <li>
+                  <a href={raribleHome} target="_blank" rel="noopener noreferrer">
+                    View and Trade the Collection on <img className='tiny-icon' src='rarible-icon.jpg' /> RARIBLE!
+                  </a>
+                </li>
               </ol>
+
+
             </div>
+
           </Route>
 
           <Route path="/letters">
@@ -876,31 +898,6 @@ function App (props) {
             />
           </Route>
 
-          <Route path="/debugcontracts">
-            <Contract
-              name="YourCollectible"
-              signer={userProvider.getSigner()}
-              provider={localProvider}
-              address={address}
-              blockExplorer={blockExplorer}
-            />
-            {/*
-            <Contract
-              name="YourERC20"
-              signer={userProvider.getSigner()}
-              provider={localProvider}
-              address={address}
-              blockExplorer={blockExplorer}
-            />
-            <Contract
-              name="NFTHolder"
-              signer={userProvider.getSigner()}
-              provider={localProvider}
-              address={address}
-              blockExplorer={blockExplorer}
-            />
-             */}
-          </Route>
         </Switch>
       </BrowserRouter>
 

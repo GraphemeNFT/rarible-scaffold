@@ -7,7 +7,7 @@ export default function Header () {
   return (
     <a href="https://github.com/austintgriffith/scaffold-eth" target="_blank" rel="noopener noreferrer">
       <PageHeader
-        title="Grapheme"
+        title="Graphitti"
         subTitle="powered by Rarible"
         style={{ cursor: "pointer" }}
       />
