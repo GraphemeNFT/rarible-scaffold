@@ -11,7 +11,6 @@ import {
 
 // import { useUserAddress } from "eth-hooks";
 // import { DAI_ABI, DAI_ADDRESS, INFURA_ID, NETWORK, NETWORKS } from "../../constants";
-import { newGrid, makeRng, renderLetter } from "./grapheme";
 
 import {
     //     List,
@@ -30,6 +29,8 @@ import GridCanvas from "../GridCanvas";
 import ClientConfig from '../../helpers/ClientConfig'
 import { useStore } from '../../helpers/Store'
 import './letters.css'
+
+const grapheme = require("./grapheme");
 
 // TODO move these up to Letters and prop drill them down?
 // or into the Claim component?
@@ -95,7 +96,7 @@ export default function OneLetter (props) {
     const letterClass = letter?.info.isClaimed ? 'letter-item claimed' : 'letter-item unclaimed'
 
     // why creating two grids?
-    const [grid, setGrid] = useState(newGrid());
+    const [grid, setGrid] = useState(grapheme.newGrid());
 
     const makeGrid = (newSig) => {
         console.log(newSig);
@@ -105,8 +106,8 @@ export default function OneLetter (props) {
         }
         if ('dna' in newSig) {
             const cloneDna = [...newSig.dna]
-            const _grid = newGrid(); // mem leak?
-            renderLetter(_grid, makeRng(cloneDna));
+            const _grid = grapheme.newGrid(); // mem leak?
+            grapheme.renderLetter(_grid, grapheme.makeRng(cloneDna));
             setGrid(_grid);
         }
         // return grid;//.map(row => row.join('') ).join('<br />');
