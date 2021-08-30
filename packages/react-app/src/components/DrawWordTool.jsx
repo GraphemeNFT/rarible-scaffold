@@ -2,10 +2,11 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Button, Input } from "antd";
 import "../App.css";
-import { newGrid, makeRng, renderLetter, crop } from "./Letters/grapheme";
 import GridCanvas from "./GridCanvas";
 
 import { useStore } from '../helpers/Store'
+
+const grapheme = require("./Letters/grapheme");
 
 // EXAMPLE STARTING JSON:
 const STARTING_JSON = {
@@ -286,12 +287,12 @@ function DrawWord ({ tokenIds, tokenDNAs, rows, cols }) {
   // rows
   // cols
   tokenDNAs.forEach((dna, idx) => {
-    let letterGrid = newGrid();
-    renderLetter(letterGrid, makeRng(dna.split(',').map(s => parseInt(s))));
+    let letterGrid = grapheme.newGrid();
+    grapheme.renderLetter(letterGrid, grapheme.makeRng(dna.split(',').map(s => parseInt(s))));
     writeLetterToGrid(grid, letterGrid, rows[idx], cols[idx]);
   });
 
-  crop(grid);
+  grapheme.crop(grid);
   // console.log('grid', grid);
 
   return (
