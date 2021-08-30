@@ -9,9 +9,8 @@ import {
     DownloadOutlined
 } from '@ant-design/icons';
 
-import { newGrid, makeRng, renderLetter } from "./grapheme";
-
 import { useStore } from "../../helpers/Store"
+const grapheme = require("./grapheme");
 
 let keyCounter = 0
 function counter () {
@@ -23,9 +22,9 @@ export default function LetterGrid (props) {
     const contractAddress = useStore(state => state.contractAddress);
 
     const makeLetter = (dna) => {
-        let grid = newGrid();
-        //renderLetter(grid, makeRng([4, 4, 1, 4, 1, 7, 0, 4, 0, 3, 2]));
-        renderLetter(grid, makeRng(dna));
+        let grid = grapheme.newGrid();
+        //grapheme.renderLetter(grid, grapheme.makeRng([4, 4, 1, 4, 1, 7, 0, 4, 0, 3, 2]));
+        grapheme.renderLetter(grid, grapheme.makeRng(dna));
         return grid;//.map(row => row.join('') ).join('<br />');
     };
     const letterStyle = {

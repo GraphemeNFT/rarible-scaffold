@@ -6,7 +6,8 @@ import React, { useState } from "react";
 import { Button, Input, Tooltip } from "antd";
 import { AddressInput } from ".";
 
-import { newGrid, makeRng, renderLetter, crop } from "./Letters/grapheme";
+const grapheme = require("./Letters/grapheme");
+
 
 export default function Mint (props) {
   const [mintTo, setMintTo] = useState();
@@ -51,8 +52,8 @@ export default function Mint (props) {
   const dnaAry = (str) => str.split(',').map(s => parseInt(s));
   const makeLetter = (dna) => {
     console.log('----------------------', dna);
-    let grid = newGrid();
-    renderLetter(grid, makeRng(dna));
+    let grid = grapheme.newGrid();
+    grapheme.renderLetter(grid, grapheme.makeRng(dna));
     return grid;//.map(row => row.join('') ).join('<br />');
   };
   const letterStyle = { fontFamily: 'monospace', textAlign: 'left', fontWeight: 'bold', fontSize: '16px', lineHeight: '16px', letterSpacing: '-2px', marginBottom: 0 };
