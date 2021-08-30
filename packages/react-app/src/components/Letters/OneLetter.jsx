@@ -30,7 +30,7 @@ import ClientConfig from '../../helpers/ClientConfig'
 import { useStore } from '../../helpers/Store'
 import './letters.css'
 
-const grapheme = require("./grapheme");
+const grapheme = require("./grapheme").default;
 
 // TODO move these up to Letters and prop drill them down?
 // or into the Claim component?

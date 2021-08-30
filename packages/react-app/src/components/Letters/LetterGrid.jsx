@@ -10,7 +10,8 @@ import {
 } from '@ant-design/icons';
 
 import { useStore } from "../../helpers/Store"
-const grapheme = require("./grapheme");
+const grapheme = require("./grapheme").default;
+console.log(grapheme);
 
 let keyCounter = 0
 function counter () {

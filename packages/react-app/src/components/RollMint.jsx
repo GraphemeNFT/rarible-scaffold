@@ -6,7 +6,7 @@ import React, { useState } from "react";
 import { Button, Input, Tooltip } from "antd";
 import { AddressInput } from ".";
 
-const grapheme = require("./Letters/grapheme");
+const grapheme = require("./Letters/grapheme").default;
 
 
 export default function Mint (props) {

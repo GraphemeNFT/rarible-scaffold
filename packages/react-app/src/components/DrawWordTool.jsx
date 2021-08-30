@@ -6,7 +6,7 @@ import GridCanvas from "./GridCanvas";
 
 import { useStore } from '../helpers/Store'
 
-const grapheme = require("./Letters/grapheme");
+const grapheme = require("./Letters/grapheme").default;
 
 // EXAMPLE STARTING JSON:
 const STARTING_JSON = {
