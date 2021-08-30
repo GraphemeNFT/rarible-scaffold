@@ -8,6 +8,11 @@
   font-size: 14px;
 }
 
+.debug-field.small {
+  font-size: 12px;
+  color: #888;
+}
+
 @font-face {
   font-family: "P0T-NOoDLE";
   src: url("/P0T-NOoDLE_v1.0.ttf") format("truetype");

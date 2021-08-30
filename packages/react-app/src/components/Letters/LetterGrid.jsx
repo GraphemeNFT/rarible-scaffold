@@ -20,6 +20,14 @@ function counter () {
 export default function LetterGrid (props) {
     const letters = props.letters
     const contractAddress = useStore(state => state.contractAddress);
+    const raribleTokenAddress = useStore(state => state.raribleTokenAddress);
+    // const [tokenAddress, setTokenAddress] = useState(raribleTokenAddress)
+
+    // useEffect(() => {
+    //     setTokenAddress(`raribleTokenAddress:${item.tokenId}?tab=details`)
+    //     ""
+    // }, [])
+
 
     const makeLetter = (dna) => {
         let grid = grapheme.newGrid();
@@ -61,9 +69,9 @@ export default function LetterGrid (props) {
 
                     const raribleLink = () => {
                         if (item.info.isClaimed) {
-                            const rarible = `https://ropsten.rarible.com/token/${contractAddress}:${item.tokenId}?tab=details`
+                            const thisTokenRarible = `${raribleTokenAddress}:${item.tokenId}?tab=details`
                             return (
-                                <a href={rarible} target="_blank" rel="noopener noreferrer">
+                                <a href={thisTokenRarible} target="_blank" rel="noopener noreferrer">
                                     View on <img className='tiny-icon' src='rarible-icon.jpg' /> RARIBLE
                                 </a>
                             )
@@ -101,6 +109,10 @@ export default function LetterGrid (props) {
             <Link to='/letters'>
                 <Button type="primary" icon={<SettingOutlined />}>Claim More Letters!</Button>
             </Link>
+
+            <br />
+            <hr />
+            <div class='debug-field small'>{raribleTokenAddress}</div>
 
         </div>
     )
