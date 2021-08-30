@@ -23,3 +23,4 @@ export { default as RollMint } from "./RollMint";
 // export { default as LazyMint } from "./LazyMint";
 // export { default as RaribleItemIndexer } from "./RaribleItemIndexer";
 export { default as DrawWordTool } from "./DrawWordTool";
+export { default as Community } from "./Community";
