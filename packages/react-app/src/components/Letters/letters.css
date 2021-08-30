@@ -50,20 +50,22 @@
     bottom: 0px;
     top: 0px;
     color: #224422;
-    border-bottom: 1px solid yellow;
+    border-bottom: 1px solid #44ff73;
     word-wrap: break-word;
     font-family: monospace;
     padding: 5px;
-    padding-top: 25px;
+    /* padding-top: 25px; */
     font-size: 14px;
     line-height: 18px;
     width: 100%; /* of parent */
-    min-height: 50%; /* limit area */
-    /* z-index: 2; */
+    height: 25px; /* limit area */
+    overflow-y: hidden;
+    z-index: 2;
 }
 
 .word-details:hover {
     color: yellow;
+    height: 100%;
     /* color: greenyellow; */
     /* background-color: rgba(0, 80, 30, 0.8); */
     /* z-index: 20; */
@@ -96,12 +98,15 @@
     color: #44FF88;
 } */
 
-.letter-canvas {
-    /* position: absolute;
-    top: 0px;
-    right: 0px; */
-    /* width: 30vw; */
+.letter-canvas-box {
+    position: relative;
+    top: 35px;
+    text-align: center;
+    z-index: 1;
 }
+
+/* .letter-canvas {
+} */
 
 /* input and button to claim */
 .claim-bar {

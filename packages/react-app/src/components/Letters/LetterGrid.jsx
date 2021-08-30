@@ -3,13 +3,15 @@ import { Link } from "react-router-dom";
 import { Alert, Button, Card, Col, Input, List, Menu, Row } from "antd";
 
 import {
+    InfoCircleOutlined,
     EditOutlined, EllipsisOutlined,
-    SettingOutlined, LinkOutlined
+    SettingOutlined, LinkOutlined,
+    DownloadOutlined
 } from '@ant-design/icons';
 
 import { newGrid, makeRng, renderLetter } from "./grapheme";
 
-
+import { useStore } from "../../helpers/Store"
 
 let keyCounter = 0
 function counter () {
@@ -18,6 +20,7 @@ function counter () {
 
 export default function LetterGrid (props) {
     const letters = props.letters
+    const contractAddress = useStore(state => state.contractAddress);
 
     const makeLetter = (dna) => {
         let grid = newGrid();
@@ -45,9 +48,35 @@ export default function LetterGrid (props) {
                     // FIXME - these vars are not defined
                     // const key = id + "_" + item.tokenURI + "_" + item.owner
                     const key = `item-${id}-${counter()}`;
-                    const actionType = item.info.isClaimed ? 'add' : 'claim'
-                    const itemType = item.info.isPrimitive ? 'letter' : 'word'
-                    const rarible = `https://ropsten.rarible.com/token/0x1725eab2faa1e9b97487b818318ba2310334e029:${item.tokenId}?tab=details`
+                    let actionButton
+                    if (item.info.isClaimed) {
+                        actionButton = <Button type="link" icon={<LinkOutlined />} />
+                    } else {
+                        actionButton = <Button type="link" icon={<EditOutlined />} />
+                    }
+                    // const actionType = item.info.isClaimed ? 'add' : 'claim'
+                    // const itemType = item.info.isPrimitive ?
+                    //     <span>'letter'</span> :
+                    //     <span>'word'</span>
+                    const itemType = <span>word</span>
+
+                    const raribleLink = () => {
+                        if (item.info.isClaimed) {
+                            const rarible = `https://ropsten.rarible.com/token/${contractAddress}:${item.tokenId}?tab=details`
+                            return (
+                                <a href={rarible} target="_blank" rel="noopener noreferrer">
+                                    View on <img className='tiny-icon' src='rarible-icon.jpg' /> RARIBLE
+                                </a>
+                            )
+                        } else {
+                            // FIXME - claim directly from here
+                            return (
+                                <Link to='/letters'>
+                                    <Button type="primary" icon={<DownloadOutlined />}>Claim this!</Button>
+                                </Link>
+                            )
+                        }
+                    }
 
                     const title = <span className='card-title'>
                         #{id} | {item.metadata.name || 'no name'}
@@ -57,15 +86,8 @@ export default function LetterGrid (props) {
                             <Card
                                 title={title}
                                 actions={[
-                                    <a href={rarible} target="_blank" rel="noopener noreferrer">
-                                        <img className='tiny-icon' src='rarible-icon.jpg' />
-                                    </a>,
-                                    <span>
-                                        {itemType}
-                                    </span>,
-                                    <Button size='small'>
-                                        {actionType}
-                                    </Button>
+                                    raribleLink(),
+                                    <Button type="link" icon={<InfoCircleOutlined />} />,
                                 ]}
                             >
                                 {makeLetter([...item.info.dna]).map((row, idx) => (<pre key={key + idx} style={letterStyle}>{row.join('')}</pre>))}
@@ -74,6 +96,13 @@ export default function LetterGrid (props) {
                     );
                 }}
             />
+
+            <hr />
+
+            <Link to='/letters'>
+                <Button type="primary" icon={<SettingOutlined />}>Claim More Letters!</Button>
+            </Link>
+
         </div>
     )
 

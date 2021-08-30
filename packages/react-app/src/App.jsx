@@ -11,7 +11,7 @@ import { useUserAddress } from "eth-hooks";
 import { BrowserRouter, Link, Route, Switch } from "react-router-dom";
 import Web3Modal from "web3modal";
 
-import useStore from "./helpers/Store";
+import { useStore } from "./helpers/Store";
 
 // main components
 import {
@@ -239,6 +239,7 @@ function App (props) {
   // zustand Store stuff
   const setWallet = useStore(state => state.setWallet);
   const setBalance = useStore(state => state.setBalance);
+  const setContractAddress = useStore(state => state.setContractAddress);
   const setLetters = useStore(state => state.setLetters);
   const letters = useStore(state => state.letters);
 
@@ -454,6 +455,15 @@ function App (props) {
   // const [transferToAddresses, setTransferToAddresses] = useState({});
   // const [approveAddresses, setApproveAddresses] = useState({});
 
+  useEffect(() => {
+    if (readContracts) {
+      let contract = readContracts.YourCollectible;
+      console.log('contract.address', contract.address)
+
+    }
+  }, [readContracts]);
+
+  // const  = useContractLoader(provider);
 
   return (
     <div className="App">
@@ -876,31 +886,6 @@ function App (props) {
             />
           </Route>
 
-          <Route path="/debugcontracts">
-            <Contract
-              name="YourCollectible"
-              signer={userProvider.getSigner()}
-              provider={localProvider}
-              address={address}
-              blockExplorer={blockExplorer}
-            />
-            {/*
-            <Contract
-              name="YourERC20"
-              signer={userProvider.getSigner()}
-              provider={localProvider}
-              address={address}
-              blockExplorer={blockExplorer}
-            />
-            <Contract
-              name="NFTHolder"
-              signer={userProvider.getSigner()}
-              provider={localProvider}
-              address={address}
-              blockExplorer={blockExplorer}
-            />
-             */}
-          </Route>
         </Switch>
       </BrowserRouter>
 

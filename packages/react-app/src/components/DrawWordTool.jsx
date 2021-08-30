@@ -5,7 +5,7 @@ import "../App.css";
 import { newGrid, makeRng, renderLetter, crop } from "./Letters/grapheme";
 import GridCanvas from "./GridCanvas";
 
-import useStore from '../helpers/Store'
+import { useStore } from '../helpers/Store'
 
 // EXAMPLE STARTING JSON:
 const STARTING_JSON = {
@@ -117,8 +117,10 @@ function LetterControl (props) {
 export default function DrawWordTool (props) {
   // const yourTokens = props.yourTokens ? props.yourTokens : [];
 
-  const letters = useStore(state => state.letters);
   const wallet = useStore(state => state.wallet);
+  const letters = useStore(state => state.letters);
+  // const claimedLetters = useStore(state => state.claimedLetters);
+  const claimedLetters = letters.filter(l => l.info.isPrimitive && l.info.isClaimed)
 
   const [wordName, setWordName] = useState('');
   const [sending, setSending] = useState();
@@ -129,9 +131,11 @@ export default function DrawWordTool (props) {
   const [tokenIds, setTokenIds] = useState([]); //[0, 1, 2];
   const [tokenDNAs, setTokenDNAs] = useState([]);
 
+  // const realDNAs = claimedLetters ? claimedLetters.map(l => l.info.dna) : [];
   const realDNAs = letters ? letters.map(l => l.info.dna) : [];
 
   const add = (tokenId, index) => {
+    console.log('adding', tokenId, index);
     setRows([...rows].concat([1]));
     setCols([...cols].concat([1]));
     setTokenDNAs([...tokenDNAs].concat([realDNAs[index].join(',')]));
@@ -181,11 +185,22 @@ export default function DrawWordTool (props) {
   };
 
   const letterTray = () => {
-    return letters.map(item => {
-      return (<Button key={'add-' + item.index} onClick={e => add(item.id, item.index)} >
-        Add #{item.id.toString()}
-      </Button>)
+
+    const trayItems = claimedLetters.map(item => {
+      return (
+        <Button key={'add-' + item.index} onClick={e => add(item.id, item.index)} >
+          {item.id} {item.metadata?.name}
+        </Button>
+      )
     })
+
+    return (
+      <div>
+        < span > Add Letters: </span>
+        {trayItems}
+      </div>
+    )
+
   }
 
   return (
@@ -219,8 +234,7 @@ export default function DrawWordTool (props) {
       </div>
 
       <div className='info-group'>
-        <span>Add one of your Letters: </span>
-        {letters && letterTray()}
+        {claimedLetters && letterTray()}
       </div>
 
       {tokenIds.map((id, idx) => (

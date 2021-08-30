@@ -5,7 +5,7 @@ import Mint from '../Mint/Mint'
 import OneLetter from './OneLetter'
 import './letters.css'
 
-import useStore from '../../helpers/Store'
+import { useStore } from '../../helpers/Store'
 
 export default function Letters (props) {
     // console.log('letters.props', props.dataSource)
