@@ -113,7 +113,7 @@ export default function LetterGrid (props) {
 
             <br />
             <hr />
-            <div class='debug-field small'>{raribleTokenAddress}</div>
+            <div className='debug-field small'>{raribleTokenAddress}</div>
 
         </div>
     )
