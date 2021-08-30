@@ -68,7 +68,7 @@ export default function LetterGrid (props) {
                     const itemType = <span>word</span>
 
                     const raribleLink = () => {
-                        if (item.info.isClaimed) {
+                        if (item.info.isClaimed || !item.info.isPrimitive) {
                             const thisTokenRarible = `${raribleTokenAddress}:${item.tokenId}?tab=details`
                             return (
                                 <a href={thisTokenRarible} target="_blank" rel="noopener noreferrer">

@@ -38,7 +38,7 @@ export default function Letters (props) {
                 {(letters && letters.length > 0)
                     ?
                     inner(letters)
-                    : <div>Loading...</div>
+                    : <div>...</div>
                 }
             </div>
         </div>

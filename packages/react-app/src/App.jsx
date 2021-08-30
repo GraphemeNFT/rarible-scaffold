@@ -24,10 +24,10 @@ import {
   Header,
   Ramp,
   ThemeSwitch,
-  Sell,
+  // Sell,
   // Mint,
-
-  RollMint,
+  Community,
+  // RollMint,
   LazyMint,
   RaribleItemIndexer,
   DrawWordTool,
@@ -514,104 +514,28 @@ function App (props) {
             </Link>
           </Menu.Item>
 
-          <Menu.Item key="/mint">
+          <Menu.Item key="/community">
             <Link
               onClick={() => {
-                setRoute("/mint");
+                setRoute("/community");
               }}
-              to="/mint"
+              to="/community"
             >
-              Mint
+              Community
             </Link>
           </Menu.Item>
 
-          <Menu.Item key="/lazyMint">
+          <Menu.Item key="/debug">
             <Link
               onClick={() => {
-                setRoute("/lazyMint");
+                setRoute("/debug");
               }}
-              to="/lazyMint"
+              to="/debug"
             >
-              Lazy Mint
+              Debug
             </Link>
           </Menu.Item>
 
-          <Menu.Item key="/raribleItemIndexer">
-            <Link
-              onClick={() => {
-                setRoute("/raribleItemIndexer");
-              }}
-              to="/raribleItemIndexer"
-            >
-              Item Indexer
-            </Link>
-          </Menu.Item>
-
-          <Menu.Item key="/rarible">
-            <Link
-              onClick={() => {
-                setRoute("/rarible");
-              }}
-              to="/rarible"
-            >
-              Order Indexer
-            </Link>
-          </Menu.Item>
-
-          <Menu.Item key="/transfers">
-            <Link
-              onClick={() => {
-                setRoute("/transfers");
-              }}
-              to="/transfers"
-            >
-              Transfers
-            </Link>
-          </Menu.Item>
-
-          <Menu.Item key="/ipfsup">
-            <Link
-              onClick={() => {
-                setRoute("/ipfsup");
-              }}
-              to="/ipfsup"
-            >
-              IPFS up
-            </Link>
-          </Menu.Item>
-
-          <Menu.Item key="/ipfsdown">
-            <Link
-              onClick={() => {
-                setRoute("/ipfsdown");
-              }}
-              to="/ipfsdown"
-            >
-              IPFS down
-            </Link>
-          </Menu.Item>
-
-          <Menu.Item key="/contract">
-            <Link
-              onClick={() => {
-                setRoute("/contract");
-              }}
-              to="/contract"
-            >
-              YC Contract
-            </Link>
-          </Menu.Item>
-
-          <Menu.Item key="/debugcontracts">
-            <Link
-              onClick={() => {
-                setRoute("/debugcontracts");
-              }}
-              to="/debugcontracts"
-            >
-              Debug Contracts
-            </Link>
-          </Menu.Item>
 
         </Menu>
 
@@ -654,10 +578,12 @@ function App (props) {
           </Route>
 
           <Route path="/words">
-
             <DrawWordTool yourTokens={letters} ipfs={ipfs} writeContracts={writeContracts} readContracts={readContracts} />
             <LetterGrid letters={letters} />
+          </Route>
 
+          <Route path="/community">
+            <Community />
           </Route>
 
           <Route path="/mint">
@@ -678,6 +604,111 @@ function App (props) {
                 accountAddress={address}
               />
             </div>
+          </Route>
+
+          <Route path='/debug'>
+            <Menu style={{ textAlign: "center" }} selectedKeys={[route]} mode="horizontal">
+
+              <Menu.Item key="/mint">
+                <Link
+                  onClick={() => {
+                    setRoute("/mint");
+                  }}
+                  to="/mint"
+                >
+                  Mint
+                </Link>
+              </Menu.Item>
+
+              <Menu.Item key="/lazyMint">
+                <Link
+                  onClick={() => {
+                    setRoute("/lazyMint");
+                  }}
+                  to="/lazyMint"
+                >
+                  Lazy Mint
+                </Link>
+              </Menu.Item>
+
+              <Menu.Item key="/raribleItemIndexer">
+                <Link
+                  onClick={() => {
+                    setRoute("/raribleItemIndexer");
+                  }}
+                  to="/raribleItemIndexer"
+                >
+                  Item Indexer
+                </Link>
+              </Menu.Item>
+
+              <Menu.Item key="/rarible">
+                <Link
+                  onClick={() => {
+                    setRoute("/rarible");
+                  }}
+                  to="/rarible"
+                >
+                  Order Indexer
+                </Link>
+              </Menu.Item>
+
+              <Menu.Item key="/transfers">
+                <Link
+                  onClick={() => {
+                    setRoute("/transfers");
+                  }}
+                  to="/transfers"
+                >
+                  Transfers
+                </Link>
+              </Menu.Item>
+
+              <Menu.Item key="/ipfsup">
+                <Link
+                  onClick={() => {
+                    setRoute("/ipfsup");
+                  }}
+                  to="/ipfsup"
+                >
+                  IPFS up
+                </Link>
+              </Menu.Item>
+
+              <Menu.Item key="/ipfsdown">
+                <Link
+                  onClick={() => {
+                    setRoute("/ipfsdown");
+                  }}
+                  to="/ipfsdown"
+                >
+                  IPFS down
+                </Link>
+              </Menu.Item>
+
+              <Menu.Item key="/contract">
+                <Link
+                  onClick={() => {
+                    setRoute("/contract");
+                  }}
+                  to="/contract"
+                >
+                  YC Contract
+                </Link>
+              </Menu.Item>
+
+              <Menu.Item key="/debugcontracts">
+                <Link
+                  onClick={() => {
+                    setRoute("/debugcontracts");
+                  }}
+                  to="/debugcontracts"
+                >
+                  Debug Contracts
+                </Link>
+              </Menu.Item>
+            </Menu>
+
           </Route>
 
           <Route path="/raribleItemIndexer">
