@@ -278,8 +278,10 @@ function App (props) {
               };
               // console.log('letter', letter)
               collectibleUpdate.push(letter)
-              // update ALL on each refresh - may cause too much redrawing?
-              setLetters(collectibleUpdate);
+              // FIXME
+              // update ALL on each refresh - causes a backlog of redrawing all
+              // need a way to just selectively add each letter as a skeleton then render insides when 'done'
+              // setLetters(collectibleUpdate);
             });
           });
 
