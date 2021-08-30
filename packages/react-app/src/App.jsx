@@ -245,6 +245,7 @@ function App (props) {
   const contractAddress = useStore(state => state.contractAddress);
   const raribleHome = useStore(state => state.raribleHome);
   const setRaribleHome = useStore(state => state.setRaribleHome);
+  const setRaribleTokenAddress = useStore(state => state.setRaribleTokenAddress);
 
   // get minimal info on token on update
   // more details are pulled on letters page as needed
@@ -462,7 +463,9 @@ function App (props) {
       let contract = readContracts.YourCollectible;
       setContractAddress(contract.addresss)
       const _raribleHome = `https://ropsten.rarible.com/collection/${contract.address}`
+      const _raribleTokenAddress = `https://ropsten.rarible.com/token/${contractAddress}`
       setRaribleHome(_raribleHome)
+      setRaribleTokenAddress(_raribleTokenAddress)
       console.log('contract.address', contract.address)
     }
   }, [readContracts]);
