@@ -24,12 +24,12 @@ import {
   Header,
   Ramp,
   ThemeSwitch,
-  Sell,
+  // Sell,
   // Mint,
 
   RollMint,
-  LazyMint,
-  RaribleItemIndexer,
+  // LazyMint,
+  // RaribleItemIndexer,
   DrawWordTool,
 } from "./components";
 
@@ -52,7 +52,7 @@ import {
   useOnBlock,
   useUserProvider,
 } from "./hooks";
-import { matchSellOrder, prepareMatchingOrder } from "./rarible/createOrders";
+// import { matchSellOrder, prepareMatchingOrder } from "./rarible/createOrders";
 
 import "./App.css";
 import LetterUtils from "./components/Letters/LetterUtils";
@@ -447,13 +447,13 @@ function App (props) {
   const [sending, setSending] = useState();
   const [ipfsHash, setIpfsHash] = useState();
   const [ipfsDownHash, setIpfsDownHash] = useState();
-  const [collectionContract, setCollectionContract] = useState();
+  // const [collectionContract, setCollectionContract] = useState();
   const [tokenId, setTokenId] = useState();
 
   const [downloading, setDownloading] = useState();
   const [ipfsContent, setIpfsContent] = useState();
 
-  const [sellOrderContent, setSellOrderContent] = useState();
+  // const [sellOrderContent, setSellOrderContent] = useState();
 
   // const [transferToAddresses, setTransferToAddresses] = useState({});
   // const [approveAddresses, setApproveAddresses] = useState({});
@@ -525,6 +525,7 @@ function App (props) {
             </Link>
           </Menu.Item>
 
+          {/*
           <Menu.Item key="/lazyMint">
             <Link
               onClick={() => {
@@ -557,6 +558,7 @@ function App (props) {
               Order Indexer
             </Link>
           </Menu.Item>
+          */}
 
           <Menu.Item key="/transfers">
             <Link
@@ -664,134 +666,6 @@ function App (props) {
             <div style={{ paddingTop: 32, width: 740, margin: "auto" }}>
               {/* <RollMint ensProvider={mainnetProvider} provider={userProvider} writeContracts={writeContracts} /> */}
               <Mint ensProvider={mainnetProvider} provider={userProvider} writeContracts={writeContracts} />
-            </div>
-          </Route>
-
-          <Route path="/lazyMint">
-            <div style={{ paddingTop: 32, width: 740, margin: "auto" }}>
-              <LazyMint
-                ensProvider={mainnetProvider}
-                provider={userProvider}
-                // contractAddress={writeContracts.ERC721Rarible.address}
-                // contractAddress={writeContracts.YourCollectible.address}
-                writeContracts={writeContracts}
-                accountAddress={address}
-              />
-            </div>
-          </Route>
-
-          <Route path="/raribleItemIndexer">
-            <div style={{ paddingTop: 32, width: 740, margin: "auto" }}>
-              <RaribleItemIndexer
-                ensProvider={mainnetProvider}
-                tx={tx}
-                provider={userProvider}
-                writeContracts={writeContracts}
-                accountAddress={address}
-              />
-            </div>
-          </Route>
-
-          <Route path="/rarible">
-            <div style={{ paddingTop: 32, width: 740, margin: "auto" }}>
-              <AddressInput
-                ensProvider={mainnetProvider}
-                placeholder="NFT collection address"
-                value={collectionContract}
-                onChange={newValue => {
-                  setCollectionContract(newValue);
-                }}
-              />
-              <Input
-                value={tokenId}
-                placeholder="tokenId"
-                onChange={e => {
-                  setTokenId(e.target.value);
-                }}
-              />
-            </div>
-            <Button
-              style={{ margin: 8 }}
-              loading={sending}
-              size="large"
-              shape="round"
-              type="primary"
-              onClick={async () => {
-                setDownloading(true);
-                let sellOrderResult;
-                if (tokenId) {
-                  const getSellOrdersByItemUrl = `https://api-dev.rarible.com/protocol/v0.1/ethereum/order/orders/sell/byItem?contract=${collectionContract}&tokenId=${tokenId}&sort=LAST_UPDATE`;
-                  sellOrderResult = await fetch(getSellOrdersByItemUrl);
-                } else {
-                  const getSellOrderByCollectionUrl = `https://api-dev.rarible.com/protocol/v0.1/ethereum/order/orders/sell/byCollection?collection=${collectionContract}&sort=LAST_UPDATE`;
-                  sellOrderResult = await fetch(getSellOrderByCollectionUrl);
-                }
-                const resultJson = await sellOrderResult.json();
-                if (resultJson && resultJson.orders) {
-                  setSellOrderContent(resultJson.orders);
-                }
-                setDownloading(false);
-              }}
-            >
-              Get Sell Orders
-            </Button>
-
-            <pre style={{ padding: 16, width: 500, margin: "auto", paddingBottom: 150 }}>
-              {JSON.stringify(sellOrderContent)}
-            </pre>
-            <div style={{ width: 640, margin: "auto", marginTop: 32, paddingBottom: 32 }}>
-              <List
-                bordered
-                dataSource={sellOrderContent}
-                renderItem={item => {
-                  const id = item.hash;
-                  return (
-                    <List.Item key={id}>
-                      <Card
-                        title={
-                          <div>
-                            <span style={{ fontSize: 16, marginRight: 8 }}>{item.type}</span>
-                          </div>
-                        }
-                      >
-                        <div>
-                          <p>maker: {item.maker}</p>
-                          <p>selling:</p>
-                          <p>collection: {item.make.assetType.contract}</p>
-                          <p>tokenId: {item.make.assetType.tokenId}</p>
-                          <p>
-                            price: {formatEther(item.take.value)}
-                            {item.take.assetType.assetClass}
-                          </p>
-                          <p>createAt: {item.createdAt}</p>
-                        </div>
-                      </Card>
-
-                      <Button
-                        onClick={async () => {
-                          const preparedTransaction = await prepareMatchingOrder(item, address);
-                          console.log({ preparedTransaction });
-                          const value = preparedTransaction.asset.value;
-                          const valueBN = BigNumber.from(value);
-                          const safeValue = valueBN.add(100);
-                          console.log({ safeValue });
-                          const signer = userProvider.getSigner();
-                          tx(
-                            signer.sendTransaction({
-                              to: preparedTransaction.transaction.to,
-                              from: address,
-                              data: preparedTransaction.transaction.data,
-                              value: safeValue,
-                            }),
-                          );
-                        }}
-                      >
-                        Fill order
-                      </Button>
-                    </List.Item>
-                  );
-                }}
-              />
             </div>
           </Route>
 
