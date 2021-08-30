@@ -30,15 +30,28 @@ const STARTING_JSON = {
   ],
 };
 
-function makeMetadata (imageCid, name, tokenIds, rows, cols) {
+function makeMetadata(letters, imageCid, name, tokenIds, rows, cols) {
   let metadata = Object.assign({}, STARTING_JSON);
   metadata.name = name;
   metadata.image = imageCid;
-  metadata.attributes = [];
+  metadata.graphemeSrc = { tokenIds, rows, cols };
+  metadata.attributes = [{
+    trait_type: "Type",
+    value: "Word",
+  },
+  {
+    trait_type: "Total Letters",
+    value: tokenIds.length.toString(),
+  }];
+
   for (let i = 0; i < tokenIds.length; i++) {
-    metadata.attributes.push({ trait_type: "tokenId_" + i, value: tokenIds[i] });
-    metadata.attributes.push({ trait_type: "row_" + i, value: rows[i] });
-    metadata.attributes.push({ trait_type: "col_" + i, value: cols[i] });
+    let letterName = letters?.find(l => l?.id === tokenIds[i])?.metadata?.name;
+    if (letterName) {
+      metadata.attributes.push({ trait_type: "Letter " + i, value: letterName });
+    }
+    // metadata.attributes.push({ trait_type: "tokenId_" + i, value: tokenIds[i] });
+    // metadata.attributes.push({ trait_type: "row_" + i, value: rows[i] });
+    // metadata.attributes.push({ trait_type: "col_" + i, value: cols[i] });
   }
   return metadata;
 }
@@ -167,7 +180,8 @@ export default function DrawWordTool (props) {
     console.log('canBlob ipfs cid: ', ipfsCanvasResult);
     let tokenURI
     try {
-      tokenURI = await metadataToIpfs(makeMetadata('https://ipfs.io/ipfs/' + ipfsCanvasResult.path, wordName, tokenIds, rows, cols), props.ipfs);
+      let ipfsGateway = 'https://ipfs.io/ipfs/';
+      tokenURI = await metadataToIpfs(makeMetadata(letters, ipfsGateway + ipfsCanvasResult.path, wordName, tokenIds, rows, cols), props.ipfs);
     } catch (e) {
       console.log('ipfs.add of metadata.json failed: ', e);
       return;

@@ -57,22 +57,26 @@ export default function OneLetter (props) {
 
     const STARTING_JSON = {
         description: "A Grapheme NFT Word",
-        external_url: "https://austingriffith.com/portfolio/paintings/", // <-- this can link to a page for the specific file too
+        external_url: "https://graphemenft.github.io/", // <-- this can link to a page for the specific file too
         image: "https://austingriffith.com/images/paintings/buffalo.jpg",
-        name: "Buffalo",
+        name: "Grapheme Letter",
         attributes: [
             {
-                trait_type: "tokenId_0",
+                trait_type: "tokenId",
                 value: "",
             },
             {
-                trait_type: "row_0",
+                trait_type: "dna",
                 value: "",
             },
             {
-                trait_type: "col_0",
-                value: "",
+                trait_type: "Claimed Status",
+                value: "true",
             },
+            {
+                trait_type: "Type",
+                value: "Word",
+            }
         ],
     };
 
@@ -147,7 +151,7 @@ export default function OneLetter (props) {
             // let ipfsGateway = 'https://cloudflare-ipfs.com/ipfs/';
             let ipfsGateway = 'https://ipfs.io/ipfs/';
             // let ipfsGateway = 'ipfs://ipfs/';
-            tokenURI = await metadataToIpfs(makeMetadata(ipfsGateway + ipfsCanvasResult.path, name, letter?.info?.dna.join(' ')), ipfs);
+            tokenURI = await metadataToIpfs(makeMetadata(ipfsGateway + ipfsCanvasResult.path, name, letter?.info?.dna.join(' '), tokenId), ipfs);
         } catch (e) {
             console.log('ipfs.add of metadata.json failed: ', e);
             return;
@@ -157,11 +161,24 @@ export default function OneLetter (props) {
         const claimed = await props.writeContracts.YourCollectible.claimToken(tokenId, tokenURI.path);
     };
 
-    function makeMetadata (imageCid, name, dna) {
+    function makeMetadata(imageCid, name, dna, tokenId) {
         let metadata = Object.assign({}, STARTING_JSON);
         metadata.name = name;
         metadata.image = imageCid;
-        metadata.attributes = [{ dna }];
+        metadata.attributes = [{
+            trait_type: "tokenId",
+            value: tokenId,
+        }, {
+            trait_type: "dna",
+            value: dna,
+        }, {
+            trait_type: "Claimed Status",
+            value: "true",
+        },
+        {
+            trait_type: "Type",
+            value: "Word",
+        }];
         return metadata;
     }
 

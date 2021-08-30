@@ -93,7 +93,7 @@ let ipfsGateway = 'https://ipfs.io/ipfs/';
 // EXAMPLE STARTING JSON:
 const STARTING_JSON = {
   description: "Grapheme NFT Letter",
-  // external_url: "https://austingriffith.com/portfolio/paintings/", // <-- this can link to a page for the specific file too
+  external_url: "https://graphemenft.github.io/", // <-- this can link to a page for the specific file too
   image: ipfsGateway + 'QmSygLmdfeStPU7TTCTbazvrUCggtGh5aNEK6cLarWZVsX',
   name: "Grapheme",
   attributes: [
