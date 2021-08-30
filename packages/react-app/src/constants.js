@@ -344,7 +344,8 @@ export const NETWORKS = {
     chainId: 3,
     faucet: "https://faucet.ropsten.be/",
     blockExplorer: "https://ropsten.etherscan.io/",
-    rpcUrl: 'https://ropsten.infura.io/v3/52978d65cfcd4cc7a96bda08ae9791aa',
+    // rpcUrl: 'https://ropsten.infura.io/v3/52978d65cfcd4cc7a96bda08ae9791aa',
+    rpcUrl: "https://ropsten.infura.io/v3/007664e3ca85463d80c974d3ff53d973"
   },
 
   goerli: {
